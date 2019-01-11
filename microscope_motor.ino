@@ -53,7 +53,12 @@ void loop() {
     b = Serial.read();
     val = Serial.parseInt();
   }
-  
+  if ( a == 'c') {
+      //Calibration case
+      curMotorPosition = 0;
+      newMotorPosition = 0;
+      EEPROM.update(address, 0);
+  }
   if ( a == 'm') {
     if ((val > -1000) && (val < 1000))
       newMotorPosition = val;
@@ -76,7 +81,7 @@ void loop() {
     myMotor2->release();
   }
 
-  
+//light control board
   if (a == 'l') {
     if (val > 0 && val <= 255) {
       light->setSpeed(val);

@@ -26,21 +26,27 @@
    ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+   Modified by Pierre Baudin
 */
 
-/* Create a WiFi access point and provide a web server on it. */
+/* Connect to a WiFi access point and provide a web server on it. */
 
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
+#include <ESP8266WiFiMulti.h>
+#include <ESP8266mDNS.h>
 #include <Wire.h>
 #include "MCP4728.h"
 
 /* Set these to your desired credentials. */
-const char *ssid = "24well_LED";
-const char *password = "password";
-
+ESP8266WiFiMulti wifiMulti;
 ESP8266WebServer server(80);
+
+const char *ssid = "TP-LINK_PiScope";
+const char *password = "raspberry";
+
 String header;
 
 MCP4728 dac;
@@ -50,6 +56,87 @@ const int loadPin = 12;   //Controls the internal transference of data in SN74HC
 const int clockPin = 14;  //Generates the clock signal to control the transference of data
 
 int led_brightness = 50;
+
+String getValue(String data, char separator, int index);
+void led_display(int i);
+String getPage();
+void handleLED();
+void handleBrightness();
+void handleRoot();
+
+
+void setup() {
+  delay(1000);
+  Serial.begin(115200);
+  Serial.println();
+
+  wifiMulti.addAP(ssid, password);
+
+  Serial.println("Connecting ...");
+
+  while (wifiMulti.run() != WL_CONNECTED) { // Wait for the Wi-Fi to connect: scan for Wi-Fi networks, and connect to the strongest of the networks above
+    delay(250);
+    Serial.print('.');
+  }
+  Serial.println('\n');
+  Serial.print("Connected to ");
+  Serial.println(WiFi.SSID());              // Tell us what network we're connected to
+  Serial.print("IP address:\t");
+  Serial.println(WiFi.localIP());
+
+  if (MDNS.begin("LEDcontroller")) {              // Start the mDNS responder for esp8266.local
+    Serial.println("mDNS responder started");
+  } else {
+    Serial.println("Error setting up MDNS responder!");
+  }
+
+  server.on("/", handleRoot);
+  server.begin();
+  Serial.println("HTTP server started");
+
+  Serial.println("init DAC");
+  pinMode(dataPin, OUTPUT);
+  pinMode(loadPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  Wire.begin(4, 5);
+  dac.attatch(Wire, 13);
+  dac.readRegisters();
+
+  dac.selectVref(MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V);
+  dac.selectPowerDown(MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM);
+  dac.selectGain(MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2);
+  //dac.analogWrite(MCP4728::DAC_CH::A, 1850); //Range 1500-2200
+  dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
+  dac.analogWrite(MCP4728::DAC_CH::B, 0);
+  dac.analogWrite(MCP4728::DAC_CH::C, 0);
+  dac.analogWrite(MCP4728::DAC_CH::D, 0);
+  dac.enable(true);
+  dac.readRegisters();
+
+
+  // Serial.print("Configuring access point...");
+  // /* You can remove the password parameter if you want the AP to be open. */
+  // WiFi.softAP(ssid, password);
+  //
+  // IPAddress myIP = WiFi.softAPIP();
+  // Serial.print("AP IP address: ");
+  // Serial.println(myIP);
+  // server.on("/", handleRoot);
+  // server.begin();
+  // Serial.println("HTTP server started");
+
+  led_display(0);
+}
+
+void loop() {
+  server.handleClient();
+}
+
+
+
+
+
+
 
 String getValue(String data, char separator, int index)
 {
@@ -161,48 +248,4 @@ void handleRoot()
   }
   server.send ( 200, "text/html", getPage() );
 
-}
-
-
-void setup() {
-  delay(1000);
-  Serial.begin(115200);
-  Serial.println();
-
-  Serial.println("init DAC");
-  pinMode(dataPin, OUTPUT);
-  pinMode(loadPin, OUTPUT);
-  pinMode(clockPin, OUTPUT);
-  Wire.begin(4, 5);
-  dac.attatch(Wire, 13);
-  dac.readRegisters();
-
-  dac.selectVref(MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V);
-  dac.selectPowerDown(MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM);
-  dac.selectGain(MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2);
-  //dac.analogWrite(MCP4728::DAC_CH::A, 1850); //Range 1500-2200
-  dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
-  dac.analogWrite(MCP4728::DAC_CH::B, 0);
-  dac.analogWrite(MCP4728::DAC_CH::C, 0);
-  dac.analogWrite(MCP4728::DAC_CH::D, 0);
-  dac.enable(true);
-  dac.readRegisters();
-
-
-  Serial.print("Configuring access point...");
-  /* You can remove the password parameter if you want the AP to be open. */
-  WiFi.softAP(ssid, password);
-
-  IPAddress myIP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(myIP);
-  server.on("/", handleRoot);
-  server.begin();
-  Serial.println("HTTP server started");
-
-  led_display(0);
-}
-
-void loop() {
-  server.handleClient();
 }

@@ -58,7 +58,7 @@ const int clockPin = 14;  //Generates the clock signal to control the transferen
 int led_brightness = 50;
 
 String getValue(String data, char separator, int index);
-void led_display(int i);
+void led_display(int i, bool on = false);
 String getPage();
 void handleLED();
 void handleBrightness();
@@ -113,18 +113,6 @@ void setup() {
   dac.enable(true);
   dac.readRegisters();
 
-
-  // Serial.print("Configuring access point...");
-  // /* You can remove the password parameter if you want the AP to be open. */
-  // WiFi.softAP(ssid, password);
-  //
-  // IPAddress myIP = WiFi.softAPIP();
-  // Serial.print("AP IP address: ");
-  // Serial.println(myIP);
-  // server.on("/", handleRoot);
-  // server.begin();
-  // Serial.println("HTTP server started");
-
   led_display(0);
 }
 
@@ -154,10 +142,17 @@ String getValue(String data, char separator, int index)
   return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
-void led_display(int i)
+void led_display(int i, bool on)
 {
-  long data = 0;
-  data = data | 1 << i;
+  static long data = 0;
+
+  if (on)
+    data = data | 1 << i;
+  else
+    data = data & ~(1 << i);
+
+  if(i == 25) //all off condition
+    data = 0;
   //Serial.println(data);
   //byte data = B01010101;
   digitalWrite(loadPin, LOW);
@@ -226,10 +221,10 @@ void handleLED() {
   else {
     if (led_status == 1)
     {
-      led_display(led_id);
+      led_display(led_id, true);
     }
     else {
-      led_display(25);
+      led_display(led_id, false);
     }
   }
 }

@@ -116,8 +116,20 @@ void setup() {
   led_display(0);
 }
 
+int id = -1;
+char a = 'n';
+char b = 'n';
+
 void loop() {
   server.handleClient();
+  if (Serial.available() >= 2){
+    id = Serial.parseInt(); // LED_id
+    a = Serial.read(); // colon separator
+    b = Serial.read(); // 1 or 0 on/off
+    Serial.flush(); // one at a time
+    if(id <= 0 && id <= 24)
+      led_display(id, b == '1');
+  }
 }
 
 

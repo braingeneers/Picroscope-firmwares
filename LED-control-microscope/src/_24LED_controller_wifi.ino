@@ -123,18 +123,25 @@ char b = 'n';
 void loop() {
   server.handleClient();
   if (Serial.available() >= 2){
-    id = Serial.parseInt(); // LED_id
-    a = Serial.read(); // colon separator
-    b = Serial.read(); // 1 or 0 on/off
-    Serial.flush(); // one at a time
-    if(id <= 0 && id <= 24)
-      led_display(id, b == '1');
+    // LED_id
+    a = Serial.read(); // 1 or 0 on/off
+    b = Serial.read(); // colon separator
+    id = Serial.parseInt();
+    //Serial.read(); //flush newline char
+
+    Serial.println(a);
+    Serial.println(b);
+    Serial.println(id);
+
+    if(id >= 0 && id <= 24)
+      led_display(id, a == '1');
+
+    while(Serial.available())
+      Serial.read(); //disgusting blocking code to deal with flushing serial line
+
   }
+
 }
-
-
-
-
 
 
 

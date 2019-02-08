@@ -22,8 +22,10 @@ Adafruit_DCMotor *light = LightController.getMotor(1);
 byte index = 0;
 int address = 0;
 int step_count[2] = {0, 0};
-int curMotorPosition = EEPROM.read(0);
-int newMotorPosition = EEPROM.read(0);
+//int curMotorPosition = EEPROM.read(0);
+//int newMotorPosition = EEPROM.read(0);
+int curMotorPosition = 0;
+int newMotorPosition = 0;
 int stepsToTake = 0;
 
 
@@ -57,13 +59,13 @@ void loop() {
       //Calibration case
       curMotorPosition = 0;
       newMotorPosition = 0;
-      EEPROM.update(address, 0);
+      //EEPROM.update(address, 0);
   }
   if ( a == 'm') {
-    if ((val > -1000) && (val < 1000))
+//    if ((val > -1000) && (val < 1000)) safety
       newMotorPosition = val;
       //save the new motor position into EEPROM
-      EEPROM.update(address, val);
+      //EEPROM.update(address, val);
   }
   stepsToTake = newMotorPosition - curMotorPosition;
   if ( stepsToTake > 0) {

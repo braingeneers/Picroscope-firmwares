@@ -28,7 +28,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    Modified by Pierre Baudin
-*/
+ */
 
 /* Connect to a WiFi access point and provide a web server on it. */
 
@@ -39,6 +39,8 @@
 #include <ESP8266mDNS.h>
 #include <Wire.h>
 #include "MCP4728.h"
+
+//#define SERIAL_C
 
 /* Set these to your desired credentials. */
 ESP8266WiFiMulti wifiMulti;
@@ -66,54 +68,54 @@ void handleRoot();
 
 
 void setup() {
-  delay(1000);
-  Serial.begin(115200);
-  Serial.println();
+        delay(1000);
+        Serial.begin(115200);
+        Serial.println();
 
-  wifiMulti.addAP(ssid, password);
+        wifiMulti.addAP(ssid, password);
 
-  Serial.println("Connecting ...");
+        Serial.println("Connecting ...");
 
-  while (wifiMulti.run() != WL_CONNECTED) { // Wait for the Wi-Fi to connect: scan for Wi-Fi networks, and connect to the strongest of the networks above
-    delay(250);
-    Serial.print('.');
-  }
-  Serial.println('\n');
-  Serial.print("Connected to ");
-  Serial.println(WiFi.SSID());              // Tell us what network we're connected to
-  Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());
+        while (wifiMulti.run() != WL_CONNECTED) { // Wait for the Wi-Fi to connect: scan for Wi-Fi networks, and connect to the strongest of the networks above
+                delay(250);
+                Serial.print('.');
+        }
+        Serial.println('\n');
+        Serial.print("Connected to ");
+        Serial.println(WiFi.SSID());        // Tell us what network we're connected to
+        Serial.print("IP address:\t");
+        Serial.println(WiFi.localIP());
 
-  if (MDNS.begin("LEDcontroller")) {              // Start the mDNS responder for esp8266.local
-    Serial.println("mDNS responder started");
-  } else {
-    Serial.println("Error setting up MDNS responder!");
-  }
+        if (MDNS.begin("LEDcontroller")) {        // Start the mDNS responder for esp8266.local
+                Serial.println("mDNS responder started");
+        } else {
+                Serial.println("Error setting up MDNS responder!");
+        }
 
-  server.on("/", handleRoot);
-  server.begin();
-  Serial.println("HTTP server started");
+        server.on("/", handleRoot);
+        server.begin();
+        Serial.println("HTTP server started");
 
-  Serial.println("init DAC");
-  pinMode(dataPin, OUTPUT);
-  pinMode(loadPin, OUTPUT);
-  pinMode(clockPin, OUTPUT);
-  Wire.begin(4, 5);
-  dac.attatch(Wire, 13);
-  dac.readRegisters();
+        Serial.println("init DAC");
+        pinMode(dataPin, OUTPUT);
+        pinMode(loadPin, OUTPUT);
+        pinMode(clockPin, OUTPUT);
+        Wire.begin(4, 5);
+        dac.attatch(Wire, 13);
+        dac.readRegisters();
 
-  dac.selectVref(MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V);
-  dac.selectPowerDown(MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM);
-  dac.selectGain(MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2);
-  //dac.analogWrite(MCP4728::DAC_CH::A, 1850); //Range 1500-2200
-  dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
-  dac.analogWrite(MCP4728::DAC_CH::B, 0);
-  dac.analogWrite(MCP4728::DAC_CH::C, 0);
-  dac.analogWrite(MCP4728::DAC_CH::D, 0);
-  dac.enable(true);
-  dac.readRegisters();
+        dac.selectVref(MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V);
+        dac.selectPowerDown(MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM);
+        dac.selectGain(MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2);
+        //dac.analogWrite(MCP4728::DAC_CH::A, 1850); //Range 1500-2200
+        dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
+        dac.analogWrite(MCP4728::DAC_CH::B, 0);
+        dac.analogWrite(MCP4728::DAC_CH::C, 0);
+        dac.analogWrite(MCP4728::DAC_CH::D, 0);
+        dac.enable(true);
+        dac.readRegisters();
 
-  led_display(0);
+        led_display(0);
 }
 
 int id = -1;
@@ -121,25 +123,28 @@ char a = 'n';
 char b = 'n';
 
 void loop() {
-  server.handleClient();
-  if (Serial.available() >= 2){
-    // LED_id
-    a = Serial.read(); // 1 or 0 on/off
-    b = Serial.read(); // colon separator
-    id = Serial.parseInt();
-    //Serial.read(); //flush newline char
+        server.handleClient();
 
-    Serial.println(a);
-    Serial.println(b);
-    Serial.println(id);
+  #ifdef SERIAL_C
+        if (Serial.available() >= 2) {
+                // LED_id
+                a = Serial.read(); // 1 or 0 on/off
+                b = Serial.read(); // colon separator
+                id = Serial.parseInt();
+                //Serial.read(); //flush newline char
 
-    if(id >= 0 && id <= 24)
-      led_display(id, a == '1');
+                Serial.println(a);
+                Serial.println(b);
+                Serial.println(id);
 
-    while(Serial.available())
-      Serial.read(); //disgusting blocking code to deal with flushing serial line
+                if(id >= 0 && id <= 24)
+                        led_display(id, a == '1');
 
-  }
+                while(Serial.available())
+                        Serial.read(); //disgusting blocking code to deal with flushing serial line
+
+        }
+  #endif
 
 }
 
@@ -147,119 +152,128 @@ void loop() {
 
 String getValue(String data, char separator, int index)
 {
-  int found = 0;
-  int strIndex[] = { 0, -1 };
-  int maxIndex = data.length() - 1;
+        int found = 0;
+        int strIndex[] = { 0, -1 };
+        int maxIndex = data.length() - 1;
 
-  for (int i = 0; i <= maxIndex && found <= index; i++) {
-    if (data.charAt(i) == separator || i == maxIndex) {
-      found++;
-      strIndex[0] = strIndex[1] + 1;
-      strIndex[1] = (i == maxIndex) ? i + 1 : i;
-    }
-  }
-  return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+        for (int i = 0; i <= maxIndex && found <= index; i++) {
+                if (data.charAt(i) == separator || i == maxIndex) {
+                        found++;
+                        strIndex[0] = strIndex[1] + 1;
+                        strIndex[1] = (i == maxIndex) ? i + 1 : i;
+                }
+        }
+        return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
 void led_display(int i, bool on)
 {
-  static long data = 0;
+        static long data = 0;
 
-  if (on)
-    data = data | 1 << i;
-  else
-    data = data & ~(1 << i);
+        if (on)
+                data = data | 1 << i;
+        else
+                data = data & ~(1 << i);
 
-  if(i == 25) //all off condition
-    data = 0;
-  //Serial.println(data);
-  //byte data = B01010101;
-  digitalWrite(loadPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, (data >> 16) & B11111111);
-  delay(10);
-  shiftOut(dataPin, clockPin, MSBFIRST, (data >> 8) & B11111111);
-  delay(10);
-  shiftOut(dataPin, clockPin, MSBFIRST, data & B11111111);
-  delay(10);
-  digitalWrite(loadPin, HIGH);
+        if(i == 25) //all off condition
+                data = 0;
+        //Serial.println(data);
+        //byte data = B01010101;
+        digitalWrite(loadPin, LOW);
+        shiftOut(dataPin, clockPin, MSBFIRST, (data >> 16) & B11111111);
+        delay(10);
+        shiftOut(dataPin, clockPin, MSBFIRST, (data >> 8) & B11111111);
+        delay(10);
+        shiftOut(dataPin, clockPin, MSBFIRST, data & B11111111);
+        delay(10);
+        digitalWrite(loadPin, HIGH);
 }
 
 String getPage()
 {
-  String page = "<html><head></head>";
-  page += "<table>";
-  /*
-    for (int i = 0; i < 24; i++) {
-    page += "<tr><td>LED " + String(i + 1) + "</td>";
-    page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='" + String(i) + ",1'>ON</button></form></td>";
-    page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='" + String(i) + ",0'>OFF</button></form></td>";
-    page += "</tr><tr>";
-    }*/
-  for (int i = 0; i < 4; i++)
-  {
-    page += "<tr>";
-    for (int j = 0; j < 6; j++)
-    {
-      page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='" + String(i * 6 + j) + ",1'>LED" + String(i * 6 + j) + "</button></form></td>";
-    }
-    page += "</tr>";
-  }
-  page += "<tr><td>All LEDs</td>";
-  page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='100,0'>OFF</button></form></td>";
-  page += "</tr><tr>";
+        String page = "<html><head></head>";
+        page += "<table>";
+        /*
+           for (int i = 0; i < 24; i++) {
+           page += "<tr><td>LED " + String(i + 1) + "</td>";
+           page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='" + String(i) + ",1'>ON</button></form></td>";
+           page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='" + String(i) + ",0'>OFF</button></form></td>";
+           page += "</tr><tr>";
+           }*/
+        for (int i = 0; i < 4; i++)
+        {
+                page += "<tr>";
+                for (int j = 0; j < 6; j++)
+                {
+                        page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='" + String(i * 6 + j) + ",1'>LED" + String(i * 6 + j) + "</button></form></td>";
+                }
+                page += "</tr>";
+        }
+        page += "<tr><td>All LEDs</td>";
+        page += "<td><form action='/' method='POST'><button type='button submit' name='led' value='100,0'>OFF</button></form></td>";
+        page += "</tr><tr>";
 
-  page += "<tr><td>Brightness</td>";
-  page += "<td><form action='/' method='POST'>";
-  page += "  <select name='brightness' id='brightness' onchange='this.form.submit()'>";
+        page += "<tr><td>Brightness</td>";
+        page += "<td><form action='/' method='POST'>";
+        page += "  <select name='brightness' id='brightness' onchange='this.form.submit()'>";
 
-  for (int i = 1; i < 11; i++)
-  {
-    page += "<option value='" + String(i * 10);
-    if (led_brightness == i * 10) {
-      page += "' selected>" + String(i * 10) + "%</option>";
-    }
-    else {
-      page += "'>" + String(i * 10) + "%</option>";
-    }
-  }
+        for (int i = 1; i < 11; i++)
+        {
+                page += "<option value='" + String(i * 10);
+                if (led_brightness == i * 10) {
+                        page += "' selected>" + String(i * 10) + "%</option>";
+                }
+                else {
+                        page += "'>" + String(i * 10) + "%</option>";
+                }
+        }
 
-  page += "</select></form></td></tr>";
-  page += "</table></body></html>";
-  return page;
+        page += "</select></form></td></tr>";
+        page += "</table></body></html>";
+        return page;
 }
 void handleLED() {
-  int led_id = getValue(server.arg("led"), ',', 0).toInt();
-  int led_status = getValue(server.arg("led"), ',', 1).toInt();
+        int led_id = getValue(server.arg("led"), ',', 0).toInt();
+        int led_status = getValue(server.arg("led"), ',', 1).toInt();
 
-  Serial.println(led_id);
-  Serial.println(led_status);
-  if (led_id == 100) {
-    Serial.println("all off");
-    led_display(25);
-  }
-  else {
-    if (led_status == 1)
-    {
-      led_display(led_id, true);
-    }
-    else {
-      led_display(led_id, false);
-    }
-  }
+        Serial.println(led_id);
+        Serial.println(led_status);
+        if (led_id == 100) {
+                if(led_status == 1) {
+                        Serial.println("1st Row On (All eventually)");
+                        for(int i = 18; i<24; i++){
+                          led_display(i,true);
+                        }
+
+                }
+                else{
+                        Serial.println("all off");
+                        led_display(25);
+                }
+        }
+        else {
+                if (led_status == 1)
+                {
+                        led_display(led_id, true);
+                }
+                else {
+                        led_display(led_id, false);
+                }
+        }
 }
 void handleBrightness() {
-  led_brightness = getValue(server.arg("brightness"), ',', 0).toInt();
-  dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
-  Serial.println(1500 + ((led_brightness - 10) / 90.0) * 700);
-  Serial.println("set brightness to" + String(led_brightness));
+        led_brightness = getValue(server.arg("brightness"), ',', 0).toInt();
+        dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
+        Serial.println(1500 + ((led_brightness - 10) / 90.0) * 700);
+        Serial.println("set brightness to" + String(led_brightness));
 }
 void handleRoot()
 {
-  if ( server.hasArg("led") ) {
-    handleLED();
-  } else if ( server.hasArg("brightness") ) {
-    handleBrightness();
-  }
-  server.send ( 200, "text/html", getPage() );
+        if ( server.hasArg("led") ) {
+                handleLED();
+        } else if ( server.hasArg("brightness") ) {
+                handleBrightness();
+        }
+        server.send ( 200, "text/html", getPage() );
 
 }

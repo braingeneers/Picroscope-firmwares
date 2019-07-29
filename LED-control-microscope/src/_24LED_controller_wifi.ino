@@ -240,8 +240,8 @@ void handleLED() {
         Serial.println(led_status);
         if (led_id == 100) {
                 if(led_status == 1) {
-                        Serial.println("1st Row On (All eventually)");
-                        for(int i = 18; i<24; i++){
+                        Serial.println("4th Row On (All eventually)");
+                        for(int i = 0; i<6; i++){
                           led_display(i,true);
                         }
 
@@ -263,9 +263,11 @@ void handleLED() {
 }
 void handleBrightness() {
         led_brightness = getValue(server.arg("brightness"), ',', 0).toInt();
+        //power limiting for safety
+        if(led_brightness > 50) led_brightness = 50;
         dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
         Serial.println(1500 + ((led_brightness - 10) / 90.0) * 700);
-        Serial.println("set brightness to" + String(led_brightness));
+        Serial.println("set brightness to " + String(led_brightness));
 }
 void handleRoot()
 {

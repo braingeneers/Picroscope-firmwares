@@ -73,6 +73,7 @@ void setup() {
         Serial.println();
 
         wifiMulti.addAP(ssid, password);
+        wifiMulti.addAP("CAVE_2.4GHz", "1butterflyCAVE@");
 
         Serial.println("Connecting ...");
 

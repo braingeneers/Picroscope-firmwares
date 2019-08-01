@@ -1,0 +1,4 @@
+sudo cat <<EOT >> /etc/ssh/ssh_config 
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+EOT

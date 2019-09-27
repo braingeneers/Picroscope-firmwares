@@ -241,8 +241,9 @@ void handleLED() {
         Serial.println(led_status);
         if (led_id == 100) {
                 if(led_status == 1) {
-                        Serial.println("4th Row On (All eventually)");
-                        for(int i = 0; i<6; i++){
+                        //Serial.println("4th Row On (All eventually)");
+                        Serial.println("All on");
+                        for(int i = 0; i<24; i++){
                           led_display(i,true);
                         }
 

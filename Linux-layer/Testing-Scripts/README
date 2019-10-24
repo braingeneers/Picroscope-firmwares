@@ -1,0 +1,4 @@
+Hub-id is the designation of which piscope you're testing, Andy would be A, Buzzwould be B... etc, run without argument if testing the original piscope
+
+sh ping-loop.sh [Hub-id]
+sh open-all-cameras.sh [Hub-id]

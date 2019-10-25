@@ -1,1 +1,1 @@
-for i in {1..4}; do for j in {1..6}; do open http://camera$1$i$j.local/html/ ; done; done
+for i in $(seq $1 1 $2); do for j in {1..6}; do open http://camera$3$i$j.local/html/ ; done; done

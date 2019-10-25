@@ -1,4 +1,5 @@
 Hub-id is the designation of which piscope you're testing, Andy would be 'A', Buwould be 'B'... etc, run without argument if testing the original piscope
+Start-row and End-row define the range of rows you want to test. 
 
 sh ping-loop.sh [Hub-id]
-sh open-all-cameras.sh [Hub-id]
+sh open-all-cameras.sh [Start-row] [End-row] [Hub-id]

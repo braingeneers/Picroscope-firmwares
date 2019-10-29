@@ -33,6 +33,18 @@ int newMotorPosition = EEPROM.read(0);
 //int newMotorPosition = 0;
 int stepsToTake = 0;
 
+//Read limit switch
+boolean read_switch(int lim_switch) {
+    if(lim_switch==0)
+    {
+      return digitalRead(11);
+    }
+    else if(lim_switch==1)
+    {
+      return digitalRead(12);
+    }
+}
+
 
 void setup() {
         Serial.begin(115200);     // set up Serial library at 9600 bps
@@ -45,6 +57,10 @@ void setup() {
 
         pinMode(2, OUTPUT);
         digitalWrite(2, HIGH);
+
+        //Set limit switch pin as input
+        pinMode(11, INPUT);
+        pinMode(12, INPUT);
         //for blue_lights
          // blue_light->setSpeed(100);
          // blue_light->run(FORWARD);

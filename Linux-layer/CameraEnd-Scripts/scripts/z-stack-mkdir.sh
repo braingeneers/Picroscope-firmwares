@@ -1,1 +1,1 @@
-mkdir -- "/home/pi/Pictures/$1"
+mkdir -- "/home/pi/Pictures/$1/$2"

@@ -38,7 +38,6 @@
 #include <ESP8266WiFiMulti.h>
 #include <ESP8266mDNS.h>
 #include <Wire.h>
-#include "MCP4728.h"
 
 //#define SERIAL_C
 
@@ -51,19 +50,14 @@ const char *password = "raspberry";
 
 String header;
 
-MCP4728 dac;
-
-const int dataPin = 16;   //Outputs the byte to transfer
-const int loadPin = 12;   //Controls the internal transference of data in SN74HC595 internal registers
-const int clockPin = 14;  //Generates the clock signal to control the transference of data
+const int led_pin = 16;
 
 int led_brightness = 50;
 
 String getValue(String data, char separator, int index);
-void led_display(int i, bool on = false);
+void led_display(bool on = false);
 String getPage();
 void handleLED();
-void handleBrightness();
 void handleRoot();
 
 
@@ -97,49 +91,28 @@ void setup() {
         server.begin();
         Serial.println("HTTP server started");
 
-        Serial.println("init DAC");
-        pinMode(dataPin, OUTPUT);
-        pinMode(loadPin, OUTPUT);
-        pinMode(clockPin, OUTPUT);
+        Serial.print("Relay Pin: ");
+        Serial.println(led_pin);
+        pinMode(led_pin, OUTPUT);
         Wire.begin(4, 5);
-        dac.attatch(Wire, 13);
-        dac.readRegisters();
-
-        dac.selectVref(MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V, MCP4728::VREF::INTERNAL_2_8V);
-        dac.selectPowerDown(MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM, MCP4728::PWR_DOWN::GND_100KOHM);
-        dac.selectGain(MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2, MCP4728::GAIN::X2);
-        //dac.analogWrite(MCP4728::DAC_CH::A, 1850); //Range 1500-2200
-        dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
-        dac.analogWrite(MCP4728::DAC_CH::B, 0);
-        dac.analogWrite(MCP4728::DAC_CH::C, 0);
-        dac.analogWrite(MCP4728::DAC_CH::D, 0);
-        dac.enable(true);
-        dac.readRegisters();
 
         led_display(0);
 }
 
 int id = -1;
-char a = 'n';
-char b = 'n';
+char led_status = 'n';
 
 void loop() {
         server.handleClient();
 
   #ifdef SERIAL_C
-        if (Serial.available() >= 2) {
+        if (Serial.available() >=2) {
                 // LED_id
-                a = Serial.read(); // 1 or 0 on/off
-                b = Serial.read(); // colon separator
-                id = Serial.parseInt();
-                //Serial.read(); //flush newline char
+                led_status = Serial.read(); // 1 or 0 on/off
 
-                Serial.println(a);
-                Serial.println(b);
-                Serial.println(id);
+                Serial.println(led_status);
 
-                if(id >= 0 && id <= 24)
-                        led_display(id, a == '1');
+                led_display(led_status);
 
                 while(Serial.available())
                         Serial.read(); //disgusting blocking code to deal with flushing serial line
@@ -167,27 +140,12 @@ String getValue(String data, char separator, int index)
         return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
-void led_display(int i, bool on)
+void led_display(bool on)
 {
-        static long data = 0;
-
         if (on)
-                data = data | 1 << i;
+                digitalWrite(led_pin, HIGH);
         else
-                data = data & ~(1 << i);
-
-        if(i == 25) //all off condition
-                data = 0;
-        //Serial.println(data);
-        //byte data = B01010101;
-        digitalWrite(loadPin, LOW);
-        shiftOut(dataPin, clockPin, MSBFIRST, (data >> 16) & B11111111);
-        delay(10);
-        shiftOut(dataPin, clockPin, MSBFIRST, (data >> 8) & B11111111);
-        delay(10);
-        shiftOut(dataPin, clockPin, MSBFIRST, data & B11111111);
-        delay(10);
-        digitalWrite(loadPin, HIGH);
+                digitalWrite(led_pin, LOW);
 }
 
 String getPage()
@@ -240,43 +198,26 @@ void handleLED() {
         Serial.println(led_id);
         Serial.println(led_status);
         if (led_id == 100) {
-                if(led_status == 1) {
-                        //Serial.println("4th Row On (All eventually)");
-                        Serial.println("All on");
-                        for(int i = 0; i<24; i++){
-                          led_display(i,true);
-                        }
-
-                }
-                else{
-                        Serial.println("all off");
-                        led_display(25);
-                }
+          if(led_status == 1) {
+            //Serial.println("4th Row On (All eventually)");
+            Serial.println("All on");
+            led_display(true);
+          }
+          else {
+            Serial.println("all off");
+            led_display(false);
+          }
         }
         else {
-                if (led_status == 1)
-                {
-                        led_display(led_id, true);
-                }
-                else {
-                        led_display(led_id, false);
-                }
+          if (led_status == 1) led_display(true);
+          else led_display(false);
         }
 }
-void handleBrightness() {
-        led_brightness = getValue(server.arg("brightness"), ',', 0).toInt();
-        //power limiting for safety
-        if(led_brightness > 50) led_brightness = 50;
-        dac.analogWrite(MCP4728::DAC_CH::A, 1500 + ((led_brightness - 10) / 90.0) * 700);
-        Serial.println(1500 + ((led_brightness - 10) / 90.0) * 700);
-        Serial.println("set brightness to " + String(led_brightness));
-}
+
 void handleRoot()
 {
         if ( server.hasArg("led") ) {
                 handleLED();
-        } else if ( server.hasArg("brightness") ) {
-                handleBrightness();
         }
         server.send ( 200, "text/html", getPage() );
 

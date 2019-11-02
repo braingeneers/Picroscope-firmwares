@@ -106,18 +106,23 @@ void loop() {
         server.handleClient();
 
   #ifdef SERIAL_C
-        if (Serial.available() >=2) {
-                // LED_id
-                led_status = Serial.read(); // 1 or 0 on/off
+    if (Serial.available() >=2) {
+      // LED_id
+      led_status = Serial.read(); // 1 or 0 on/off
+      if (led_status == 1) {
+        led_display(led_status);
+        Serial.println(led_status);
+      }
+      else if (led_status == 0) {
+        led_display(led_status);
+        Serial.println(led_status);
+      }
+      else
+        break;
+      while(Serial.available())
+              Serial.read(); //disgusting blocking code to deal with flushing serial line
 
-                Serial.println(led_status);
-
-                led_display(led_status);
-
-                while(Serial.available())
-                        Serial.read(); //disgusting blocking code to deal with flushing serial line
-
-        }
+    }
   #endif
 
 }

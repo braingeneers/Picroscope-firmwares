@@ -101,13 +101,13 @@ void loop() {
         }
         stepsToTake = newMotorPosition - curMotorPosition;
         if ( stepsToTake > 0) {
-                myMotor1->step(1, FORWARD, SINGLE);
-                myMotor2->step(1, FORWARD, SINGLE);
+                myMotor1->step(1, FORWARD, INTERLEAVE );
+                myMotor2->step(1, FORWARD, INTERLEAVE);
                 curMotorPosition++;
         }
         else if ( stepsToTake < 0) {
-                myMotor1->step(1, BACKWARD, SINGLE);
-                myMotor2->step(1, BACKWARD, SINGLE);
+                myMotor1->step(1, BACKWARD, INTERLEAVE);
+                myMotor2->step(1, BACKWARD, INTERLEAVE);
                 curMotorPosition--;
         }
         else {

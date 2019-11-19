@@ -105,7 +105,7 @@ void loop() {
                 EEPROM.update(address, 0);
         }
         if ( a == 'r') {
-                //Calibration case
+                //return to origin based on limit switch
                 return_to_start();
                 curMotorPosition = 0;
                 newMotorPosition = 0;
@@ -120,9 +120,14 @@ void loop() {
         }
         stepsToTake = newMotorPosition - curMotorPosition;
         if ( stepsToTake > 0) {
-                myMotor1->onestep(FORWARD, INTERLEAVE );
-                myMotor2->onestep(FORWARD, INTERLEAVE);
-                curMotorPosition++;
+                if(read_switch(1)==1){//stop collision with cell plate
+                  myMotor1->onestep(FORWARD, INTERLEAVE );
+                  myMotor2->onestep(FORWARD, INTERLEAVE);
+                  curMotorPosition++;
+                }else{
+                  newMotorPosition = curMotorPosition;
+                  stepsToTake = 0;
+                }
         }
         else if ( stepsToTake < 0) {
                 myMotor1->onestep(BACKWARD, INTERLEAVE);

@@ -45,6 +45,14 @@ boolean read_switch(int lim_switch) {
     }
 }
 
+void return_to_start(){
+  while(read_switch(0)==1 && curMotorPosition > -3000){ //safety in case of limit switch failure
+    myMotor1->onestep(BACKWARD, INTERLEAVE);
+    myMotor2->onestep(BACKWARD, INTERLEAVE);
+    curMotorPosition--;
+  }
+}
+
 
 void setup() {
         Serial.begin(115200);     // set up Serial library at 9600 bps
@@ -84,14 +92,25 @@ void loop() {
                 Serial.println(a);
                 Serial.println(b);
                 Serial.println(val, DEC);
+
 #endif
         }
-
+        // Serial.print("switch zero: ");Serial.print(read_switch(0));
+        // Serial.print(" switch one: "); Serial.print(read_switch(1)); Serial.println();
+        // delay(500);
         if ( a == 'c') {
                 //Calibration case
                 curMotorPosition = 0;
                 newMotorPosition = 0;
                 EEPROM.update(address, 0);
+        }
+        if ( a == 'r') {
+                //Calibration case
+                return_to_start();
+                curMotorPosition = 0;
+                newMotorPosition = 0;
+                EEPROM.update(address, 0);
+                a = 'n';
         }
         if ( a == 'm') {
                 //    if ((val > -1000) && (val < 1000)) safety
@@ -101,13 +120,13 @@ void loop() {
         }
         stepsToTake = newMotorPosition - curMotorPosition;
         if ( stepsToTake > 0) {
-                myMotor1->step(1, FORWARD, INTERLEAVE );
-                myMotor2->step(1, FORWARD, INTERLEAVE);
+                myMotor1->onestep(FORWARD, INTERLEAVE );
+                myMotor2->onestep(FORWARD, INTERLEAVE);
                 curMotorPosition++;
         }
         else if ( stepsToTake < 0) {
-                myMotor1->step(1, BACKWARD, INTERLEAVE);
-                myMotor2->step(1, BACKWARD, INTERLEAVE);
+                myMotor1->onestep(BACKWARD, INTERLEAVE);
+                myMotor2->onestep(BACKWARD, INTERLEAVE);
                 curMotorPosition--;
         }
         else {

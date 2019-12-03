@@ -41,7 +41,9 @@ boolean read_switch(int lim_switch) {
     }
     else if(lim_switch==1)
     {
-      return digitalRead(12);
+      //quick hack
+      return true;
+      //return digitalRead(12);
     }
 }
 
@@ -50,6 +52,13 @@ void return_to_start(){
     myMotor1->onestep(BACKWARD, INTERLEAVE);
     myMotor2->onestep(BACKWARD, INTERLEAVE);
     curMotorPosition--;
+  }
+  //correct for mechanical hysteresis in limit switch
+  //read_switch(1) ensures no collision with tissue culture
+  while(read_switch(0)==0 && read_switch(1)==1){
+    myMotor1->onestep(FORWARD, INTERLEAVE);
+    myMotor2->onestep(FORWARD, INTERLEAVE);
+    curMotorPosition++;
   }
 }
 
@@ -67,7 +76,8 @@ void setup() {
         digitalWrite(2, HIGH);
 
         //Set limit switch pin as input
-        pinMode(11, INPUT);
+        //input INPUT_PULLUP not for use with Pat's board
+        pinMode(11, INPUT_PULLUP);
         pinMode(12, INPUT);
         //for blue_lights
          // blue_light->setSpeed(100);

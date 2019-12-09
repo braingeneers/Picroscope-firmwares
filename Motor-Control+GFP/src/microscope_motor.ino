@@ -65,7 +65,7 @@ void return_to_start(){
 
 void setup() {
         Serial.begin(115200);     // set up Serial library at 9600 bps
-
+        //Serial.println("starting: ");
         AFMS.begin(); // create with the default frequency 1.6KHz
         LightController.begin();
 
@@ -90,6 +90,7 @@ char a = 'n';
 char b = 'n';
 
 void loop() {
+        //Serial.println("running: ");
         if (Serial.available() >= 2) {
                 a = Serial.read();
                 //for fast GFP blue_light response act here to avoid processing delays

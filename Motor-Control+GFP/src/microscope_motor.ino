@@ -73,6 +73,8 @@ void setup() {
         myMotor2->setSpeed(200);
 
         pinMode(2, OUTPUT);
+        pinMode(A1, OUTPUT);
+        pinMode(A2, OUTPUT);
         digitalWrite(2, HIGH);
 
         //Set limit switch pin as input
@@ -151,14 +153,17 @@ void loop() {
         }
 
         if (a == 'l') {
-                if (val >= 0 && val <= 255) {
+                if (val == 0) {
                         //analogWrite(ledPin, val);
-                        blue_light->setSpeed(val);
-                        blue_light->run(FORWARD);
+                        digitalWrite(A0, HIGH);
+                        //blue_light->setSpeed(val);
+                        //blue_light->run(FORWARD);
                 }
+                if ( val == 1)
+                        digitalWrite(A1, HIGH);
                 else{
-                        blue_light->setSpeed(0);
-                        blue_light->run(RELEASE);
+                        digitalWrite(A0, LOW);
+                        digitalWrite(A1, LOW);
                 }
         }
         if (a == 'w') {

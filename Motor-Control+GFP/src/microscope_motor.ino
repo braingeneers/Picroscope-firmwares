@@ -10,6 +10,8 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 #include "EEPROM.h"
 
+#define SWITCH_2_PIN 7
+#define BLUE_LED_PIN 2
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_MotorShield LightController = Adafruit_MotorShield(0x61);
@@ -35,32 +37,36 @@ int stepsToTake = 0;
 
 //Read limit switch
 boolean read_switch(int lim_switch) {
-    if(lim_switch==0)
-    {
-      return digitalRead(11);
-    }
-    else if(lim_switch==1)
-    {
-      //quick hack
-      return true;
-      //return digitalRead(12);
-    }
+        if(lim_switch==2)
+        {
+                return digitalRead(SWITCH_2_PIN);
+        }
+        else if(lim_switch==1)
+        {
+                //quick hack
+                return true;
+                //return digitalRead(12);
+        }
 }
 
 void return_to_start(){
-  while(read_switch(0)==1 && curMotorPosition > -3000){ //safety in case of limit switch failure
-    myMotor1->onestep(BACKWARD, INTERLEAVE);
-    myMotor2->onestep(BACKWARD, INTERLEAVE);
-    curMotorPosition--;
-  }
-  //correct for mechanical hysteresis in limit switch
-  //read_switch(1) ensures no collision with tissue culture
-  while(read_switch(0)==0 && read_switch(1)==1){
-    myMotor1->onestep(FORWARD, INTERLEAVE);
-    myMotor2->onestep(FORWARD, INTERLEAVE);
-    curMotorPosition++;
-  }
+        while(digitalRead(SWITCH_2_PIN) && curMotorPosition > -5000) { //safety in case of limit switch failure
+                myMotor1->onestep(BACKWARD, INTERLEAVE);
+                myMotor2->onestep(BACKWARD, INTERLEAVE);
+                curMotorPosition--;
+        }
+        //correct for mechanical hysteresis in limit switch
+        //read_switch(1) ensures no collision with tissue culture
+        while(digitalRead(SWITCH_2_PIN)==0) {
+                myMotor1->onestep(FORWARD, INTERLEAVE);
+                myMotor2->onestep(FORWARD, INTERLEAVE);
+                curMotorPosition++;
+        }
 }
+
+void return_to_start_step();
+
+
 
 
 void setup() {
@@ -72,24 +78,24 @@ void setup() {
         myMotor1->setSpeed(200); // 10 rpm
         myMotor2->setSpeed(200);
 
-        pinMode(2, OUTPUT);
-        pinMode(A1, OUTPUT);
-        pinMode(A2, OUTPUT);
-        digitalWrite(2, HIGH);
+        pinMode(BLUE_LED_PIN, OUTPUT);
+        pinMode(3, OUTPUT);
+        pinMode(4, OUTPUT);
+        digitalWrite(BLUE_LED_PIN, LOW);
 
         //Set limit switch pin as input
         //input INPUT_PULLUP not for use with Pat's board
-        pinMode(11, INPUT_PULLUP);
-        pinMode(12, INPUT);
+        pinMode(SWITCH_2_PIN, INPUT);
         //for blue_lights
-         // blue_light->setSpeed(100);
-         // blue_light->run(FORWARD);
-         // // turn on motor
-         // blue_light->run(RELEASE);
+        // blue_light->setSpeed(100);
+        // blue_light->run(FORWARD);
+        // // turn on motor
+        // blue_light->run(RELEASE);
 }
 int val = -1;
 char a = 'n';
 char b = 'n';
+bool return_flag = false;
 
 void loop() {
         //Serial.println("running: ");
@@ -119,10 +125,11 @@ void loop() {
         }
         if ( a == 'r') {
                 //return to origin based on limit switch
-                return_to_start();
-                curMotorPosition = 0;
-                newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                return_flag = true;
+                //return_to_start();
+                //curMotorPosition = 0;
+                //newMotorPosition = 0;
+                //EEPROM.update(address, 0);
                 a = 'n';
         }
         if ( a == 'm') {
@@ -131,40 +138,40 @@ void loop() {
                 //save the new motor position into EEPROM
                 EEPROM.update(address, val);
         }
-        stepsToTake = newMotorPosition - curMotorPosition;
-        if ( stepsToTake > 0) {
-                if(read_switch(1)==1){//stop collision with cell plate
-                  myMotor1->onestep(FORWARD, INTERLEAVE );
-                  myMotor2->onestep(FORWARD, INTERLEAVE);
-                  curMotorPosition++;
-                }else{
-                  newMotorPosition = curMotorPosition;
-                  stepsToTake = 0;
+        if(return_flag) {
+                return_to_start_step();
+        }
+        else{
+                stepsToTake = newMotorPosition - curMotorPosition;
+                if ( stepsToTake > 0) {
+                        if(read_switch(1)==1) {//stop collision with cell plate
+                                myMotor1->onestep(FORWARD, INTERLEAVE );
+                                myMotor2->onestep(FORWARD, INTERLEAVE);
+                                curMotorPosition++;
+                        }else{
+                                newMotorPosition = curMotorPosition;
+                                stepsToTake = 0;
+                        }
+                }
+                else if ( stepsToTake < 0) {
+                        myMotor1->onestep(BACKWARD, INTERLEAVE);
+                        myMotor2->onestep(BACKWARD, INTERLEAVE);
+                        curMotorPosition--;
+                }
+                else {
+                        myMotor1->release();
+                        myMotor2->release();
                 }
         }
-        else if ( stepsToTake < 0) {
-                myMotor1->onestep(BACKWARD, INTERLEAVE);
-                myMotor2->onestep(BACKWARD, INTERLEAVE);
-                curMotorPosition--;
-        }
-        else {
-                myMotor1->release();
-                myMotor2->release();
-        }
-
         if (a == 'l') {
                 if (val == 0) {
                         //analogWrite(ledPin, val);
-                        digitalWrite(A0, HIGH);
+                        digitalWrite(BLUE_LED_PIN, LOW);
                         //blue_light->setSpeed(val);
                         //blue_light->run(FORWARD);
                 }
                 if ( val == 1)
-                        digitalWrite(A1, HIGH);
-                else{
-                        digitalWrite(A0, LOW);
-                        digitalWrite(A1, LOW);
-                }
+                        digitalWrite(BLUE_LED_PIN, HIGH);
         }
         if (a == 'w') {
                 if (val >= 0 && val <= 255) {
@@ -179,4 +186,60 @@ void loop() {
         }
 
 
+}
+
+
+void return_to_start_step(){
+        //this is a mess to make the motor control non-blocking, must make into a state machine at a later date
+        enum state {DOWN, UP, EXIT, ERROR};
+        static int state = DOWN;
+        switch (state)
+        {
+        case DOWN:
+                if(digitalRead(SWITCH_2_PIN) == 1) { //safety in case of limit switch failure
+                        myMotor1->onestep(BACKWARD, INTERLEAVE);
+                        myMotor2->onestep(BACKWARD, INTERLEAVE);
+                        curMotorPosition--;
+                        if(curMotorPosition < -5000) {
+                                state = ERROR;//error condition
+                        }
+                }
+                else{
+                        state = UP;
+                }
+                break;
+        case UP:
+                if(digitalRead(SWITCH_2_PIN)==0) {
+                        myMotor1->onestep(FORWARD, INTERLEAVE);
+                        myMotor2->onestep(FORWARD, INTERLEAVE);
+                        curMotorPosition++;
+                }
+                else{
+                        state = EXIT;
+                }
+
+                break;
+        case EXIT:
+                return_flag = false;
+                curMotorPosition = 0;
+                newMotorPosition = 0;
+                EEPROM.update(address, 0);
+                state = DOWN;
+                break;
+        case ERROR:
+                return_flag = false;
+                curMotorPosition = 0;
+                newMotorPosition = 0;
+                EEPROM.update(address, 0);
+                state = DOWN;
+                break;
+
+        }
+        //correct for mechanical hysteresis in limit switch
+        //read_switch(1) ensures no collision with tissue culture
+        // while(digitalRead(SWITCH_2_PIN)==0) {
+        //         myMotor1->onestep(FORWARD, INTERLEAVE);
+        //         myMotor2->onestep(FORWARD, INTERLEAVE);
+        //         curMotorPosition++;
+        // }
 }

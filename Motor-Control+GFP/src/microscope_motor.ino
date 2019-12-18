@@ -12,6 +12,7 @@
 
 #define SWITCH_2_PIN 7
 #define BLUE_LED_PIN 2
+#define WHITE_LED_PIN 3
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_MotorShield LightController = Adafruit_MotorShield(0x61);
@@ -79,10 +80,10 @@ void setup() {
         myMotor2->setSpeed(200);
 
         pinMode(BLUE_LED_PIN, OUTPUT);
-        pinMode(3, OUTPUT);
+        pinMode(WHITE_LED_PIN, OUTPUT);
         pinMode(4, OUTPUT);
         digitalWrite(BLUE_LED_PIN, LOW);
-
+        digitalWrite(WHITE_LED_PIN, LOW);
         //Set limit switch pin as input
         //input INPUT_PULLUP not for use with Pat's board
         pinMode(SWITCH_2_PIN, INPUT);
@@ -167,11 +168,14 @@ void loop() {
                 if (val == 0) {
                         //analogWrite(ledPin, val);
                         digitalWrite(BLUE_LED_PIN, LOW);
+                        digitalWrite(WHITE_LED_PIN, LOW);
                         //blue_light->setSpeed(val);
                         //blue_light->run(FORWARD);
                 }
                 if ( val == 1)
                         digitalWrite(BLUE_LED_PIN, HIGH);
+                if( val == 2)
+                        digitalWrite(WHITE_LED_PIN, HIGH);
         }
         if (a == 'w') {
                 if (val >= 0 && val <= 255) {

@@ -1,42 +1,59 @@
 /*
-   This code is for running the stepper motors and GFP blue_light board for the Braingeneers PiCroscope Project
+   This is a test sketch for the Adafruit assembled Motor Shield for Arduino v2
+   It won't work with v1.x motor shields! Only for the v2's with built in PWM
+   control
 
-
+   For use with the Adafruit Motor Shield v2
+   ---->	http://www.adafruit.com/products/1438
  */
 
-#define DEBUG
+
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
-#include "utility/Adafruit_MS_PWMServoDriver.h"
-#include "EEPROM.h"
+#include <PubSubClient.h>
+#include "ESPmDNS.h"
+#include "WiFi.h"
+#include <stdio.h>
 
-#define SWITCH_2_PIN 7
-#define BLUE_LED_PIN 2
-#define WHITE_LED_PIN 3
+
+#define DEBUG
+//#define SWITCH_2_PIN 7
+#define SWITCH_2_PIN 14
+//#define BLUE_LED_PIN 2
+#define BLUE_LED_PIN 26
+//#define WHITE_LED_PIN 3
+#define WHITE_LED_PIN 25
+
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-Adafruit_MotorShield LightController = Adafruit_MotorShield(0x61);
+// Or, create it with a different I2C address (say for stacking)
+// Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61);
 
-//L -> R
-//Yellow, Orange, NC, Brown, Redaaaaa
+// Connect a stepper motor with 200 steps per revolution (1.8 degree)
+// to motor port #2 (M3 and M4)
+//Adafruit_StepperMotor *myMotor = AFMS.getStepper(200, 2);
 Adafruit_StepperMotor * myMotor1 = AFMS.getStepper(200,  1);
-Adafruit_StepperMotor *myMotor2 = AFMS.getStepper(200,  2);
-//Adafruit_DCMotor *blue_light = LightController.getMotor(1);
-//Adafruit_DCMotor *white_light = LightController.getMotor(2);
+Adafruit_StepperMotor * myMotor2 = AFMS.getStepper(200,  2);
 
 
-byte index = 0;
+
+//byte index = 0;
 int address = 0;
 int ledPin = 3;
 
 int step_count[2] = {0, 0};
-int curMotorPosition = EEPROM.read(0);
-int newMotorPosition = EEPROM.read(0);
+int curMotorPosition = 0;
+int newMotorPosition = 0;
 //int curMotorPosition = 0;
 //int newMotorPosition = 0;
 int stepsToTake = 0;
 
-//Read limit switch
+int val = -1;
+char a = 'n';
+char b = 'n';
+bool return_flag = false;
+
+
 boolean read_switch(int lim_switch) {
         if(lim_switch==2)
         {
@@ -48,6 +65,7 @@ boolean read_switch(int lim_switch) {
                 return true;
                 //return digitalRead(12);
         }
+        return -1;
 }
 
 void return_to_start(){
@@ -67,14 +85,41 @@ void return_to_start(){
 
 void return_to_start_step();
 
+const char* ssid = "TP-LINK_PiScope";
+const char* password =  "raspberry";
 
+//const char* mqtt_server = "10.1.10.88";
+const char * serverHostname = "gfphub";
+const int mqtt_port = 1883;
+char buff[20];
 
+WiFiClient espClient;
+PubSubClient client(espClient);
 
-void setup() {
-        Serial.begin(115200);     // set up Serial library at 9600 bps
+void reconnect();
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  for (int i=0;i<length;i++) {
+    Serial.print((char)payload[i]);
+    buff[i] = (char)payload[i];
+  }
+  buff[length] = '\0';
+  sscanf (buff,"%c : %d",&a,&val);
+  //sscanf("foo", "f%s", a);
+  Serial.print(" a: ");
+  Serial.print(a);
+  Serial.print(" val: ");
+  Serial.println(val, DEC);
+  Serial.println();
+}
+
+void setup(){
+        Serial.begin(115200); // set up Serial library at 9600 bps
         //Serial.println("starting: ");
         AFMS.begin(); // create with the default frequency 1.6KHz
-        LightController.begin();
 
         myMotor1->setSpeed(200); // 10 rpm
         myMotor2->setSpeed(200);
@@ -84,22 +129,52 @@ void setup() {
         pinMode(4, OUTPUT);
         digitalWrite(BLUE_LED_PIN, LOW);
         digitalWrite(WHITE_LED_PIN, LOW);
-        //Set limit switch pin as input
-        //input INPUT_PULLUP not for use with Pat's board
         pinMode(SWITCH_2_PIN, INPUT);
-        //for blue_lights
-        // blue_light->setSpeed(100);
-        // blue_light->run(FORWARD);
-        // // turn on motor
-        // blue_light->run(RELEASE);
+
+
+
+
+        WiFi.begin(ssid, password);
+        Serial.println("Connecting to WiFi");
+        while (WiFi.status() != WL_CONNECTED) {
+                delay(500);
+                Serial.print(".");
+        }
+
+        Serial.println(" Connected to the WiFi network");
+
+        if (!MDNS.begin("esp32whatever")) {
+                Serial.println("Error setting up MDNS responder!");
+        } else {
+                Serial.println("Finished intitializing the MDNS client...");
+        }
+
+        IPAddress serverIp = MDNS.queryHost(serverHostname);
+        while (serverIp.toString() == "0.0.0.0") {
+                Serial.println("Trying again to resolve mDNS");
+                delay(250);
+                serverIp = MDNS.queryHost(serverHostname);
+        }
+        Serial.print("IP address of server: ");
+        Serial.println(serverIp.toString());
+
+        client.setServer(serverIp, mqtt_port);
+        client.setCallback(callback);
 }
-int val = -1;
-char a = 'n';
-char b = 'n';
-bool return_flag = false;
+int timer = 0;
 
 void loop() {
-        //Serial.println("running: ");
+        if (!client.connected()) {
+                reconnect();
+        }
+        client.loop();
+        if(abs(millis() - timer) > 2000) {
+                timer = millis();
+                Serial.println("running: ");
+        }
+
+
+
         if (Serial.available() >= 2) {
                 a = Serial.read();
                 //for fast GFP blue_light response act here to avoid processing delays
@@ -107,7 +182,10 @@ void loop() {
                 b = Serial.read();
                 val = Serial.parseInt();
                 //    //flush
-                //    while(Serial.available) Serial.read();
+                while(Serial.available()) {
+                        Serial.read();
+                        Serial.println("flushing");
+                }
 #ifdef DEBUG
                 Serial.println(a);
                 Serial.println(b);
@@ -122,7 +200,7 @@ void loop() {
                 //Calibration case
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                //EEPROM.update(address, 0);
         }
         if ( a == 'r') {
                 //return to origin based on limit switch
@@ -130,14 +208,14 @@ void loop() {
                 //return_to_start();
                 //curMotorPosition = 0;
                 //newMotorPosition = 0;
-                //EEPROM.update(address, 0);
+                ////EEPROM.update(address, 0);
                 a = 'n';
         }
         if ( a == 'm') {
                 //    if ((val > -1000) && (val < 1000)) safety
                 newMotorPosition = val;
-                //save the new motor position into EEPROM
-                EEPROM.update(address, val);
+                //save the new motor position into //EEPROM
+                //EEPROM.update(address, val);
         }
         if(return_flag) {
                 return_to_start_step();
@@ -177,21 +255,30 @@ void loop() {
                 if( val == 2)
                         digitalWrite(WHITE_LED_PIN, HIGH);
         }
-        if (a == 'w') {
-                if (val >= 0 && val <= 255) {
-                        //analogWrite(ledPin, val);
-                        white_light->setSpeed(val);
-                        white_light->run(FORWARD);
-                }
-                else{
-                        white_light->setSpeed(0);
-                        white_light->run(RELEASE);
-                }
-        }
+
+
 
 
 }
 
+
+void reconnect() {
+        while (!client.connected()) {
+                Serial.print("Attempting MQTT connection...");
+                // Attempt to connect
+                if (client.connect("ESP8266Client")) {
+                        Serial.println("connected");
+                        // Subscribe
+                        client.subscribe("motorControl");
+                } else {
+                        Serial.print("failed, rc=");
+                        Serial.print(client.state());
+                        Serial.println(" try again in 5 seconds");
+                        // Wait 5 seconds before retrying
+                        delay(5000);
+                }
+        }
+}
 
 void return_to_start_step(){
         //this is a mess to make the motor control non-blocking, must make into a state machine at a later date
@@ -227,14 +314,14 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                ////EEPROM.update(address, 0);
                 state = DOWN;
                 break;
         case ERROR:
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                //.update(address, 0);
                 state = DOWN;
                 break;
 
@@ -247,3 +334,31 @@ void return_to_start_step(){
         //         curMotorPosition++;
         // }
 }
+
+// void setup() {
+//         Serial.begin(9600);     // set up Serial library at 9600 bps
+//         Serial.println("Stepper test!");
+//
+//         AFMS.begin(); // create with the default frequency 1.6KHz
+//         //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
+//
+//         myMotor1->setSpeed(10); // 10 rpm
+// }
+//
+// void loop() {
+//         Serial.println("Single coil steps");
+//         myMotor1->step(100, FORWARD, SINGLE);
+//         myMotor1->step(100, BACKWARD, SINGLE);
+//
+//         Serial.println("Double coil steps");
+//         myMotor1->step(100, FORWARD, DOUBLE);
+//         myMotor1->step(100, BACKWARD, DOUBLE);
+//
+//         Serial.println("Interleave coil steps");
+//         myMotor1->step(100, FORWARD, INTERLEAVE);
+//         myMotor1->step(100, BACKWARD, INTERLEAVE);
+//
+//         Serial.println("Microstep steps");
+//         myMotor1->step(50, FORWARD, MICROSTEP);
+//         myMotor1->step(50, BACKWARD, MICROSTEP);
+// }

@@ -14,6 +14,7 @@
 #include "ESPmDNS.h"
 #include "WiFi.h"
 #include <stdio.h>
+#include <ArduinoOTA.h>
 
 
 #define DEBUG
@@ -89,7 +90,7 @@ const char* ssid = "TP-LINK_PiScope";
 const char* password =  "raspberry";
 
 //const char* mqtt_server = "10.1.10.88";
-const char * serverHostname = "gfphub";
+const char * serverHostname = "microscopehub";
 const int mqtt_port = 1883;
 char buff[20];
 
@@ -160,10 +161,52 @@ void setup(){
 
         client.setServer(serverIp, mqtt_port);
         client.setCallback(callback);
+
+        ArduinoOTA.onStart([](){
+                String type;
+                if(ArduinoOTA.getCommand() == U_FLASH)
+                        type = "sketch";
+                else
+                        type = "filesystem";
+                           
+                Serial.println("Starting update: " + type);
+        })
+
+        .onEnd([]() {
+                Serial.println("\nDone");
+
+        })
+        .onProgress([](unsigned int progress, unsigned int total) {
+                Serial.printf("Progress: %u%%/r", (progress / (total / 100)));
+        })
+        .onError([](ota_error_t error) {
+                Serial.printf("Error[%u]: ", error);
+                if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+                else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+                else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+                else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+                else if (error == OTA_END_ERROR) Serial.println("End Failed");
+        });
+                
+        
 }
 int timer = 0;
 
 void loop() {
+
+        if(WiFi.status() != WL_CONNECTED){
+                Serial.println("List connection");
+                if(WiFi.status() == WL_NO_SSID_AVAIL){
+                        Serial.println("SSID not found");
+                }
+                WiFi.begin(ssid, "raspberry");
+                Serial.println("Connecting to WiFi: Reconnect");
+                while (WiFi.status() != WL_CONNECTED) {
+                        delay(500);
+                        Serial.print(".");
+                }
+        }
+
         if (!client.connected()) {
                 reconnect();
         }
@@ -173,7 +216,7 @@ void loop() {
                 Serial.println("running: ");
         }
 
-
+        ArduinoOTA.handle();
 
         if (Serial.available() >= 2) {
                 a = Serial.read();

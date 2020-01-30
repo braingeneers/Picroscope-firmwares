@@ -20,6 +20,8 @@
 #define DEBUG
 //#define SWITCH_2_PIN 7
 #define SWITCH_2_PIN 14
+//#define SWITCH_1_PIN 12
+#define SWITCH_1_PIN 19
 //#define BLUE_LED_PIN 2
 #define BLUE_LED_PIN 26
 //#define WHITE_LED_PIN 3
@@ -63,21 +65,22 @@ boolean read_switch(int lim_switch) {
         else if(lim_switch==1)
         {
                 //quick hack
-                return true;
+                //return true;
                 //return digitalRead(12);
+                return digitalRead(SWITCH_1_PIN);
         }
         return -1;
 }
 
 void return_to_start(){
-        while(digitalRead(SWITCH_2_PIN) && curMotorPosition > -5000) { //safety in case of limit switch failure
+        while(digitalRead(SWITCH_1_PIN) && curMotorPosition > -5000) { //safety in case of limit switch failure
                 myMotor1->onestep(BACKWARD, INTERLEAVE);
                 myMotor2->onestep(BACKWARD, INTERLEAVE);
                 curMotorPosition--;
         }
         //correct for mechanical hysteresis in limit switch
         //read_switch(1) ensures no collision with tissue culture
-        while(digitalRead(SWITCH_2_PIN)==0) {
+        while(digitalRead(SWITCH_1_PIN)==0) {
                 myMotor1->onestep(FORWARD, INTERLEAVE);
                 myMotor2->onestep(FORWARD, INTERLEAVE);
                 curMotorPosition++;
@@ -131,6 +134,7 @@ void setup(){
         digitalWrite(BLUE_LED_PIN, LOW);
         digitalWrite(WHITE_LED_PIN, LOW);
         pinMode(SWITCH_2_PIN, INPUT);
+        pinMode(SWITCH_1_PIN, INPUT);
 
 
 
@@ -168,7 +172,7 @@ void setup(){
                         type = "sketch";
                 else
                         type = "filesystem";
-                           
+
                 Serial.println("Starting update: " + type);
         })
 
@@ -187,8 +191,8 @@ void setup(){
                 else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
                 else if (error == OTA_END_ERROR) Serial.println("End Failed");
         });
-                
-        
+
+
 }
 int timer = 0;
 
@@ -266,7 +270,7 @@ void loop() {
         else{
                 stepsToTake = newMotorPosition - curMotorPosition;
                 if ( stepsToTake > 0) {
-                        if(read_switch(1)==1) {//stop collision with cell plate
+                        if(true){//read_switch(1)==1) {//stop collision with cell plate
                                 myMotor1->onestep(FORWARD, INTERLEAVE );
                                 myMotor2->onestep(FORWARD, INTERLEAVE);
                                 curMotorPosition++;

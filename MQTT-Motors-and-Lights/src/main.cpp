@@ -93,7 +93,7 @@ const char* ssid = "TP-LINK_PiScope";
 const char* password =  "raspberry";
 
 //const char* mqtt_server = "10.1.10.88";
-const char * serverHostname = "microscopehub";
+const char * serverHostname = "gfphub";
 const int mqtt_port = 1883;
 char buff[20];
 
@@ -148,7 +148,7 @@ void setup(){
 
         Serial.println(" Connected to the WiFi network");
 
-        if (!MDNS.begin("esp32whatever")) {
+        if (!MDNS.begin("esp32whatever1")) {
                 Serial.println("Error setting up MDNS responder!");
         } else {
                 Serial.println("Finished intitializing the MDNS client...");

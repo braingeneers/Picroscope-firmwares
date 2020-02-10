@@ -91,9 +91,10 @@ void return_to_start_step();
 
 const char* ssid = "TP-LINK_PiScope";
 const char* password =  "raspberry";
+const char* clientName = "ESP32thingy_1";
 
 //const char* mqtt_server = "10.1.10.88";
-const char * serverHostname = "gfphub";
+const char * serverHostname = "microscopehub";
 const int mqtt_port = 1883;
 char buff[20];
 
@@ -103,21 +104,21 @@ PubSubClient client(espClient);
 void reconnect();
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i=0;i<length;i++) {
-    Serial.print((char)payload[i]);
-    buff[i] = (char)payload[i];
-  }
-  buff[length] = '\0';
-  sscanf (buff,"%c : %d",&a,&val);
-  //sscanf("foo", "f%s", a);
-  Serial.print(" a: ");
-  Serial.print(a);
-  Serial.print(" val: ");
-  Serial.println(val, DEC);
-  Serial.println();
+        Serial.print("Message arrived [");
+        Serial.print(topic);
+        Serial.print("] ");
+        for (int i=0; i<length; i++) {
+                Serial.print((char)payload[i]);
+                buff[i] = (char)payload[i];
+        }
+        buff[length] = '\0';
+        sscanf (buff,"%c : %d",&a,&val);
+        //sscanf("foo", "f%s", a);
+        Serial.print(" a: ");
+        Serial.print(a);
+        Serial.print(" val: ");
+        Serial.println(val, DEC);
+        Serial.println();
 }
 
 void setup(){
@@ -148,7 +149,7 @@ void setup(){
 
         Serial.println(" Connected to the WiFi network");
 
-        if (!MDNS.begin("esp32whatever1")) {
+        if (!MDNS.begin(clientName)) {
                 Serial.println("Error setting up MDNS responder!");
         } else {
                 Serial.println("Finished intitializing the MDNS client...");
@@ -166,80 +167,88 @@ void setup(){
         client.setServer(serverIp, mqtt_port);
         client.setCallback(callback);
 
-        ArduinoOTA.onStart([](){
-                String type;
-                if(ArduinoOTA.getCommand() == U_FLASH)
-                        type = "sketch";
-                else
-                        type = "filesystem";
-
-                Serial.println("Starting update: " + type);
-        })
-
-        .onEnd([]() {
-                Serial.println("\nDone");
-
-        })
-        .onProgress([](unsigned int progress, unsigned int total) {
-                Serial.printf("Progress: %u%%/r", (progress / (total / 100)));
-        })
-        .onError([](ota_error_t error) {
-                Serial.printf("Error[%u]: ", error);
-                if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-                else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-                else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-                else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-                else if (error == OTA_END_ERROR) Serial.println("End Failed");
-        });
+        // ArduinoOTA.onStart([](){
+        //         String type;
+        //         if(ArduinoOTA.getCommand() == U_FLASH)
+        //                 type = "sketch";
+        //         else
+        //                 type = "filesystem";
+        //
+        //         Serial.println("Starting update: " + type);
+        // })
+        //
+        // .onEnd([]() {
+        //         Serial.println("\nDone");
+        //
+        // })
+        // .onProgress([](unsigned int progress, unsigned int total) {
+        //         Serial.printf("Progress: %u%%/r", (progress / (total / 100)));
+        // })
+        // .onError([](ota_error_t error) {
+        //         Serial.printf("Error[%u]: ", error);
+        //         if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+        //         else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+        //         else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+        //         else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+        //         else if (error == OTA_END_ERROR) Serial.println("End Failed");
+        // });
 
 
 }
 int timer = 0;
 
 void loop() {
-
-        if(WiFi.status() != WL_CONNECTED){
-                Serial.println("List connection");
-                if(WiFi.status() == WL_NO_SSID_AVAIL){
-                        Serial.println("SSID not found");
-                }
-                WiFi.begin(ssid, "raspberry");
-                Serial.println("Connecting to WiFi: Reconnect");
-                while (WiFi.status() != WL_CONNECTED) {
-                        delay(500);
-                        Serial.print(".");
-                }
-        }
-
-        if (!client.connected()) {
-                reconnect();
-        }
-        client.loop();
-        if(abs(millis() - timer) > 2000) {
+        if(abs(millis() - timer) > 3000) {
                 timer = millis();
                 Serial.println("running: ");
-        }
+                if(WiFi.status() != WL_CONNECTED) {
+                        //for safety
+                        myMotor1->release();
+                        myMotor2->release();
 
-        ArduinoOTA.handle();
-
-        if (Serial.available() >= 2) {
-                a = Serial.read();
-                //for fast GFP blue_light response act here to avoid processing delays
-
-                b = Serial.read();
-                val = Serial.parseInt();
-                //    //flush
-                while(Serial.available()) {
-                        Serial.read();
-                        Serial.println("flushing");
+                        Serial.println("Lost connection");
+                        if(WiFi.status() == WL_NO_SSID_AVAIL) {
+                                Serial.println("SSID not found");
+                        }
+                        WiFi.begin(ssid, "raspberry");
+                        Serial.println("Connecting to WiFi: Reconnect");
+                        if(WiFi.status() == WL_CONNECTED) {
+                                if (!client.connected()) {
+                                        reconnect();
+                                }
+                        }
+                        // while (WiFi.status() != WL_CONNECTED) {
+                        //         delay(500);
+                        //         Serial.print(".");
+                        // }
                 }
-#ifdef DEBUG
-                Serial.println(a);
-                Serial.println(b);
-                Serial.println(val, DEC);
-
-#endif
+                else if (!client.connected()){
+                  myMotor1->release();//probably unecessary, very cautious
+                  myMotor2->release();
+                  reconnect();
+                }
         }
+
+        client.loop();
+
+        // ArduinoOTA.handle();
+
+        // if (Serial.available() >= 2) {
+        //         a = Serial.read();
+        //         //for fast GFP blue_light response act here to avoid processing delays
+        //         b = Serial.read();
+        //         val = Serial.parseInt();
+        //         //    //flush
+        //         while(Serial.available()) {
+        //                 Serial.read();
+        //                 Serial.println("flushing");
+        //         }
+// #ifdef DEBUG
+//         Serial.println(a);
+//         Serial.println(b);
+//         Serial.println(val, DEC);
+//
+// #endif
         // Serial.print("switch zero: ");Serial.print(read_switch(0));
         // Serial.print(" switch one: "); Serial.print(read_switch(1)); Serial.println();
         // delay(500);
@@ -260,6 +269,7 @@ void loop() {
         }
         if ( a == 'm') {
                 //    if ((val > -1000) && (val < 1000)) safety
+
                 newMotorPosition = val;
                 //save the new motor position into //EEPROM
                 //EEPROM.update(address, val);
@@ -270,7 +280,7 @@ void loop() {
         else{
                 stepsToTake = newMotorPosition - curMotorPosition;
                 if ( stepsToTake > 0) {
-                        if(true){//read_switch(1)==1) {//stop collision with cell plate
+                        if(true) {//read_switch(1)==1) {//stop collision with cell plate
                                 myMotor1->onestep(FORWARD, INTERLEAVE );
                                 myMotor2->onestep(FORWARD, INTERLEAVE);
                                 curMotorPosition++;
@@ -310,21 +320,21 @@ void loop() {
 
 
 void reconnect() {
-        while (!client.connected()) {
+        //if (!client.connected()) {
                 Serial.print("Attempting MQTT connection...");
                 // Attempt to connect
-                if (client.connect("ESP8266Client")) {
+                if (client.connect(clientName)) {
                         Serial.println("connected");
                         // Subscribe
                         client.subscribe("motorControl");
                 } else {
                         Serial.print("failed, rc=");
                         Serial.print(client.state());
-                        Serial.println(" try again in 5 seconds");
+                        Serial.println(" try again in 2 seconds");
                         // Wait 5 seconds before retrying
-                        delay(5000);
+                        //delay(5000);
                 }
-        }
+        //}
 }
 
 void return_to_start_step(){
@@ -361,6 +371,8 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
+                myMotor1->release();
+                myMotor2->release();
                 ////EEPROM.update(address, 0);
                 state = DOWN;
                 break;
@@ -368,6 +380,8 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
+                myMotor1->release();
+                myMotor2->release();
                 //.update(address, 0);
                 state = DOWN;
                 break;

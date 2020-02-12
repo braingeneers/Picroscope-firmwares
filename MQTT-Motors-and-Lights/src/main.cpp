@@ -91,7 +91,7 @@ void return_to_start_step();
 
 const char* ssid = "TP-LINK_PiScope";
 const char* password =  "raspberry";
-const char* clientName = "ESP32thingy_2";
+const char* clientName = "ESP32thingy_3";
 
 //const char* mqtt_server = "10.1.10.88";
 const char * serverHostname = "gfphub";

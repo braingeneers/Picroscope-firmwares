@@ -177,17 +177,17 @@ void loop() {
                 if( val == 2)
                         digitalWrite(WHITE_LED_PIN, HIGH);
         }
-        // if (a == 'w') {
-        //         if (val >= 0 && val <= 255) {
-        //                 //analogWrite(ledPin, val);
-        //                 white_light->setSpeed(val);
-        //                 white_light->run(FORWARD);
-        //         }
-        //         else{
-        //                 white_light->setSpeed(0);
-        //                 white_light->run(RELEASE);
-        //         }
-        // }
+        if (a == 'w') {
+                if (val >= 0 && val <= 255) {
+                        //analogWrite(ledPin, val);
+                        white_light->setSpeed(val);
+                        white_light->run(FORWARD);
+                }
+                else{
+                        white_light->setSpeed(0);
+                        white_light->run(RELEASE);
+                }
+        }
 
 
 }
@@ -227,8 +227,6 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                myMotor1->release();
-                myMotor2->release();
                 EEPROM.update(address, 0);
                 state = DOWN;
                 break;
@@ -236,8 +234,6 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                myMotor1->release();
-                myMotor2->release();
                 EEPROM.update(address, 0);
                 state = DOWN;
                 break;

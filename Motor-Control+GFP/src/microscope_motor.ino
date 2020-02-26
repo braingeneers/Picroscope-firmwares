@@ -146,7 +146,7 @@ void loop() {
                 stepsToTake = newMotorPosition - curMotorPosition;
                 if ( stepsToTake > 0) {
                         if(read_switch(1)==1) {//stop collision with cell plate
-                                myMotor1->onestep(FORWARD, INTERLEAVE );
+                                myMotor1->onestep(FORWARD, INTERLEAVE);
                                 myMotor2->onestep(FORWARD, INTERLEAVE);
                                 curMotorPosition++;
                         }else{
@@ -177,17 +177,17 @@ void loop() {
                 if( val == 2)
                         digitalWrite(WHITE_LED_PIN, HIGH);
         }
-        if (a == 'w') {
-                if (val >= 0 && val <= 255) {
-                        //analogWrite(ledPin, val);
-                        white_light->setSpeed(val);
-                        white_light->run(FORWARD);
-                }
-                else{
-                        white_light->setSpeed(0);
-                        white_light->run(RELEASE);
-                }
-        }
+        // if (a == 'w') {
+        //         if (val >= 0 && val <= 255) {
+        //                 //analogWrite(ledPin, val);
+        //                 white_light->setSpeed(val);
+        //                 white_light->run(FORWARD);
+        //         }
+        //         else{
+        //                 white_light->setSpeed(0);
+        //                 white_light->run(RELEASE);
+        //         }
+        // }
 
 
 }

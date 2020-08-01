@@ -9,10 +9,28 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 #include "EEPROM.h"
+#include "DHT.h"
 
 #define SWITCH_2_PIN 7
 #define BLUE_LED_PIN 2
 #define WHITE_LED_PIN 3
+#define DHTPIN 8
+
+#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+
+// Connect pin 1 (on the left) of the sensor to +5V
+// NOTE: If using a board with 3.3V logic like an Arduino Due connect pin 1
+// to 3.3V instead of 5V!
+// Connect pin 2 of the sensor to whatever your DHTPIN is
+// Connect pin 4 (on the right) of the sensor to GROUND
+// Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
+
+// Initialize DHT sensor.
+// Note that older versions of this library took an optional third parameter to
+// tweak the timings for faster processors.  This parameter is no longer needed
+// as the current DHT reading algorithm adjusts itself to work on faster procs.
+DHT dht(DHTPIN, DHTTYPE);
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_MotorShield LightController = Adafruit_MotorShield(0x61);
@@ -92,6 +110,7 @@ void setup() {
         // blue_light->run(FORWARD);
         // // turn on motor
         // blue_light->run(RELEASE);
+        dht.begin();
 }
 int val = -1;
 char a = 'n';
@@ -176,6 +195,13 @@ void loop() {
                         digitalWrite(BLUE_LED_PIN, HIGH);
                 if( val == 2)
                         digitalWrite(WHITE_LED_PIN, HIGH);
+        }
+        if (a == 't') {
+          float t = dht.readTemperature();
+          Serial.print(F("%  Temperature: "));
+          Serial.print(t);
+          Serial.println(F("°C "));
+          a = 'n';
         }
         // if (a == 'w') {
         //         if (val >= 0 && val <= 255) {

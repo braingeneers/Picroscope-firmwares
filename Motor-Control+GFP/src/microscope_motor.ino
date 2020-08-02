@@ -14,6 +14,7 @@
 #define SWITCH_2_PIN 7
 #define BLUE_LED_PIN 2
 #define WHITE_LED_PIN 3
+#define SAFE_SWITCH_PIN 4
 #define DHTPIN 8
 
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
@@ -99,9 +100,11 @@ void setup() {
 
         pinMode(BLUE_LED_PIN, OUTPUT);
         pinMode(WHITE_LED_PIN, OUTPUT);
-        pinMode(4, OUTPUT);
+        //pinMode(4, OUTPUT);
+        pinMode(SAFE_SWITCH_PIN, OUTPUT);
         digitalWrite(BLUE_LED_PIN, LOW);
         digitalWrite(WHITE_LED_PIN, LOW);
+        digitalWrite(SAFE_SWITCH_PIN, HIGH);
         //Set limit switch pin as input
         //input INPUT_PULLUP not for use with Pat's board
         pinMode(SWITCH_2_PIN, INPUT);
@@ -116,8 +119,18 @@ int val = -1;
 char a = 'n';
 char b = 'n';
 bool return_flag = false;
-
+float t = dht.readTemperature();
+int temp_timer = millis();
+bool catastrophe = false;
 void loop() {
+        if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0){
+            t = dht.readTemperature();
+            if (t > 40 && !isnan(t)){
+              catastrophe = true;
+              digitalWrite(SAFE_SWITCH_PIN, LOW);
+
+            }
+        }
         //Serial.println("running: ");
         if (Serial.available() >= 2) {
                 a = Serial.read();
@@ -197,7 +210,6 @@ void loop() {
                         digitalWrite(WHITE_LED_PIN, HIGH);
         }
         if (a == 't') {
-          float t = dht.readTemperature();
           Serial.print(F("%  Temperature: "));
           Serial.print(t);
           Serial.println(F("°C "));

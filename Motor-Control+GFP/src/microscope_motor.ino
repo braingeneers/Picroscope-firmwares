@@ -4,7 +4,7 @@
 
  */
 
-#define DEBUG
+//#define DEBUG
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
@@ -121,10 +121,14 @@ char b = 'n';
 bool return_flag = false;
 float t = dht.readTemperature();
 int temp_timer = millis();
+float highest_temp = 0;
 bool catastrophe = false;
 void loop() {
         if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0){
             t = dht.readTemperature();
+            if (t > highest_temp){
+              highest_temp = t;
+            }
             if (t > 40 && !isnan(t)){
               catastrophe = true;
               digitalWrite(SAFE_SWITCH_PIN, LOW);
@@ -212,7 +216,17 @@ void loop() {
         if (a == 't') {
           Serial.print(F("%  Temperature: "));
           Serial.print(t);
-          Serial.println(F("°C "));
+          Serial.print(F("°C "));
+          Serial.print(F("%  Peak Temperature: "));
+          Serial.print(highest_temp);
+          Serial.print(F("°C "));
+          Serial.print(F("%  catastrophe: "));
+          Serial.println(catastrophe);
+          a = 'n';
+        }
+        if (a == 's') { //Catastrophe reset
+          catastrophe = false;
+          digitalWrite(SAFE_SWITCH_PIN, HIGH);
           a = 'n';
         }
         // if (a == 'w') {

@@ -102,9 +102,9 @@ void setup() {
         pinMode(WHITE_LED_PIN, OUTPUT);
         //pinMode(4, OUTPUT);
         pinMode(SAFE_SWITCH_PIN, OUTPUT);
-        digitalWrite(BLUE_LED_PIN, LOW);
-        digitalWrite(WHITE_LED_PIN, LOW);
-        digitalWrite(SAFE_SWITCH_PIN, HIGH);
+        digitalWrite(BLUE_LED_PIN, HIGH);
+        digitalWrite(WHITE_LED_PIN, HIGH);
+        digitalWrite(SAFE_SWITCH_PIN, LOW);
         //Set limit switch pin as input
         //input INPUT_PULLUP not for use with Pat's board
         pinMode(SWITCH_2_PIN, INPUT);
@@ -131,7 +131,7 @@ void loop() {
             }
             if (t > 40 && !isnan(t)){
               catastrophe = true;
-              digitalWrite(SAFE_SWITCH_PIN, LOW);
+              digitalWrite(SAFE_SWITCH_PIN, HIGH);
 
             }
         }
@@ -203,15 +203,15 @@ void loop() {
         if (a == 'l') {
                 if (val == 0) {
                         //analogWrite(ledPin, val);
-                        digitalWrite(BLUE_LED_PIN, LOW);
-                        digitalWrite(WHITE_LED_PIN, LOW);
+                        digitalWrite(BLUE_LED_PIN, HIGH);
+                        digitalWrite(WHITE_LED_PIN, HIGH);
                         //blue_light->setSpeed(val);
                         //blue_light->run(FORWARD);
                 }
                 if ( val == 1)
-                        digitalWrite(BLUE_LED_PIN, HIGH);
+                        digitalWrite(BLUE_LED_PIN, LOW);
                 if( val == 2)
-                        digitalWrite(WHITE_LED_PIN, HIGH);
+                        digitalWrite(WHITE_LED_PIN, LOW;
         }
         if (a == 't') {
           Serial.print(F("%  Temperature: "));
@@ -226,7 +226,7 @@ void loop() {
         }
         if (a == 's') { //Catastrophe reset
           catastrophe = false;
-          digitalWrite(SAFE_SWITCH_PIN, HIGH);
+          digitalWrite(SAFE_SWITCH_PIN, LOW);
           a = 'n';
         }
         // if (a == 'w') {

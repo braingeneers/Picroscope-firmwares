@@ -211,7 +211,7 @@ void loop() {
                 if ( val == 1)
                         digitalWrite(BLUE_LED_PIN, LOW);
                 if( val == 2)
-                        digitalWrite(WHITE_LED_PIN, LOW;
+                        digitalWrite(WHITE_LED_PIN, LOW);
         }
         if (a == 't') {
           Serial.print(F("%  Temperature: "));

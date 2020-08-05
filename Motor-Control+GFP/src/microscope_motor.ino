@@ -11,7 +11,7 @@
 #include "EEPROM.h"
 #include "DHT.h"
 
-#define SWITCH_2_PIN 7
+#define SWITCH_2_PIN 6 //changed from pin 7
 #define BLUE_LED_PIN 2
 #define WHITE_LED_PIN 3
 #define SAFE_SWITCH_PIN 4
@@ -122,6 +122,7 @@ bool return_flag = false;
 float t = dht.readTemperature();
 int temp_timer = millis();
 float highest_temp = 0;
+float trigger_temp = 50;
 bool catastrophe = false;
 void loop() {
         if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0){
@@ -129,7 +130,7 @@ void loop() {
             if (t > highest_temp){
               highest_temp = t;
             }
-            if (t > 40 && !isnan(t)){
+            if (t > trigger_temp && !isnan(t)){
               catastrophe = true;
               digitalWrite(SAFE_SWITCH_PIN, HIGH);
 
@@ -220,6 +221,9 @@ void loop() {
           Serial.print(F("%  Peak Temperature: "));
           Serial.print(highest_temp);
           Serial.print(F("°C "));
+          Serial.print(F("%  Trigger Temperature: "));
+          Serial.print(trigger_temp);
+          Serial.print(F("°C "));
           Serial.print(F("%  catastrophe: "));
           Serial.println(catastrophe);
           a = 'n';
@@ -227,6 +231,7 @@ void loop() {
         if (a == 's') { //Catastrophe reset
           catastrophe = false;
           digitalWrite(SAFE_SWITCH_PIN, LOW);
+          trigger_temp = val;
           a = 'n';
         }
         // if (a == 'w') {

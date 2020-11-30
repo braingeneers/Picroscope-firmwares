@@ -12,9 +12,9 @@
 #include "DHT.h"
 
 #define SWITCH_2_PIN 6 //changed from pin 7
-#define BLUE_LED_PIN 2
+#define BLUE_LED_PIN 5
 #define WHITE_LED_PIN 3
-#define SAFE_SWITCH_PIN 4
+#define SAFE_SWITCH_PIN 2
 #define DHTPIN 8
 
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321

@@ -15,7 +15,9 @@
 #define BLUE_LED_PIN 5
 #define WHITE_LED_PIN 3
 #define SAFE_SWITCH_PIN 2
+#define MOTOR_SAFETY_PIN 11
 #define DHTPIN 8
+//#define ACTIVE_LOW
 
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
@@ -102,9 +104,18 @@ void setup() {
         pinMode(WHITE_LED_PIN, OUTPUT);
         //pinMode(4, OUTPUT);
         pinMode(SAFE_SWITCH_PIN, OUTPUT);
+
+        #ifdef ACTIVE_LOW
         digitalWrite(BLUE_LED_PIN, HIGH);
         digitalWrite(WHITE_LED_PIN, HIGH);
         digitalWrite(SAFE_SWITCH_PIN, LOW);
+        #else
+        digitalWrite(BLUE_LED_PIN, LOW);
+        digitalWrite(WHITE_LED_PIN, LOW);
+        digitalWrite(SAFE_SWITCH_PIN, HIGH);
+        digitalWrite(MOTOR_SAFETY_PIN, HIGH); // we dont have this one on the active low board
+        #endif
+
         //Set limit switch pin as input
         //input INPUT_PULLUP not for use with Pat's board
         pinMode(SWITCH_2_PIN, INPUT);
@@ -132,8 +143,12 @@ void loop() {
             }
             if (t > trigger_temp && !isnan(t)){
               catastrophe = true;
+              #ifdef ACTIVE_LOW
               digitalWrite(SAFE_SWITCH_PIN, HIGH);
-
+              #else
+              digitalWrite(SAFE_SWITCH_PIN, LOW);
+              digitalWrite(MOTOR_SAFETY_PIN, LOW);
+              #endif
             }
         }
         //Serial.println("running: ");
@@ -204,15 +219,27 @@ void loop() {
         if (a == 'l') {
                 if (val == 0) {
                         //analogWrite(ledPin, val);
+                        #ifdef ACTIVE_LOW
                         digitalWrite(BLUE_LED_PIN, HIGH);
                         digitalWrite(WHITE_LED_PIN, HIGH);
+                        #else
+                        digitalWrite(BLUE_LED_PIN, LOW);
+                        digitalWrite(WHITE_LED_PIN, LOW);
+                        #endif
                         //blue_light->setSpeed(val);
                         //blue_light->run(FORWARD);
                 }
+                #ifdef ACTIVE_LOW
                 if ( val == 1)
                         digitalWrite(BLUE_LED_PIN, LOW);
                 if( val == 2)
                         digitalWrite(WHITE_LED_PIN, LOW);
+                #else
+                if ( val == 1)
+                        digitalWrite(BLUE_LED_PIN, HIGH);
+                if( val == 2)
+                        digitalWrite(WHITE_LED_PIN, HIGH);
+                #endif
         }
         if (a == 't') {
           Serial.print(F("%  Temperature: "));
@@ -230,7 +257,11 @@ void loop() {
         }
         if (a == 's') { //Catastrophe reset
           catastrophe = false;
+          #ifdef ACTIVE_LOW
           digitalWrite(SAFE_SWITCH_PIN, LOW);
+          #else
+          digitalWrite(SAFE_SWITCH_PIN, HIGH);
+          #endif
           trigger_temp = val;
           a = 'n';
         }

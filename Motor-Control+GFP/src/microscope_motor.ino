@@ -104,6 +104,7 @@ void setup() {
         pinMode(WHITE_LED_PIN, OUTPUT);
         //pinMode(4, OUTPUT);
         pinMode(SAFE_SWITCH_PIN, OUTPUT);
+        pinMode(MOTOR_SAFETY_PIN, OUTPUT);
 
         #ifdef ACTIVE_LOW
         digitalWrite(BLUE_LED_PIN, HIGH);

@@ -261,8 +261,13 @@ void loop() {
           digitalWrite(SAFE_SWITCH_PIN, LOW);
           #else
           digitalWrite(SAFE_SWITCH_PIN, HIGH);
+          digitalWrite(MOTOR_SAFETY_PIN, HIGH);
           #endif
           trigger_temp = val;
+          a = 'n';
+        }
+        if (a == 'p') { //pin toggle
+          digitalWrite(val, !digitalRead(val));
           a = 'n';
         }
         // if (a == 'w') {

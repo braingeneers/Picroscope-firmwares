@@ -1,1 +1,3 @@
 avrdude -p m328p -carduino -P /dev/tty.usbmodem144101 -U flash:w:/Users/pierre/Braingeneers/Picroscope_Firmwares/Compiled-Bins/motor_and_lights.hex
+
+avrdude -p m328p -carduino -P /dev/ttyACM0 -U flash:w:motor_and_lights.hex

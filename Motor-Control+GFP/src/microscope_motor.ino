@@ -149,6 +149,8 @@ void loop() {
               #else
               digitalWrite(SAFE_SWITCH_PIN, LOW);
               digitalWrite(MOTOR_SAFETY_PIN, LOW);
+              digitalWrite(BLUE_LED_PIN, LOW);
+              digitalWrite(WHITE_LED_PIN, LOW);
               #endif
             }
         }

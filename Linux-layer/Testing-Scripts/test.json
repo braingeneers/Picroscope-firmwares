@@ -1,0 +1,1 @@
+{"uuid":"2020-02-07-fluidics-imaging-2","num_wells":24,"stack_size":10,"captures":[],"params":{"interval":1,"stack_size":10,"stack_offset":1500,"step_size":150,"camera_params":"-t 4000 -awb off -awbg 1,1 -o","light_mode":"white"}}

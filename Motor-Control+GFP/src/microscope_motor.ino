@@ -56,6 +56,7 @@ int newMotorPosition = EEPROM.read(0);
 //int curMotorPosition = 0;
 //int newMotorPosition = 0;
 int stepsToTake = 0;
+int previousStepsToTake = 0;
 
 //Read limit switch
 boolean read_switch(int lim_switch) {
@@ -133,26 +134,40 @@ char b = 'n';
 bool return_flag = false;
 float t = dht.readTemperature();
 int temp_timer = millis();
+int motor_timer = millis();
 float highest_temp = 0;
 float trigger_temp = 50;
 bool catastrophe = false;
 void loop() {
-        if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0){
-            t = dht.readTemperature();
-            if (t > highest_temp){
-              highest_temp = t;
-            }
-            if (t > trigger_temp && !isnan(t)){
-              catastrophe = true;
+        if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0) {
+                //we're not reading temp while motors are trying to move add timers for motors
+                t = dht.readTemperature();
+                if (t > highest_temp) {
+                        highest_temp = t;
+                }
+                if (t > trigger_temp && !isnan(t)) {
+                        catastrophe = true;
               #ifdef ACTIVE_LOW
-              digitalWrite(SAFE_SWITCH_PIN, HIGH);
+                        digitalWrite(SAFE_SWITCH_PIN, HIGH);
               #else
-              digitalWrite(SAFE_SWITCH_PIN, LOW);
-              digitalWrite(MOTOR_SAFETY_PIN, LOW);
-              digitalWrite(BLUE_LED_PIN, LOW);
-              digitalWrite(WHITE_LED_PIN, LOW);
+                        digitalWrite(SAFE_SWITCH_PIN, LOW);
+                        digitalWrite(MOTOR_SAFETY_PIN, LOW);
+                        digitalWrite(BLUE_LED_PIN, LOW);
+                        digitalWrite(WHITE_LED_PIN, LOW);
               #endif
-            }
+                }
+        }
+        //motor running too long
+        else if (abs(millis() - motor_timer) > 10000 && (return_flag == true || stepsToTake == 0)) {
+                catastrophe = true;
+          #ifdef ACTIVE_LOW
+                digitalWrite(SAFE_SWITCH_PIN, HIGH);
+          #else
+                digitalWrite(SAFE_SWITCH_PIN, LOW);
+                digitalWrite(MOTOR_SAFETY_PIN, LOW);
+                digitalWrite(BLUE_LED_PIN, LOW);
+                digitalWrite(WHITE_LED_PIN, LOW);
+          #endif
         }
         //Serial.println("running: ");
         if (Serial.available() >= 2) {
@@ -181,9 +196,10 @@ void loop() {
         }
         if ( a == 'r') {
                 //return to origin based on limit switch
+                motor_timer = millis();
                 return_flag = true;
                 //return_to_start();
-                //curMotorPosition = 0;
+                curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
                 //newMotorPosition = 0;
                 //EEPROM.update(address, 0);
                 a = 'n';
@@ -199,6 +215,11 @@ void loop() {
         }
         else{
                 stepsToTake = newMotorPosition - curMotorPosition;
+
+                if (stepsToTake != 0 && previousStepsToTake == 0){
+                    motor_timer = millis();
+                }
+
                 if ( stepsToTake > 0) {
                         if(read_switch(1)==1) {//stop collision with cell plate
                                 myMotor1->onestep(FORWARD, INTERLEAVE);
@@ -245,33 +266,33 @@ void loop() {
                 #endif
         }
         if (a == 't') {
-          Serial.print(F("%  Temperature: "));
-          Serial.print(t);
-          Serial.print(F("°C "));
-          Serial.print(F("%  Peak Temperature: "));
-          Serial.print(highest_temp);
-          Serial.print(F("°C "));
-          Serial.print(F("%  Trigger Temperature: "));
-          Serial.print(trigger_temp);
-          Serial.print(F("°C "));
-          Serial.print(F("%  catastrophe: "));
-          Serial.println(catastrophe);
-          a = 'n';
+                Serial.print(F("%  Temperature: "));
+                Serial.print(t);
+                Serial.print(F("°C "));
+                Serial.print(F("%  Peak Temperature: "));
+                Serial.print(highest_temp);
+                Serial.print(F("°C "));
+                Serial.print(F("%  Trigger Temperature: "));
+                Serial.print(trigger_temp);
+                Serial.print(F("°C "));
+                Serial.print(F("%  catastrophe: "));
+                Serial.println(catastrophe);
+                a = 'n';
         }
         if (a == 's') { //Catastrophe reset
-          catastrophe = false;
+                catastrophe = false;
           #ifdef ACTIVE_LOW
-          digitalWrite(SAFE_SWITCH_PIN, LOW);
+                digitalWrite(SAFE_SWITCH_PIN, LOW);
           #else
-          digitalWrite(SAFE_SWITCH_PIN, HIGH);
-          digitalWrite(MOTOR_SAFETY_PIN, HIGH);
+                digitalWrite(SAFE_SWITCH_PIN, HIGH);
+                digitalWrite(MOTOR_SAFETY_PIN, HIGH);
           #endif
-          trigger_temp = val;
-          a = 'n';
+                trigger_temp = val;
+                a = 'n';
         }
         if (a == 'p') { //pin toggle
-          digitalWrite(val, !digitalRead(val));
-          a = 'n';
+                digitalWrite(val, !digitalRead(val));
+                a = 'n';
         }
         // if (a == 'w') {
         //         if (val >= 0 && val <= 255) {

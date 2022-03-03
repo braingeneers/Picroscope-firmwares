@@ -6,19 +6,28 @@
 
 #define DEBUG
 #include <Wire.h>
+#include <SPI.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
-#include "EEPROM.h"
+//#include "EEPROM.h"
 #include "DHT.h"
 
-#define SWITCH_2_PIN 6 //changed from pin 7
-#define BLUE_LED_PIN 5
-#define WHITE_LED_PIN 3
-#define SAFE_SWITCH_PIN 2
-#define MOTOR_SAFETY_PIN 11
-#define DHTPIN 8
+//following pin defines are for uno, must remap for wemos
+// #define SWITCH_2_PIN 6 //changed from pin 7
+// #define BLUE_LED_PIN 5
+// #define WHITE_LED_PIN 3
+// #define SAFE_SWITCH_PIN 2
+// #define MOTOR_SAFETY_PIN 11
+// #define DHTPIN 8
 //#define ACTIVE_LOW
 
+#define SWITCH_2_PIN 27
+#define BLUE_LED_PIN 16
+#define WHITE_LED_PIN 25
+#define SAFE_SWITCH_PIN 26
+#define MOTOR_SAFETY_PIN 23
+#define DHTPIN 12
+//#define ACTIVE_LOW
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 
@@ -35,33 +44,28 @@
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
 // Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x60);
-Adafruit_MotorShield XY_Stage = Adafruit_MotorShield(0x61);
+Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+Adafruit_MotorShield LightController = Adafruit_MotorShield(0x61);
 
 //L -> R
 //Yellow, Orange, NC, Brown, Redaaaaa
-Adafruit_StepperMotor *myMotor1 = AFMS.getStepper(200,  1);
+Adafruit_StepperMotor * myMotor1 = AFMS.getStepper(200,  1);
 Adafruit_StepperMotor *myMotor2 = AFMS.getStepper(200,  2);
-
-Adafruit_StepperMotor *xTranslation = XY_Stage.getStepper(200,  1);
-Adafruit_StepperMotor *yTranslation = XY_Stage.getStepper(200,  2);
 //Adafruit_DCMotor *blue_light = LightController.getMotor(1);
 //Adafruit_DCMotor *white_light = LightController.getMotor(2);
 
 
-byte index = 0;
+//byte index = 0;
 int address = 0;
 int ledPin = 3;
 
 int step_count[2] = {0, 0};
-int curMotorPosition = EEPROM.read(0);
-int newMotorPosition = EEPROM.read(0);
-//int curMotorPosition = 0;
-//int newMotorPosition = 0;
+// int curMotorPosition = EEPROM.read(0);
+// int newMotorPosition = EEPROM.read(0);
+int curMotorPosition = 0;
+int newMotorPosition = 0;
 int stepsToTake = 0;
 int previousStepsToTake = 0;
-int xStepsToTake = 0;
-int yStepsToTake = 0;
 
 //Read limit switch
 boolean read_switch(int lim_switch) {
@@ -101,7 +105,7 @@ void setup() {
         Serial.begin(115200);     // set up Serial library at 9600 bps
         //Serial.println("starting: ");
         AFMS.begin(); // create with the default frequency 1.6KHz
-        XY_Stage.begin();
+        LightController.begin();
 
         myMotor1->setSpeed(200); // 10 rpm
         myMotor2->setSpeed(200);
@@ -138,32 +142,34 @@ char a = 'n';
 char b = 'n';
 bool return_flag = false;
 float t = dht.readTemperature();
+//float t = 0;
 int temp_timer = millis();
 int motor_timer = millis();
 float highest_temp = 0;
 float trigger_temp = 50;
 bool catastrophe = false;
 void loop() {
-        if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0) {
-                //we're not reading temp while motors are trying to move add timers for motors
-                t = dht.readTemperature();
-                if (t > highest_temp) {
-                        highest_temp = t;
-                }
-                if (t > trigger_temp && !isnan(t)) {
-                        catastrophe = true;
-              #ifdef ACTIVE_LOW
-                        digitalWrite(SAFE_SWITCH_PIN, HIGH);
-              #else
-                        digitalWrite(SAFE_SWITCH_PIN, LOW);
-                        digitalWrite(MOTOR_SAFETY_PIN, LOW);
-                        digitalWrite(BLUE_LED_PIN, LOW);
-                        digitalWrite(WHITE_LED_PIN, LOW);
-              #endif
-                }
-        }
+        // if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0) {
+        //         //we're not reading temp while motors are trying to move add timers for motors
+        //         t = dht.readTemperature();
+        //         if (t > highest_temp) {
+        //                 highest_temp = t;
+        //         }
+        //         if (t > trigger_temp && !isnan(t)) {
+        //                 catastrophe = true;
+        //       #ifdef ACTIVE_LOW
+        //                 digitalWrite(SAFE_SWITCH_PIN, HIGH);
+        //       #else
+        //                 digitalWrite(SAFE_SWITCH_PIN, LOW);
+        //                 digitalWrite(MOTOR_SAFETY_PIN, LOW);
+        //                 digitalWrite(BLUE_LED_PIN, LOW);
+        //                 digitalWrite(WHITE_LED_PIN, LOW);
+        //       #endif
+        //         }
+        // }
         //motor running too long
-        else if (abs(millis() - motor_timer) > 10000 && (return_flag == true || stepsToTake == 0)) {
+        //else
+        if (abs(millis() - motor_timer) > 10000 && (return_flag == true || stepsToTake == 0)) {
                 catastrophe = true;
           #ifdef ACTIVE_LOW
                 digitalWrite(SAFE_SWITCH_PIN, HIGH);
@@ -197,7 +203,7 @@ void loop() {
                 //Calibration case
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                //EEPROM.update(address, 0);
         }
         if ( a == 'r') {
                 //return to origin based on limit switch
@@ -213,21 +219,12 @@ void loop() {
                 //    if ((val > -1000) && (val < 1000)) safety
                 newMotorPosition = val;
                 //save the new motor position into EEPROM
-                EEPROM.update(address, val);
-        }
-        if ( a == 'x') {
-                //    if ((val > -1000) && (val < 1000)) safety
-                xStepsToTake = val;
-        }
-        if ( a == 'y') {
-                //    if ((val > -1000) && (val < 1000)) safety
-                yStepsToTake = val;
+                //EEPROM.update(address, val);
         }
         if(return_flag) {
                 return_to_start_step();
         }
         else{
-                //Elevator Motors
                 stepsToTake = newMotorPosition - curMotorPosition;
 
                 if (stepsToTake != 0 && previousStepsToTake == 0){
@@ -253,32 +250,6 @@ void loop() {
                         myMotor1->release();
                         myMotor2->release();
                 }
-                //X Stage Translation
-                if ( xStepsToTake > 0) {
-                        xTranslation->onestep(FORWARD, SINGLE);
-                        xStepsToTake--;
-                }
-                else if ( xStepsToTake < 0) {
-                        xTranslation->onestep(BACKWARD, SINGLE);
-                        xStepsToTake++;
-                }
-                else {
-                        xTranslation->release();
-                }
-                //Y Stage Translation
-                if ( yStepsToTake > 0) {
-                        yTranslation->onestep(FORWARD, SINGLE);
-                        yStepsToTake--;
-                }
-                else if ( yStepsToTake < 0) {
-                        yTranslation->onestep(BACKWARD, SINGLE);
-                        yStepsToTake++;
-                }
-                else {
-                        yTranslation->release();
-                }
-
-
         }
         if (a == 'l') {
                 if (val == 0) {
@@ -334,8 +305,18 @@ void loop() {
                 digitalWrite(val, !digitalRead(val));
                 a = 'n';
         }
-        //clear command
-        a='n';
+        // if (a == 'w') {
+        //         if (val >= 0 && val <= 255) {
+        //                 //analogWrite(ledPin, val);
+        //                 white_light->setSpeed(val);
+        //                 white_light->run(FORWARD);
+        //         }
+        //         else{
+        //                 white_light->setSpeed(0);
+        //                 white_light->run(RELEASE);
+        //         }
+        // }
+
 
 }
 
@@ -374,14 +355,14 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                //EEPROM.update(address, 0);
                 state = DOWN;
                 break;
         case ERROR:
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
+                //EEPROM.update(address, 0);
                 state = DOWN;
                 break;
 

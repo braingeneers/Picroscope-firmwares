@@ -15,6 +15,7 @@
 #include "WiFi.h"
 #include <stdio.h>
 #include <ArduinoOTA.h>
+#include <SPI.h>
 
 
 #define DEBUG

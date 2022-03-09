@@ -10,6 +10,7 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 #include "EEPROM.h"
 #include "DHT.h"
+#include <Arduino.h>
 
 #define SWITCH_2_PIN 6 //changed from pin 7
 #define BLUE_LED_PIN 5

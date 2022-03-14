@@ -11,8 +11,14 @@
 #include "EEPROM.h"
 #include "DHT.h"
 #include <Arduino.h>
+#include <SPI.h>
+#include <pins_arduino.h>
+#include <avr/interrupt.h>
 
 #define SWITCH_2_PIN 6 //changed from pin 7
+#define SWITCH_X_PIN A0
+#define SWITCH_Y_PIN A1
+
 #define BLUE_LED_PIN 5
 #define WHITE_LED_PIN 3
 #define SAFE_SWITCH_PIN 2
@@ -64,6 +70,47 @@ int previousStepsToTake = 0;
 int xStepsToTake = 0;
 int yStepsToTake = 0;
 
+
+//CopyPated encoder code starts hereby
+
+
+const byte encoderPinA = 9;
+const byte encoderPinB = 10;//outoutB digital pin3
+volatile int count = 0;
+int protectedCount = 0;
+int previousCount = 0;
+
+const byte encoderPinC = 11;
+const byte encoderPinD = 12;
+volatile int count2 = 0;
+int protectedCount2 = 0;
+int previousCount2 = 0;
+
+
+volatile uint8_t stateA = 0;
+volatile uint8_t stateB = 0;
+volatile uint8_t stateC = 0;
+volatile uint8_t stateD = 0;
+
+// void isrC();
+// void isrD();
+
+//#define readA bitRead(PINC, PC0)
+#define readA bitRead(PINB, PB1) //D9
+#define readB bitRead(PINB, PB2) //D10
+
+uint8_t bus = B00000000;
+volatile byte pinBStatus;
+
+//#define readA PINB | PB1
+//#define readB PINB | PB0
+
+// #define readC digitalRead(2)
+// #define readD digitalRead(3)
+#define readC bitRead(PINB, PB4) //D12
+#define readD bitRead(PINB, PB5) //D13
+//end of encoder code blocked
+
 //Read limit switch
 boolean read_switch(int lim_switch) {
         if(lim_switch==2)
@@ -78,7 +125,7 @@ boolean read_switch(int lim_switch) {
         }
 }
 
-void return_to_start(){
+void return_to_start(){//never use this blocking BS, must be a leftover
         while(digitalRead(SWITCH_2_PIN) && curMotorPosition > -5000) { //safety in case of limit switch failure
                 myMotor1->onestep(BACKWARD, INTERLEAVE);
                 myMotor2->onestep(BACKWARD, INTERLEAVE);
@@ -92,6 +139,28 @@ void return_to_start(){
                 curMotorPosition++;
         }
 }
+void encoder_setup(){
+  PCICR |= B00000001;
+  //PCMSK0 |= B00000011;
+
+
+  //trying to put the other interrupt on
+  PCMSK0 |= B00110110; //this corresponds to pins D8 and D11
+  //PCMSK1 |= B00000001;
+
+  pinMode(encoderPinA, INPUT_PULLUP);
+  pinMode(encoderPinB, INPUT_PULLUP);
+
+  pinMode(encoderPinC, INPUT_PULLUP);
+  pinMode(encoderPinD, INPUT_PULLUP);
+
+  stateA = readA;
+  stateB = readB;
+
+  stateC = readC;
+  stateD = readD;
+}
+
 
 void return_to_start_step();
 
@@ -103,6 +172,8 @@ void setup() {
         //Serial.println("starting: ");
         AFMS.begin(); // create with the default frequency 1.6KHz
         XY_Stage.begin();
+
+        encoder_setup();
 
         myMotor1->setSpeed(200); // 10 rpm
         myMotor2->setSpeed(200);
@@ -144,7 +215,14 @@ int motor_timer = millis();
 float highest_temp = 0;
 float trigger_temp = 50;
 bool catastrophe = false;
+
 void loop() {
+
+        noInterrupts();
+        protectedCount = count;
+        protectedCount2 = count2;
+        interrupts();
+
         if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0) {
                 //we're not reading temp while motors are trying to move add timers for motors
                 t = dht.readTemperature();
@@ -394,4 +472,38 @@ void return_to_start_step(){
         //         myMotor2->onestep(FORWARD, INTERLEAVE);
         //         curMotorPosition++;
         // }
+}
+
+ISR(PCINT0_vect) {
+
+  //Serial.println(PINB);
+
+  uint8_t b = readB;
+
+  if(stateB != b){
+
+    if (readA == b) {
+      count ++;
+      } else {
+      count --;
+    }
+
+    stateB = b;
+
+  }
+
+  uint8_t c = readC;
+
+  if(stateC != c){
+
+    if (readD == c) {
+      count2 ++;
+    }
+    else {
+      count2 --;
+    }
+
+    stateC = c;
+
+  }
 }

@@ -1,4 +1,4 @@
-encoderMotorPositon/*
+/*
    This code is for running the stepper motors and GFP blue_light board for the Braingeneers PiCroscope Project
 
 
@@ -67,6 +67,7 @@ int newMotorPosition = EEPROM.read(0);
 //int newMotorPosition = 0;
 int stepsToTake = 0;
 int previousStepsToTake = 0;
+double encoderStepsToTake = 0;
 int xStepsToTake = 0;
 int yStepsToTake = 0;
 
@@ -77,13 +78,13 @@ int yStepsToTake = 0;
 const byte encoderPinA = 9;
 const byte encoderPinB = 10;//outoutB digital pin3
 volatile int count = 0;
-int safeMotorEncoderPositonA = 0;
+int safeMotorEncoderPositionA = 0;
 int previousCount = 0;
 
 const byte encoderPinC = 11;
 const byte encoderPinD = 12;
 volatile int count2 = 0;
-int safeMotorEncoderPositonB = 0;
+int safeMotorEncoderPositionB = 0;
 int previousCount2 = 0;
 
 
@@ -426,7 +427,7 @@ void move_motor_to_position_with_feedback(){
   encoderStepsToTake = stepsToTake * 1.5;
   //make sure to reset count before using
   if ( encoderStepsToTake > 0){
-      if ( safeMotorEncoderPositonA < encoderStepsToTake) {
+      if ( safeMotorEncoderPositionA < encoderStepsToTake) {
           if(read_switch(1)==1) {//stop collision with cell plate
               myMotor1->onestep(FORWARD, INTERLEAVE);
               // myMotor2->onestep(FORWARD, INTERLEAVE);
@@ -436,7 +437,7 @@ void move_motor_to_position_with_feedback(){
       else{
           myMotor2->release();
       }
-      if ( safeMotorEncoderPositonB < encoderStepsToTake) {
+      if ( safeMotorEncoderPositionB < encoderStepsToTake) {
           if(read_switch(1)==1) {//stop collision with cell plate
               //myMotor1->onestep(FORWARD, INTERLEAVE);
               myMotor2->onestep(FORWARD, INTERLEAVE);
@@ -448,7 +449,7 @@ void move_motor_to_position_with_feedback(){
       }
   }
   if ( encoderStepsToTake < 0){
-      if ( safeMotorEncoderPositonA > encoderStepsToTake) {
+      if ( safeMotorEncoderPositionA > encoderStepsToTake) {
           if(read_switch(2)==1) {//stop collision with lower paddle
                   myMotor1->onestep(BACKWARD, INTERLEAVE);
                   // myMotor2->onestep(FORWARD, INTERLEAVE);
@@ -458,7 +459,7 @@ void move_motor_to_position_with_feedback(){
       else{
           myMotor1->release();
       }
-      if ( safeMotorEncoderPositonB > encoderStepsToTake) {
+      if ( safeMotorEncoderPositionB > encoderStepsToTake) {
           if(read_switch(2)==1) {//stop collision with lower paddle
                   //myMotor1->onestep(FORWARD, INTERLEAVE);
                   myMotor2->onestep(FORWARD, INTERLEAVE);
@@ -466,7 +467,7 @@ void move_motor_to_position_with_feedback(){
           }
       }
       else{
-          myMotor2.release();
+          myMotor2->release();
       }
   }
 }

@@ -1,4 +1,4 @@
-/*
+encoderMotorPositon/*
    This code is for running the stepper motors and GFP blue_light board for the Braingeneers PiCroscope Project
 
 
@@ -77,13 +77,13 @@ int yStepsToTake = 0;
 const byte encoderPinA = 9;
 const byte encoderPinB = 10;//outoutB digital pin3
 volatile int count = 0;
-int protectedCount = 0;
+int safeMotorEncoderPositonA = 0;
 int previousCount = 0;
 
 const byte encoderPinC = 11;
 const byte encoderPinD = 12;
 volatile int count2 = 0;
-int protectedCount2 = 0;
+int safeMotorEncoderPositonB = 0;
 int previousCount2 = 0;
 
 
@@ -219,8 +219,8 @@ bool catastrophe = false;
 void loop() {
 
         noInterrupts();
-        protectedCount = count;
-        protectedCount2 = count2;
+        safeMotorEncoderPositionA = count;
+        safeMotorEncoderPositionB = count2;
         interrupts();
 
         if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0) {
@@ -308,7 +308,9 @@ void loop() {
         else{
                 //Elevator Motors
                 stepsToTake = newMotorPosition - curMotorPosition;
+                encoderStepsToTake = stepsToTake * 1.5;
 
+                //previousStepsToTake seems to not be set up yet
                 if (stepsToTake != 0 && previousStepsToTake == 0){
                     motor_timer = millis();
                 }
@@ -418,6 +420,56 @@ void loop() {
 
 }
 
+void move_motor_to_position_with_feedback(){
+  //these 2 variables should not be recalculated every time, i need to test
+  stepsToTake = newMotorPosition - curMotorPosition;
+  encoderStepsToTake = stepsToTake * 1.5;
+  //make sure to reset count before using
+  if ( encoderStepsToTake > 0){
+      if ( safeMotorEncoderPositonA < encoderStepsToTake) {
+          if(read_switch(1)==1) {//stop collision with cell plate
+              myMotor1->onestep(FORWARD, INTERLEAVE);
+              // myMotor2->onestep(FORWARD, INTERLEAVE);
+              //curMotorPosition++;
+          }
+      }
+      else{
+          myMotor2->release();
+      }
+      if ( safeMotorEncoderPositonB < encoderStepsToTake) {
+          if(read_switch(1)==1) {//stop collision with cell plate
+              //myMotor1->onestep(FORWARD, INTERLEAVE);
+              myMotor2->onestep(FORWARD, INTERLEAVE);
+              //curMotorPosition++;
+          }
+      }
+      else{
+          myMotor2->release();
+      }
+  }
+  if ( encoderStepsToTake < 0){
+      if ( safeMotorEncoderPositonA > encoderStepsToTake) {
+          if(read_switch(2)==1) {//stop collision with lower paddle
+                  myMotor1->onestep(BACKWARD, INTERLEAVE);
+                  // myMotor2->onestep(FORWARD, INTERLEAVE);
+                  //curMotorPosition++;
+          }
+      }
+      else{
+          myMotor1->release();
+      }
+      if ( safeMotorEncoderPositonB > encoderStepsToTake) {
+          if(read_switch(2)==1) {//stop collision with lower paddle
+                  //myMotor1->onestep(FORWARD, INTERLEAVE);
+                  myMotor2->onestep(FORWARD, INTERLEAVE);
+                  //curMotorPosition++;
+          }
+      }
+      else{
+          myMotor2.release();
+      }
+  }
+}
 
 void return_to_start_step(){
         //this is a mess to make the motor control non-blocking, must make into a state machine at a later date

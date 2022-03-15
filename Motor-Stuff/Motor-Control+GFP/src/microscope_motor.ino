@@ -270,39 +270,114 @@ void loop() {
 
 #endif
         }
-        // Serial.print("switch zero: ");Serial.print(read_switch(0));
-        // Serial.print(" switch one: "); Serial.print(read_switch(1)); Serial.println();
-        // delay(500);
-        if ( a == 'c') {
-                //Calibration case
-                curMotorPosition = 0;
-                newMotorPosition = 0;
-                EEPROM.update(address, 0);
+        switch(a){
+          // Serial.print("switch zero: ");Serial.print(read_switch(0));
+          // Serial.print(" switch one: "); Serial.print(read_switch(1)); Serial.println();
+          // delay(500);
+          case 'e':
+          //report encoder data
+                  Serial.print("Motor A: ");
+                  Serial.println(safeMotorEncoderPositionA);
+                  Serial.print("Motor B: ");
+                  Serial.println(safeMotorEncoderPositionB);          
+                  break;
+          case 'c' :
+          //Calibration case
+                  curMotorPosition = 0;
+                  newMotorPosition = 0;
+                  EEPROM.update(address, 0);
+                  break;
+
+          case 'r' :
+          //return to origin based on limit switch
+                  motor_timer = millis();
+                  return_flag = true;
+                  //return_to_start();
+                  curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
+                  //newMotorPosition = 0;
+                  //EEPROM.update(address, 0);
+                  a = 'n';
+                  break;
+          case 'm' :
+          //set new motor position
+                  //    if ((val > -1000) && (val < 1000)) safety
+                  newMotorPosition = val;
+                  //save the new motor position into EEPROM
+                  EEPROM.update(address, val);
+                  break;
+          case 'x' :
+          //move x axis motors on XY stage
+                  //    if ((val > -1000) && (val < 1000)) safety
+                  xStepsToTake = val;
+                  break;
+
+          case 'y' :
+          //move y axis motors on XY plate
+                  //    if ((val > -1000) && (val < 1000)) safety
+                  yStepsToTake = val;
+                  break;
+
+          case 'l' :
+          //control lights
+                  if (val == 0) {
+                          //analogWrite(ledPin, val);
+                          #ifdef ACTIVE_LOW
+                          digitalWrite(BLUE_LED_PIN, HIGH);
+                          digitalWrite(WHITE_LED_PIN, HIGH);
+                          #else
+                          digitalWrite(BLUE_LED_PIN, LOW);
+                          digitalWrite(WHITE_LED_PIN, LOW);
+                          #endif
+                          //blue_light->setSpeed(val);
+                          //blue_light->run(FORWARD);
+                  }
+                  #ifdef ACTIVE_LOW
+                  if ( val == 1)
+                          digitalWrite(BLUE_LED_PIN, LOW);
+                  if( val == 2)
+                          digitalWrite(WHITE_LED_PIN, LOW);
+                  #else
+                  if ( val == 1)
+                          digitalWrite(BLUE_LED_PIN, HIGH);
+                  if( val == 2)
+                          digitalWrite(WHITE_LED_PIN, HIGH);
+                  #endif
+                  break;
+          case 't' :
+          //report temperature data
+                  Serial.print(F("%  Temperature: "));
+                  Serial.print(t);
+                  Serial.print(F("°C "));
+                  Serial.print(F("%  Peak Temperature: "));
+                  Serial.print(highest_temp);
+                  Serial.print(F("°C "));
+                  Serial.print(F("%  Trigger Temperature: "));
+                  Serial.print(trigger_temp);
+                  Serial.print(F("°C "));
+                  Serial.print(F("%  catastrophe: "));
+                  Serial.println(catastrophe);
+                  a = 'n';
+                  break;
+
+          case 's' : //Catastrophe reset
+                  catastrophe = false;
+            #ifdef ACTIVE_LOW
+                  digitalWrite(SAFE_SWITCH_PIN, LOW);
+            #else
+                  digitalWrite(SAFE_SWITCH_PIN, HIGH);
+                  digitalWrite(MOTOR_SAFETY_PIN, HIGH);
+            #endif
+                  trigger_temp = val;
+                  a = 'n';
+                  break;
+          case 'p' : //pin toggle
+                  digitalWrite(val, !digitalRead(val));
+                  a = 'n';
+                  break;
+          //clear command
         }
-        if ( a == 'r') {
-                //return to origin based on limit switch
-                motor_timer = millis();
-                return_flag = true;
-                //return_to_start();
-                curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
-                //newMotorPosition = 0;
-                //EEPROM.update(address, 0);
-                a = 'n';
-        }
-        if ( a == 'm') {
-                //    if ((val > -1000) && (val < 1000)) safety
-                newMotorPosition = val;
-                //save the new motor position into EEPROM
-                EEPROM.update(address, val);
-        }
-        if ( a == 'x') {
-                //    if ((val > -1000) && (val < 1000)) safety
-                xStepsToTake = val;
-        }
-        if ( a == 'y') {
-                //    if ((val > -1000) && (val < 1000)) safety
-                yStepsToTake = val;
-        }
+        a='n';
+
         if(return_flag) {
                 return_to_start_step();
         }
@@ -362,62 +437,6 @@ void loop() {
 
 
         }
-        if (a == 'l') {
-                if (val == 0) {
-                        //analogWrite(ledPin, val);
-                        #ifdef ACTIVE_LOW
-                        digitalWrite(BLUE_LED_PIN, HIGH);
-                        digitalWrite(WHITE_LED_PIN, HIGH);
-                        #else
-                        digitalWrite(BLUE_LED_PIN, LOW);
-                        digitalWrite(WHITE_LED_PIN, LOW);
-                        #endif
-                        //blue_light->setSpeed(val);
-                        //blue_light->run(FORWARD);
-                }
-                #ifdef ACTIVE_LOW
-                if ( val == 1)
-                        digitalWrite(BLUE_LED_PIN, LOW);
-                if( val == 2)
-                        digitalWrite(WHITE_LED_PIN, LOW);
-                #else
-                if ( val == 1)
-                        digitalWrite(BLUE_LED_PIN, HIGH);
-                if( val == 2)
-                        digitalWrite(WHITE_LED_PIN, HIGH);
-                #endif
-        }
-        if (a == 't') {
-                Serial.print(F("%  Temperature: "));
-                Serial.print(t);
-                Serial.print(F("°C "));
-                Serial.print(F("%  Peak Temperature: "));
-                Serial.print(highest_temp);
-                Serial.print(F("°C "));
-                Serial.print(F("%  Trigger Temperature: "));
-                Serial.print(trigger_temp);
-                Serial.print(F("°C "));
-                Serial.print(F("%  catastrophe: "));
-                Serial.println(catastrophe);
-                a = 'n';
-        }
-        if (a == 's') { //Catastrophe reset
-                catastrophe = false;
-          #ifdef ACTIVE_LOW
-                digitalWrite(SAFE_SWITCH_PIN, LOW);
-          #else
-                digitalWrite(SAFE_SWITCH_PIN, HIGH);
-                digitalWrite(MOTOR_SAFETY_PIN, HIGH);
-          #endif
-                trigger_temp = val;
-                a = 'n';
-        }
-        if (a == 'p') { //pin toggle
-                digitalWrite(val, !digitalRead(val));
-                a = 'n';
-        }
-        //clear command
-        a='n';
 
 }
 

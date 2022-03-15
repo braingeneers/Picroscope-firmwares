@@ -75,14 +75,12 @@ int yStepsToTake = 0;
 //CopyPated encoder code starts hereby
 
 
-const byte encoderPinA = 9;
-const byte encoderPinB = 10;//outoutB digital pin3
+
 volatile int count = 0;
 int safeMotorEncoderPositionA = 0;
 int previousCount = 0;
 
-const byte encoderPinC = 11;
-const byte encoderPinD = 12;
+
 volatile int count2 = 0;
 int safeMotorEncoderPositionB = 0;
 int previousCount2 = 0;
@@ -97,8 +95,11 @@ volatile uint8_t stateD = 0;
 // void isrD();
 
 //#define readA bitRead(PINC, PC0)
-#define readA bitRead(PINB, PB1) //D9
-#define readB bitRead(PINB, PB2) //D10
+const byte encoderPinB = 9;
+const byte encoderPinA = 10;//outoutB digital pin3
+//note B definition comes first, this was a quick fix to reverse direction of count
+#define readB bitRead(PINB, PB1) //D9
+#define readA bitRead(PINB, PB2) //D10
 
 uint8_t bus = B00000000;
 volatile byte pinBStatus;
@@ -108,8 +109,10 @@ volatile byte pinBStatus;
 
 // #define readC digitalRead(2)
 // #define readD digitalRead(3)
-#define readC bitRead(PINB, PB4) //D12
-#define readD bitRead(PINB, PB5) //D13
+const byte encoderPinD = 12;
+const byte encoderPinC = 13;
+#define readD bitRead(PINB, PB4) //D12
+#define readC bitRead(PINB, PB5) //D13
 //end of encoder code blocked
 
 //Read limit switch
@@ -149,11 +152,11 @@ void encoder_setup(){
   PCMSK0 |= B00110110; //this corresponds to pins D8 and D11
   //PCMSK1 |= B00000001;
 
-  pinMode(encoderPinA, INPUT_PULLUP);
-  pinMode(encoderPinB, INPUT_PULLUP);
-
-  pinMode(encoderPinC, INPUT_PULLUP);
-  pinMode(encoderPinD, INPUT_PULLUP);
+  // pinMode(encoderPinA, INPUT_PULLUP);
+  // pinMode(encoderPinB, INPUT_PULLUP);
+  //
+  // pinMode(encoderPinC, INPUT_PULLUP);
+  // pinMode(encoderPinD, INPUT_PULLUP);
 
   stateA = readA;
   stateB = readB;
@@ -217,6 +220,8 @@ float highest_temp = 0;
 float trigger_temp = 50;
 bool catastrophe = false;
 
+void move_motor_to_position_with_feedback();
+
 void loop() {
 
         noInterrupts();
@@ -276,11 +281,32 @@ void loop() {
           // delay(500);
           case 'e':
           //report encoder data
-                  Serial.print("Motor A: ");
-                  Serial.println(safeMotorEncoderPositionA);
-                  Serial.print("Motor B: ");
-                  Serial.println(safeMotorEncoderPositionB);          
+                  switch(val){
+                      case 1:
+                      //report
+                        Serial.print("Motor A: ");
+                        Serial.println(safeMotorEncoderPositionA);
+                        Serial.print("Motor B: ");
+                        Serial.println(safeMotorEncoderPositionB);
+                        break;
+
+                      case 2:
+                      //recalibrate set zero
+                        count = 0;
+                        count2 = 0;
+                        safeMotorEncoderPositionA = 0;
+                        safeMotorEncoderPositionB = 0;
+                        break;
+
+                      default:
+                        count = 0;
+                        count2 = 0;
+                        safeMotorEncoderPositionA = 0;
+                        safeMotorEncoderPositionB = 0;
+                        encoderStepsToTake = val;
+                  }
                   break;
+
           case 'c' :
           //Calibration case
                   curMotorPosition = 0;
@@ -381,10 +407,13 @@ void loop() {
         if(return_flag) {
                 return_to_start_step();
         }
+        else if(encoderStepsToTake != 0){
+                move_motor_to_position_with_feedback();
+        }
         else{
                 //Elevator Motors
                 stepsToTake = newMotorPosition - curMotorPosition;
-                encoderStepsToTake = stepsToTake * 1.5;
+                //encoderStepsToTake = stepsToTake * 1.5;
 
                 //previousStepsToTake seems to not be set up yet
                 if (stepsToTake != 0 && previousStepsToTake == 0){
@@ -441,14 +470,11 @@ void loop() {
 }
 
 void move_motor_to_position_with_feedback(){
-  //these 2 variables should not be recalculated every time, i need to test
-  stepsToTake = newMotorPosition - curMotorPosition;
-  encoderStepsToTake = stepsToTake * 1.5;
-  //make sure to reset count before using
+//must confirm which encoder reads which motor
   if ( encoderStepsToTake > 0){
       if ( safeMotorEncoderPositionA < encoderStepsToTake) {
           if(read_switch(1)==1) {//stop collision with cell plate
-              myMotor1->onestep(FORWARD, INTERLEAVE);
+              myMotor2->onestep(FORWARD, INTERLEAVE);
               // myMotor2->onestep(FORWARD, INTERLEAVE);
               //curMotorPosition++;
           }
@@ -459,34 +485,34 @@ void move_motor_to_position_with_feedback(){
       if ( safeMotorEncoderPositionB < encoderStepsToTake) {
           if(read_switch(1)==1) {//stop collision with cell plate
               //myMotor1->onestep(FORWARD, INTERLEAVE);
-              myMotor2->onestep(FORWARD, INTERLEAVE);
+              myMotor1->onestep(FORWARD, INTERLEAVE);
               //curMotorPosition++;
-          }
-      }
-      else{
-          myMotor2->release();
-      }
-  }
-  if ( encoderStepsToTake < 0){
-      if ( safeMotorEncoderPositionA > encoderStepsToTake) {
-          if(read_switch(2)==1) {//stop collision with lower paddle
-                  myMotor1->onestep(BACKWARD, INTERLEAVE);
-                  // myMotor2->onestep(FORWARD, INTERLEAVE);
-                  //curMotorPosition++;
           }
       }
       else{
           myMotor1->release();
       }
-      if ( safeMotorEncoderPositionB > encoderStepsToTake) {
+  }
+  if ( encoderStepsToTake < 0){
+      if ( safeMotorEncoderPositionA > encoderStepsToTake) {
           if(read_switch(2)==1) {//stop collision with lower paddle
-                  //myMotor1->onestep(FORWARD, INTERLEAVE);
-                  myMotor2->onestep(FORWARD, INTERLEAVE);
+                  myMotor2->onestep(BACKWARD, INTERLEAVE);
+                  // myMotor2->onestep(FORWARD, INTERLEAVE);
                   //curMotorPosition++;
           }
       }
       else{
           myMotor2->release();
+      }
+      if ( safeMotorEncoderPositionB > encoderStepsToTake) {
+          if(read_switch(2)==1) {//stop collision with lower paddle
+                  //myMotor1->onestep(FORWARD, INTERLEAVE);
+                  myMotor1->onestep(BACKWARD, INTERLEAVE);
+                  //curMotorPosition++;
+          }
+      }
+      else{
+          myMotor1->release();
       }
   }
 }

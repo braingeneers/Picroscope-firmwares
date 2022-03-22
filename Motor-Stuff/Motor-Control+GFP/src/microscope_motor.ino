@@ -219,6 +219,8 @@ int motor_timer = millis();
 float highest_temp = 0;
 float trigger_temp = 50;
 bool catastrophe = false;
+unsigned long speed_timer = 0;
+bool speed_timer_flag = false;
 
 void move_motor_to_position_with_feedback();
 
@@ -327,9 +329,13 @@ void loop() {
           case 'm' :
           //set new motor position
                   //    if ((val > -1000) && (val < 1000)) safety
+                  #ifdef DEBUG
+                  speed_timer = millis();
+                  speed_timer_flag = true;
+                  #endif
                   newMotorPosition = val;
                   //save the new motor position into EEPROM
-                  EEPROM.update(address, val);
+                  //EEPROM.update(address, val);
                   break;
           case 'x' :
           //move x axis motors on XY stage
@@ -436,6 +442,12 @@ void loop() {
                         curMotorPosition--;
                 }
                 else {
+                        #ifdef DEBUG
+                        if (speed_timer_flag){
+                          Serial.println(millis()-speed_timer);
+                          speed_timer_flag = false;
+                        }
+                        #endif
                         myMotor1->release();
                         myMotor2->release();
                 }

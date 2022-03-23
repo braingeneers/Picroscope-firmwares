@@ -1,10 +1,17 @@
+
+
+
+
+
+
+
 /*
    This code is for running the stepper motors and GFP blue_light board for the Braingeneers PiCroscope Project
 
 
  */
 
-#define DEBUG
+//#define DEBUG
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
@@ -214,8 +221,8 @@ char a = 'n';
 char b = 'n';
 bool return_flag = false;
 float t = dht.readTemperature();
-int temp_timer = millis();
-int motor_timer = millis();
+unsigned long temp_timer = millis();
+unsigned long motor_timer = millis();
 float highest_temp = 0;
 float trigger_temp = 50;
 bool catastrophe = false;
@@ -250,7 +257,7 @@ void loop() {
                 }
         }
         //motor running too long
-        else if (abs(millis() - motor_timer) > 10000 && (return_flag == true || stepsToTake == 0)) {
+        else if (abs(millis() - motor_timer) > 25000 && (return_flag == true || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0)) {
                 catastrophe = true;
           #ifdef ACTIVE_LOW
                 digitalWrite(SAFE_SWITCH_PIN, HIGH);
@@ -334,18 +341,21 @@ void loop() {
                   speed_timer_flag = true;
                   #endif
                   newMotorPosition = val;
+                  motor_timer = millis();
                   //save the new motor position into EEPROM
                   //EEPROM.update(address, val);
                   break;
           case 'x' :
           //move x axis motors on XY stage
                   //    if ((val > -1000) && (val < 1000)) safety
+                  motor_timer = millis();
                   xStepsToTake = val;
                   break;
 
           case 'y' :
           //move y axis motors on XY plate
                   //    if ((val > -1000) && (val < 1000)) safety
+                  motor_timer = millis();
                   yStepsToTake = val;
                   break;
 
@@ -393,6 +403,10 @@ void loop() {
 
           case 's' : //Catastrophe reset
                   catastrophe = false;
+                  return_flag = false; //needed to reset motor catastrophe
+                  stepsToTake = 0;
+                  xStepsToTake = 0;
+                  yStepsToTake = 0;
             #ifdef ACTIVE_LOW
                   digitalWrite(SAFE_SWITCH_PIN, LOW);
             #else
@@ -420,11 +434,6 @@ void loop() {
                 //Elevator Motors
                 stepsToTake = newMotorPosition - curMotorPosition;
                 //encoderStepsToTake = stepsToTake * 1.5;
-
-                //previousStepsToTake seems to not be set up yet
-                if (stepsToTake != 0 && previousStepsToTake == 0){
-                    motor_timer = millis();
-                }
 
                 if ( stepsToTake > 0) {
                         if(read_switch(1)==1) {//stop collision with cell plate

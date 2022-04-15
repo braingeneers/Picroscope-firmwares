@@ -4,7 +4,7 @@
 
  */
 
-//#define DEBUG
+#define DEBUG
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
@@ -67,7 +67,9 @@ int newMotorPosition = EEPROM.read(0);
 //int newMotorPosition = 0;
 int stepsToTake = 0;
 int previousStepsToTake = 0;
-double encoderStepsToTake = 0;
+int newEncoderPosition = 0;
+int encoderA_StepsToTake = 0;
+int encoderB_StepsToTake = 0;
 int xStepsToTake = 0;
 int yStepsToTake = 0;
 
@@ -109,10 +111,10 @@ volatile byte pinBStatus;
 
 // #define readC digitalRead(2)
 // #define readD digitalRead(3)
-const byte encoderPinD = 12;
-const byte encoderPinC = 13;
-#define readD bitRead(PINB, PB4) //D12
-#define readC bitRead(PINB, PB5) //D13
+const byte encoderPinC = 12;
+const byte encoderPinD = 13;
+#define readC bitRead(PINB, PB4) //D12
+#define readD bitRead(PINB, PB5) //D13
 //end of encoder code blocked
 
 //Read limit switch
@@ -222,6 +224,9 @@ bool catastrophe = false;
 unsigned long speed_timer = 0;
 bool speed_timer_flag = false;
 
+bool dirA_up = true;
+bool dirB_up = true;
+
 void move_motor_to_position_with_feedback();
 void shut_down_everything();
 void lights_off();
@@ -284,12 +289,17 @@ void loop() {
 
                       default:
                         //set number of steps to take in encoder based feedback control
-                        count = 0;
-                        count2 = 0;
-                        safeMotorEncoderPositionA = 0;
-                        safeMotorEncoderPositionB = 0;
+                        // count = 0;
+                        // count2 = 0;
+                        // safeMotorEncoderPositionA = 0;
+                        // safeMotorEncoderPositionB = 0;
+
                         //encoder steps to take is acted on outside this state machine
-                        encoderStepsToTake = val;
+                        //encoderStepsToTake = val;
+                        dirA_up = (val > safeMotorEncoderPositionA);
+                        dirB_up = (val > safeMotorEncoderPositionB);
+
+                        newEncoderPosition = val;
                   }
                   break;
 
@@ -407,13 +417,7 @@ void loop() {
                 //towards our limit switch paddle until we reach it
                 return_to_start_step();
         }
-        else if(encoderStepsToTake != 0){
-                //single step encoder feedback control
-                //not running if in return mode
-                //should investigate what happens if we dont use that else
-                move_motor_to_position_with_feedback();
-        }
-        else{
+        else if (newMotorPosition != curMotorPosition){
                 //Elevator Motors
                 //Move motors based on values defined in serial
                 stepsToTake = newMotorPosition - curMotorPosition;
@@ -471,14 +475,21 @@ void loop() {
 
 
         }
+        else{
+                //single step encoder feedback control
+                //not running if in return mode
+                //should investigate what happens if we dont use that else
+                move_motor_to_position_with_feedback();
+        }
+
 
 }
 
 void move_motor_to_position_with_feedback(){
 //must confirm which encoder reads which motor
 //otherwise you end up with one turning forever
-  if ( encoderStepsToTake > 0){
-      if ( safeMotorEncoderPositionA < encoderStepsToTake) {
+  if (dirA_up){
+      if (safeMotorEncoderPositionA < newEncoderPosition) {
           if(read_switch(1)==1) {//stop collision with cell plate
               myMotor2->onestep(FORWARD, INTERLEAVE);
               // myMotor2->onestep(FORWARD, INTERLEAVE);
@@ -488,10 +499,22 @@ void move_motor_to_position_with_feedback(){
       else{
           myMotor2->release();
       }
-      if ( safeMotorEncoderPositionB < encoderStepsToTake) {
+  }
+  else{
+    if ( safeMotorEncoderPositionA > newEncoderPosition) {
+        if(read_switch(2)==1) {//stop collision with lower paddle
+                myMotor2->onestep(BACKWARD, INTERLEAVE);
+        }
+    }
+    else{
+        myMotor2->release();
+    }
+  }
+  if (dirB_up){
+      if (safeMotorEncoderPositionB < newEncoderPosition) {
           if(read_switch(1)==1) {//stop collision with cell plate
-              //myMotor1->onestep(FORWARD, INTERLEAVE);
               myMotor1->onestep(FORWARD, INTERLEAVE);
+              // myMotor2->onestep(FORWARD, INTERLEAVE);
               //curMotorPosition++;
           }
       }
@@ -499,32 +522,71 @@ void move_motor_to_position_with_feedback(){
           myMotor1->release();
       }
   }
-  if ( encoderStepsToTake < 0){
-      if ( safeMotorEncoderPositionA > encoderStepsToTake) {
-          if(read_switch(2)==1) {//stop collision with lower paddle
-                  myMotor2->onestep(BACKWARD, INTERLEAVE);
-                  // myMotor2->onestep(FORWARD, INTERLEAVE);
-                  //curMotorPosition++;
-          }
-      }
-      else{
-          myMotor2->release();
-      }
-      if ( safeMotorEncoderPositionB > encoderStepsToTake) {
-          if(read_switch(2)==1) {//stop collision with lower paddle
-                  //myMotor1->onestep(FORWARD, INTERLEAVE);
-                  myMotor1->onestep(BACKWARD, INTERLEAVE);
-                  //curMotorPosition++;
-          }
-      }
-      else{
-          myMotor1->release();
-      }
+  else{
+    if ( safeMotorEncoderPositionB > newEncoderPosition) {
+        if(read_switch(2)==1) {//stop collision with lower paddle
+                myMotor1->onestep(BACKWARD, INTERLEAVE);
+        }
+    }
+    else{
+        myMotor1->release();
+    }
   }
+
 }
+
+// void move_motor_steps_with_feedback(){
+// //must confirm which encoder reads which motor
+// //otherwise you end up with one turning forever
+//   if ( encoderStepsToTake > 0){
+//       if ( safeMotorEncoderPositionA < encoderStepsToTake) {
+//           if(read_switch(1)==1) {//stop collision with cell plate
+//               myMotor2->onestep(FORWARD, INTERLEAVE);
+//               // myMotor2->onestep(FORWARD, INTERLEAVE);
+//               //curMotorPosition++;
+//           }
+//       }
+//       else{
+//           myMotor2->release();
+//       }
+//       if ( safeMotorEncoderPositionB < encoderStepsToTake) {
+//           if(read_switch(1)==1) {//stop collision with cell plate
+//               //myMotor1->onestep(FORWARD, INTERLEAVE);
+//               myMotor1->onestep(FORWARD, INTERLEAVE);
+//               //curMotorPosition++;
+//           }
+//       }
+//       else{
+//           myMotor1->release();
+//       }
+//   }
+//   if ( encoderStepsToTake < 0){
+//       if ( safeMotorEncoderPositionA > encoderStepsToTake) {
+//           if(read_switch(2)==1) {//stop collision with lower paddle
+//                   myMotor2->onestep(BACKWARD, INTERLEAVE);
+//                   // myMotor2->onestep(FORWARD, INTERLEAVE);
+//                   //curMotorPosition++;
+//           }
+//       }
+//       else{
+//           myMotor2->release();
+//       }
+//       if ( safeMotorEncoderPositionB > encoderStepsToTake) {
+//           if(read_switch(2)==1) {//stop collision with lower paddle
+//                   //myMotor1->onestep(FORWARD, INTERLEAVE);
+//                   myMotor1->onestep(BACKWARD, INTERLEAVE);
+//                   //curMotorPosition++;
+//           }
+//       }
+//       else{
+//           myMotor1->release();
+//       }
+//   }
+// }
 
 void return_to_start_step(){
         //non blocking state machine to bring elevator down to where limit switch collides and then back up until it's free
+        //now needs to compensate for encoder feeback control implementation
         enum state {DOWN, UP, EXIT, ERROR};
         static int state = DOWN;
         switch (state)
@@ -559,6 +621,13 @@ void return_to_start_step(){
                 newMotorPosition = 0;
                 EEPROM.update(address, 0);
                 state = DOWN;
+
+                // update motor encoder feedback control value to prevent elevator from going back up
+                // also has benefit of leveling the elevator to the higher encoder
+                if (safeMotorEncoderPositionA > safeMotorEncoderPositionB){
+                  newEncoderPosition = safeMotorEncoderPositionA;
+                }else{ newEncoderPosition = safeMotorEncoderPositionB; }
+
                 break;
         case ERROR:
                 return_flag = false;

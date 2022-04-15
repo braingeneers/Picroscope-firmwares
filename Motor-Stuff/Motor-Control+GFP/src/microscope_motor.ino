@@ -72,6 +72,9 @@ int encoderA_StepsToTake = 0;
 int encoderB_StepsToTake = 0;
 int xStepsToTake = 0;
 int yStepsToTake = 0;
+bool dirA_up = true;
+bool dirB_up = true;
+int encoderZero = 0;
 
 
 //CopyPated encoder code starts hereby
@@ -224,8 +227,7 @@ bool catastrophe = false;
 unsigned long speed_timer = 0;
 bool speed_timer_flag = false;
 
-bool dirA_up = true;
-bool dirB_up = true;
+
 
 void move_motor_to_position_with_feedback();
 void shut_down_everything();
@@ -277,6 +279,8 @@ void loop() {
                         Serial.println(safeMotorEncoderPositionA);
                         Serial.print("Motor B: ");
                         Serial.println(safeMotorEncoderPositionB);
+                        Serial.print("Encoder Zero Point: ");
+                        Serial.println(encoderZero);
                         break;
 
                       case 2:
@@ -285,6 +289,8 @@ void loop() {
                         count2 = 0;
                         safeMotorEncoderPositionA = 0;
                         safeMotorEncoderPositionB = 0;
+                        encoderZero = 0;
+                        newEncoderPosition = 0;
                         break;
 
                       default:
@@ -296,10 +302,10 @@ void loop() {
 
                         //encoder steps to take is acted on outside this state machine
                         //encoderStepsToTake = val;
-                        dirA_up = (val > safeMotorEncoderPositionA);
-                        dirB_up = (val > safeMotorEncoderPositionB);
+                        dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
+                        dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
 
-                        newEncoderPosition = val;
+                        newEncoderPosition = (val+encoderZero);
                   }
                   break;
 
@@ -626,7 +632,10 @@ void return_to_start_step(){
                 // also has benefit of leveling the elevator to the higher encoder
                 if (safeMotorEncoderPositionA > safeMotorEncoderPositionB){
                   newEncoderPosition = safeMotorEncoderPositionA;
-                }else{ newEncoderPosition = safeMotorEncoderPositionB; }
+                }else{
+                  newEncoderPosition = safeMotorEncoderPositionB;
+                }
+                encoderZero = newEncoderPosition;
 
                 break;
         case ERROR:

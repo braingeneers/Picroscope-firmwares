@@ -226,6 +226,9 @@ float trigger_temp = 50;
 bool catastrophe = false;
 unsigned long speed_timer = 0;
 bool speed_timer_flag = false;
+bool motorA_on = false;
+bool motorB_on = false;
+bool motors_moving = false;
 
 
 
@@ -240,7 +243,9 @@ void loop() {
         safeMotorEncoderPositionB = count2;
         interrupts();
 
-        if (abs(millis() - temp_timer) > 2000 && return_flag == false && stepsToTake == 0) {
+
+        motors_moving = (motorA_on || motorB_on || return_flag || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0);
+        if (abs(millis() - temp_timer) > 25000 && !motors_moving) {
                 //we're not reading temp while motors are trying to move add timers for motors
                 t = dht.readTemperature();
                 if (t > highest_temp) {
@@ -251,7 +256,7 @@ void loop() {
                 }
         }
         //motor running too long
-        else if (abs(millis() - motor_timer) > 25000 && (return_flag == true || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0)) {
+        else if (abs(millis() - motor_timer) > 3000 && motors_moving) {
             shut_down_everything();
         }
         //Serial.println("running: ");
@@ -281,6 +286,10 @@ void loop() {
                         Serial.println(safeMotorEncoderPositionB);
                         Serial.print("Encoder Zero Point: ");
                         Serial.println(encoderZero);
+                        Serial.print("Motor Timer: ");
+                        Serial.println(abs(millis() - motor_timer));
+                        Serial.println(motorA_on);
+
                         break;
 
                       case 2:
@@ -302,6 +311,7 @@ void loop() {
 
                         //encoder steps to take is acted on outside this state machine
                         //encoderStepsToTake = val;
+                        motor_timer = millis();
                         dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
                         dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
 
@@ -495,46 +505,45 @@ void move_motor_to_position_with_feedback(){
 //must confirm which encoder reads which motor
 //otherwise you end up with one turning forever
   if (dirA_up){
-      if (safeMotorEncoderPositionA < newEncoderPosition) {
-          if(read_switch(1)==1) {//stop collision with cell plate
-              myMotor2->onestep(FORWARD, INTERLEAVE);
-              // myMotor2->onestep(FORWARD, INTERLEAVE);
-              //curMotorPosition++;
-          }
+      if ((safeMotorEncoderPositionA < newEncoderPosition) && read_switch(1)==1 ) {
+          // switch stops collision with cell plate
+          motorA_on = true;
+          myMotor2->onestep(FORWARD, INTERLEAVE);
+
       }
       else{
+          motorA_on = false;
           myMotor2->release();
       }
   }
   else{
-    if ( safeMotorEncoderPositionA > newEncoderPosition) {
-        if(read_switch(2)==1) {//stop collision with lower paddle
-                myMotor2->onestep(BACKWARD, INTERLEAVE);
-        }
+    if ((safeMotorEncoderPositionA > newEncoderPosition) && read_switch(2)==1 ) {
+        motorA_on = true;
+        myMotor2->onestep(BACKWARD, INTERLEAVE);
+
     }
     else{
+        motorA_on = false;
         myMotor2->release();
     }
   }
   if (dirB_up){
-      if (safeMotorEncoderPositionB < newEncoderPosition) {
-          if(read_switch(1)==1) {//stop collision with cell plate
-              myMotor1->onestep(FORWARD, INTERLEAVE);
-              // myMotor2->onestep(FORWARD, INTERLEAVE);
-              //curMotorPosition++;
-          }
-      }
-      else{
-          myMotor1->release();
-      }
-  }
-  else{
-    if ( safeMotorEncoderPositionB > newEncoderPosition) {
-        if(read_switch(2)==1) {//stop collision with lower paddle
-                myMotor1->onestep(BACKWARD, INTERLEAVE);
-        }
+    if ((safeMotorEncoderPositionB < newEncoderPosition) && read_switch(1)==1) {
+        motorB_on = true;
+        myMotor1->onestep(FORWARD, INTERLEAVE);
     }
     else{
+        motorB_on = false;
+        myMotor1->release();
+    }
+  }
+  else{
+    if ((safeMotorEncoderPositionB > newEncoderPosition)&&read_switch(2)==1) {
+        motorB_on = true;
+        myMotor1->onestep(BACKWARD, INTERLEAVE);
+    }
+    else{
+        motorB_on = false;
         myMotor1->release();
     }
   }

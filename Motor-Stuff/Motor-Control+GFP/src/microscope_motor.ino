@@ -26,7 +26,8 @@
 #define DHTPIN 8
 //#define ACTIVE_LOW
 
-#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
+#define DHTTYPE DHT22
+// DHT 22  (AM2302), AM2321
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
 
 // Connect pin 1 (on the left) of the sensor to +5V
@@ -216,6 +217,7 @@ bool speed_timer_flag = false;
 bool motorA_on = false;
 bool motorB_on = false;
 bool motors_moving = false;
+int nanCount = 0;
 
 
 
@@ -232,13 +234,23 @@ void loop() {
 
 
         motors_moving = (motorA_on || motorB_on || return_flag || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0);
+        if (!motors_moving){
+            motor_timer = millis();
+        }
+
         if (abs(millis() - temp_timer) > 2500 && !motors_moving) {
                 //we're not reading temp while motors are trying to move add timers for motors
                 t = dht.readTemperature();
+                if (isnan(t)){
+                  nanCount++;
+                }
+                else{
+                  nanCount = 0;
+                }
                 if (t > highest_temp) {
                         highest_temp = t;
                 }
-                if (t > trigger_temp && !isnan(t)) {
+                if (t > trigger_temp || nanCount > 10) {
                     shut_down_everything();
                 }
         }
@@ -275,7 +287,11 @@ void loop() {
                         Serial.println(encoderZero);
                         Serial.print("Motor Timer: ");
                         Serial.println(abs(millis() - motor_timer));
+                        Serial.print("Motor A On:");
                         Serial.println(motorA_on);
+                        Serial.print("Motor B On:");
+                        Serial.println(motorB_on);
+
 
                         break;
 
@@ -298,7 +314,7 @@ void loop() {
 
                         //encoder steps to take is acted on outside this state machine
                         //encoderStepsToTake = val;
-                        motor_timer = millis();
+                        //motor_timer = millis();
                         dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
                         dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
 
@@ -315,7 +331,7 @@ void loop() {
 
           case 'r' :
           //return to origin based on limit switch
-                  motor_timer = millis();
+                  //motor_timer = millis();
                   return_flag = true;
                   curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
                   //newMotorPosition = 0;
@@ -330,19 +346,19 @@ void loop() {
                   speed_timer_flag = true;
                   #endif
                   newMotorPosition = val;
-                  motor_timer = millis();
+                  //motor_timer = millis();
                   break;
           case 'x' :
           //move x axis motors on XY stage
                   //    if ((val > -1000) && (val < 1000)) safety
-                  motor_timer = millis();
+                  //motor_timer = millis();
                   xStepsToTake = val;
                   break;
 
           case 'y' :
           //move y axis motors on XY plate
                   //    if ((val > -1000) && (val < 1000)) safety
-                  motor_timer = millis();
+                  //motor_timer = millis();
                   yStepsToTake = val;
                   break;
 

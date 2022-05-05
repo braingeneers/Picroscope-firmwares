@@ -134,20 +134,6 @@ boolean read_switch(int lim_switch) {
         }
 }
 
-void return_to_start(){//never use this blocking BS, must be a leftover
-        while(digitalRead(SWITCH_2_PIN) && curMotorPosition > -5000) { //safety in case of limit switch failure
-                myMotor1->onestep(BACKWARD, INTERLEAVE);
-                myMotor2->onestep(BACKWARD, INTERLEAVE);
-                curMotorPosition--;
-        }
-        //correct for mechanical hysteresis in limit switch
-        //read_switch(1) ensures no collision with tissue culture
-        while(digitalRead(SWITCH_2_PIN)==0) {
-                myMotor1->onestep(FORWARD, INTERLEAVE);
-                myMotor2->onestep(FORWARD, INTERLEAVE);
-                curMotorPosition++;
-        }
-}
 void encoder_setup(){
   PCICR |= B00000001;
   //PCMSK0 |= B00000011;
@@ -206,6 +192,7 @@ void setup() {
 
         //Set limit switch pin as input
         //input INPUT_PULLUP not for use with Pat's board
+        //pinMode(SWITCH_2_PIN, INPUT);
         pinMode(SWITCH_2_PIN, INPUT);
         //for blue_lights
         // blue_light->setSpeed(100);
@@ -245,7 +232,7 @@ void loop() {
 
 
         motors_moving = (motorA_on || motorB_on || return_flag || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0);
-        if (abs(millis() - temp_timer) > 25000 && !motors_moving) {
+        if (abs(millis() - temp_timer) > 2500 && !motors_moving) {
                 //we're not reading temp while motors are trying to move add timers for motors
                 t = dht.readTemperature();
                 if (t > highest_temp) {
@@ -256,7 +243,7 @@ void loop() {
                 }
         }
         //motor running too long
-        else if (abs(millis() - motor_timer) > 3000 && motors_moving) {
+        else if (abs(millis() - motor_timer) > 40000 && motors_moving) {
             shut_down_everything();
         }
         //Serial.println("running: ");
@@ -406,6 +393,13 @@ void loop() {
                   stepsToTake = 0;
                   xStepsToTake = 0;
                   yStepsToTake = 0;
+
+                  count = 0;
+                  count2 = 0;
+                  safeMotorEncoderPositionA = 0;
+                  safeMotorEncoderPositionB = 0;
+                  encoderZero = 0;
+                  newEncoderPosition = 0;
             #ifdef ACTIVE_LOW
                   digitalWrite(SAFE_SWITCH_PIN, LOW);
             #else
@@ -433,69 +427,73 @@ void loop() {
                 //towards our limit switch paddle until we reach it
                 return_to_start_step();
         }
-        else if (newMotorPosition != curMotorPosition){
-                //Elevator Motors
-                //Move motors based on values defined in serial
-                stepsToTake = newMotorPosition - curMotorPosition;
-                //encoderStepsToTake = stepsToTake * 1.5;
+        // else if (newMotorPosition != curMotorPosition){
+        //         //Elevator Motors
+        //         //Move motors based on values defined in serial
+        //         stepsToTake = newMotorPosition - curMotorPosition;
+        //         //encoderStepsToTake = stepsToTake * 1.5;
+        //
+        //         if ( stepsToTake > 0) {
+        //                 if(read_switch(1)==1) {//stop collision with cell plate
+        //                         myMotor1->onestep(FORWARD, INTERLEAVE);
+        //                         myMotor2->onestep(FORWARD, INTERLEAVE);
+        //                         curMotorPosition++;
+        //                 }else{
+        //                         newMotorPosition = curMotorPosition;
+        //                         stepsToTake = 0;
+        //                 }
+        //         }
+        //         else if ( stepsToTake < 0) {
+        //                 myMotor1->onestep(BACKWARD, INTERLEAVE);
+        //                 myMotor2->onestep(BACKWARD, INTERLEAVE);
+        //                 curMotorPosition--;
+        //         }
+        //         else {
+        //                 #ifdef DEBUG
+        //                 if (speed_timer_flag){
+        //                   Serial.println(millis()-speed_timer);
+        //                   speed_timer_flag = false;
+        //                 }
+        //                 #endif
+        //                 myMotor1->release();
+        //                 myMotor2->release();
+        //         }
+        //}
+       else if (xStepsToTake || yStepsToTake){
+           if ( xStepsToTake > 0) {
+                   xTranslation->onestep(FORWARD, INTERLEAVE);
+                   xStepsToTake--;
+           }
+           else if ( xStepsToTake < 0) {
+                   xTranslation->onestep(BACKWARD, INTERLEAVE);
+                   xStepsToTake++;
+           }
+           else {
+                   xTranslation->release();
+           }
+           //Y Stage Translation
+           if ( yStepsToTake > 0) {
+                   yTranslation->onestep(FORWARD, INTERLEAVE);
+                   yStepsToTake--;
+           }
+           else if ( yStepsToTake < 0) {
+                   yTranslation->onestep(BACKWARD, INTERLEAVE);
+                   yStepsToTake++;
+           }
+           else {
+                   yTranslation->release();
+           }
 
-                if ( stepsToTake > 0) {
-                        if(read_switch(1)==1) {//stop collision with cell plate
-                                myMotor1->onestep(FORWARD, INTERLEAVE);
-                                myMotor2->onestep(FORWARD, INTERLEAVE);
-                                curMotorPosition++;
-                        }else{
-                                newMotorPosition = curMotorPosition;
-                                stepsToTake = 0;
-                        }
-                }
-                else if ( stepsToTake < 0) {
-                        myMotor1->onestep(BACKWARD, INTERLEAVE);
-                        myMotor2->onestep(BACKWARD, INTERLEAVE);
-                        curMotorPosition--;
-                }
-                else {
-                        #ifdef DEBUG
-                        if (speed_timer_flag){
-                          Serial.println(millis()-speed_timer);
-                          speed_timer_flag = false;
-                        }
-                        #endif
-                        myMotor1->release();
-                        myMotor2->release();
-                }
-                //X Stage Translation
-                if ( xStepsToTake > 0) {
-                        xTranslation->onestep(FORWARD, SINGLE);
-                        xStepsToTake--;
-                }
-                else if ( xStepsToTake < 0) {
-                        xTranslation->onestep(BACKWARD, SINGLE);
-                        xStepsToTake++;
-                }
-                else {
-                        xTranslation->release();
-                }
-                //Y Stage Translation
-                if ( yStepsToTake > 0) {
-                        yTranslation->onestep(FORWARD, SINGLE);
-                        yStepsToTake--;
-                }
-                else if ( yStepsToTake < 0) {
-                        yTranslation->onestep(BACKWARD, SINGLE);
-                        yStepsToTake++;
-                }
-                else {
-                        yTranslation->release();
-                }
-
-
-        }
-        else{
+       }
+       else{
                 //single step encoder feedback control
                 //not running if in return mode
                 //should investigate what happens if we dont use that else
                 move_motor_to_position_with_feedback();
+
+                //X Stage Translation
+
+
         }
 
 
@@ -538,7 +536,7 @@ void move_motor_to_position_with_feedback(){
     }
   }
   else{
-    if ((safeMotorEncoderPositionB > newEncoderPosition)&&read_switch(2)==1) {
+    if ((safeMotorEncoderPositionB > newEncoderPosition) && read_switch(2)==1) {
         motorB_on = true;
         myMotor1->onestep(BACKWARD, INTERLEAVE);
     }
@@ -611,9 +609,9 @@ void return_to_start_step(){
                         myMotor1->onestep(BACKWARD, INTERLEAVE);
                         myMotor2->onestep(BACKWARD, INTERLEAVE);
                         curMotorPosition--;
-                        if(curMotorPosition < -5000) {
-                                state = ERROR;//error condition
-                        }
+                        // if(curMotorPosition < -5000) {
+                        //         state = ERROR;//error condition
+                        // }
                 }
                 else{
                         state = UP;
@@ -634,9 +632,7 @@ void return_to_start_step(){
                 return_flag = false;
                 curMotorPosition = 0;
                 newMotorPosition = 0;
-                EEPROM.update(address, 0);
                 state = DOWN;
-
                 // update motor encoder feedback control value to prevent elevator from going back up
                 // also has benefit of leveling the elevator to the higher encoder
                 if (safeMotorEncoderPositionA > safeMotorEncoderPositionB){
@@ -647,13 +643,13 @@ void return_to_start_step(){
                 encoderZero = newEncoderPosition;
 
                 break;
-        case ERROR:
-                return_flag = false;
-                curMotorPosition = 0;
-                newMotorPosition = 0;
-                EEPROM.update(address, 0);
-                state = DOWN;
-                break;
+        // case ERROR:
+        //         shut_down_everything();
+        //         return_flag = false;
+        //         curMotorPosition = 0;
+        //         newMotorPosition = 0;
+        //         state = DOWN;
+        //         break;
 
         }
         //correct for mechanical hysteresis in limit switch

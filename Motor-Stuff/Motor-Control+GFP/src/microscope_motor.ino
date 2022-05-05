@@ -20,7 +20,7 @@
 #define SWITCH_Y_PIN A1
 
 #define BLUE_LED_PIN 5
-#define WHITE_LED_PIN 3
+#define WHITE_LED_PIN 4
 #define SAFE_SWITCH_PIN 2
 #define MOTOR_SAFETY_PIN 11
 #define DHTPIN 8
@@ -438,6 +438,7 @@ void loop() {
 
           case 'p' :
           // toggle the state of any pin, useful for debugging hardware
+                  pinMode(val, OUTPUT);
                   digitalWrite(val, !digitalRead(val));
                   a = 'n';
                   break;

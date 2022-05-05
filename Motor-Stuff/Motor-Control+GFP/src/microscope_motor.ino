@@ -4,7 +4,7 @@
 
  */
 
-#define DEBUG
+//#define DEBUG
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
@@ -255,7 +255,7 @@ void loop() {
                 }
         }
         //motor running too long
-        else if (abs(millis() - motor_timer) > 40000 && motors_moving) {
+        else if (abs(millis() - motor_timer) > 25000 && motors_moving) {
             shut_down_everything();
         }
         //Serial.println("running: ");
@@ -315,6 +315,8 @@ void loop() {
                         //encoder steps to take is acted on outside this state machine
                         //encoderStepsToTake = val;
                         //motor_timer = millis();
+
+                        //copying this code into the case M block for quick compatible drop in
                         dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
                         dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
 
@@ -345,7 +347,13 @@ void loop() {
                   speed_timer = millis();
                   speed_timer_flag = true;
                   #endif
-                  newMotorPosition = val;
+
+                  //copied this code from the case E block for quick compatible drop in
+                  dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
+                  dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
+
+                  newEncoderPosition = (val+encoderZero);
+                  // newMotorPosition = val;
                   //motor_timer = millis();
                   break;
           case 'x' :

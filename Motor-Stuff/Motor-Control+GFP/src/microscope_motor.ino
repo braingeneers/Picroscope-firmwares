@@ -218,6 +218,9 @@ bool motorA_on = false;
 bool motorB_on = false;
 bool motors_moving = false;
 int nanCount = 0;
+int hysteresisA = 0;
+int hysteresisB = 0;
+#define HYSTERESIS_GAP 5
 
 
 
@@ -317,9 +320,8 @@ void loop() {
                         //motor_timer = millis();
 
                         //copying this code into the case M block for quick compatible drop in
-                        dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
-                        dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
 
+                        hysteresisA = hysteresisB = 0;
                         newEncoderPosition = (val+encoderZero);
                   }
                   break;
@@ -349,9 +351,9 @@ void loop() {
                   #endif
 
                   //copied this code from the case E block for quick compatible drop in
-                  dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
-                  dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
-
+                  // dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
+                  // dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
+                  hysteresisA = hysteresisB = 0;
                   newEncoderPosition = (val+encoderZero);
                   // newMotorPosition = val;
                   //motor_timer = millis();
@@ -526,20 +528,13 @@ void loop() {
 void move_motor_to_position_with_feedback(){
 //must confirm which encoder reads which motor
 //otherwise you end up with one turning forever
-  if (dirA_up){
-      if ((safeMotorEncoderPositionA < newEncoderPosition) && read_switch(1)==1 ) {
-          // switch stops collision with cell plate
-          motorA_on = true;
-          myMotor2->onestep(FORWARD, INTERLEAVE);
+    if ((safeMotorEncoderPositionA < newEncoderPosition - hysteresisA) && read_switch(1)==1 ) {
+        // switch stops collision with cell plate
+        motorA_on = true;
+        myMotor2->onestep(FORWARD, INTERLEAVE);
 
-      }
-      else{
-          motorA_on = false;
-          myMotor2->release();
-      }
-  }
-  else{
-    if ((safeMotorEncoderPositionA > newEncoderPosition) && read_switch(2)==1 ) {
+    }
+    else if ((safeMotorEncoderPositionA > newEncoderPosition + hysteresisA) && read_switch(2)==1 ) {
         motorA_on = true;
         myMotor2->onestep(BACKWARD, INTERLEAVE);
 
@@ -547,30 +542,22 @@ void move_motor_to_position_with_feedback(){
     else{
         motorA_on = false;
         myMotor2->release();
+        hysteresisA = HYSTERESIS_GAP;
     }
-  }
-  if (dirB_up){
-    if ((safeMotorEncoderPositionB < newEncoderPosition) && read_switch(1)==1) {
+    if ((safeMotorEncoderPositionB < newEncoderPosition - hysteresisB) && read_switch(1)==1) {
         motorB_on = true;
         myMotor1->onestep(FORWARD, INTERLEAVE);
     }
-    else{
-        motorB_on = false;
-        myMotor1->release();
-    }
-  }
-  else{
-    if ((safeMotorEncoderPositionB > newEncoderPosition) && read_switch(2)==1) {
-        motorB_on = true;
-        myMotor1->onestep(BACKWARD, INTERLEAVE);
+    else if ((safeMotorEncoderPositionB > newEncoderPosition + hysteresisB) && read_switch(2)==1) {
+            motorB_on = true;
+            myMotor1->onestep(BACKWARD, INTERLEAVE);
     }
     else{
         motorB_on = false;
         myMotor1->release();
+        hysteresisB = HYSTERESIS_GAP;
     }
   }
-
-}
 
 // void move_motor_steps_with_feedback(){
 // //must confirm which encoder reads which motor

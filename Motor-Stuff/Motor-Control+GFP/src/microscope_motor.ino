@@ -454,39 +454,7 @@ void loop() {
                 //towards our limit switch paddle until we reach it
                 return_to_start_step();
         }
-        // else if (newMotorPosition != curMotorPosition){
-        //         //Elevator Motors
-        //         //Move motors based on values defined in serial
-        //         stepsToTake = newMotorPosition - curMotorPosition;
-        //         //encoderStepsToTake = stepsToTake * 1.5;
-        //
-        //         if ( stepsToTake > 0) {
-        //                 if(read_switch(1)==1) {//stop collision with cell plate
-        //                         myMotor1->onestep(FORWARD, INTERLEAVE);
-        //                         myMotor2->onestep(FORWARD, INTERLEAVE);
-        //                         curMotorPosition++;
-        //                 }else{
-        //                         newMotorPosition = curMotorPosition;
-        //                         stepsToTake = 0;
-        //                 }
-        //         }
-        //         else if ( stepsToTake < 0) {
-        //                 myMotor1->onestep(BACKWARD, INTERLEAVE);
-        //                 myMotor2->onestep(BACKWARD, INTERLEAVE);
-        //                 curMotorPosition--;
-        //         }
-        //         else {
-        //                 #ifdef DEBUG
-        //                 if (speed_timer_flag){
-        //                   Serial.println(millis()-speed_timer);
-        //                   speed_timer_flag = false;
-        //                 }
-        //                 #endif
-        //                 myMotor1->release();
-        //                 myMotor2->release();
-        //         }
-        //}
-       else if (xStepsToTake || yStepsToTake){
+        else if (xStepsToTake || yStepsToTake){
            if ( xStepsToTake > 0) {
                    xTranslation->onestep(FORWARD, INTERLEAVE);
                    xStepsToTake--;
@@ -495,7 +463,7 @@ void loop() {
                    xTranslation->onestep(BACKWARD, INTERLEAVE);
                    xStepsToTake++;
            }
-           else {
+           if (xStepsToTake == 0){
                    xTranslation->release();
            }
            //Y Stage Translation
@@ -507,7 +475,7 @@ void loop() {
                    yTranslation->onestep(BACKWARD, INTERLEAVE);
                    yStepsToTake++;
            }
-           else {
+           if( yStepsToTake == 0){
                    yTranslation->release();
            }
 

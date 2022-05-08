@@ -329,16 +329,29 @@ void loop() {
           case 'c' :
           //set zero point without limit switch based reset.
           //deprecated, unlikely to ever be used in practice
-                  curMotorPosition = 0;
-                  newMotorPosition = 0;
+                  // curMotorPosition = 0;
+                  // newMotorPosition = 0;
+
+                  // set encoder 0 position
+                  if (safeMotorEncoderPositionA > safeMotorEncoderPositionB){
+                    newEncoderPosition = safeMotorEncoderPositionA;
+                  }else{
+                    newEncoderPosition = safeMotorEncoderPositionB;
+                  }
+                  encoderZero = newEncoderPosition;
+
                   break;
 
           case 'r' :
           //return to origin based on limit switch
                   //motor_timer = millis();
-                  return_flag = true;
-                  curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
-                  //newMotorPosition = 0;
+
+                  // return_flag = true;
+                  // curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
+                  // //newMotorPosition = 0;
+
+                  hysteresisA = hysteresisB = 0;
+                  newEncoderPosition = (0+encoderZero);
                   a = 'n';
                   break;
           case 'm' :
@@ -500,12 +513,12 @@ void move_motor_to_position_with_feedback(){
     if ((safeMotorEncoderPositionA < newEncoderPosition - hysteresisA) && read_switch(1)==1 ) {
         // switch stops collision with cell plate
         motorA_on = true;
-        myMotor2->onestep(FORWARD, INTERLEAVE);
+        myMotor2->onestep(FORWARD, DOUBLE);
 
     }
     else if ((safeMotorEncoderPositionA > newEncoderPosition + hysteresisA) && read_switch(2)==1 ) {
         motorA_on = true;
-        myMotor2->onestep(BACKWARD, INTERLEAVE);
+        myMotor2->onestep(BACKWARD, DOUBLE);
 
     }
     else{
@@ -515,11 +528,11 @@ void move_motor_to_position_with_feedback(){
     }
     if ((safeMotorEncoderPositionB < newEncoderPosition - hysteresisB) && read_switch(1)==1) {
         motorB_on = true;
-        myMotor1->onestep(FORWARD, INTERLEAVE);
+        myMotor1->onestep(FORWARD, DOUBLE);
     }
     else if ((safeMotorEncoderPositionB > newEncoderPosition + hysteresisB) && read_switch(2)==1) {
             motorB_on = true;
-            myMotor1->onestep(BACKWARD, INTERLEAVE);
+            myMotor1->onestep(BACKWARD, DOUBLE);
     }
     else{
         motorB_on = false;

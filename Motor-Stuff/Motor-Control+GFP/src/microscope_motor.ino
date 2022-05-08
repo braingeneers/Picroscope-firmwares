@@ -220,7 +220,7 @@ bool motors_moving = false;
 int nanCount = 0;
 int hysteresisA = 0;
 int hysteresisB = 0;
-#define HYSTERESIS_GAP 5
+#define HYSTERESIS_GAP 20
 
 
 
@@ -346,12 +346,12 @@ void loop() {
           //return to origin based on limit switch
                   //motor_timer = millis();
 
-                  // return_flag = true;
-                  // curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
+                  return_flag = true;
+                  curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
                   // //newMotorPosition = 0;
 
-                  hysteresisA = hysteresisB = 0;
-                  newEncoderPosition = (0+encoderZero);
+                  // hysteresisA = hysteresisB = 0;
+                  // newEncoderPosition = (0+encoderZero);
                   a = 'n';
                   break;
           case 'm' :

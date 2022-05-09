@@ -220,7 +220,9 @@ bool motors_moving = false;
 int nanCount = 0;
 int hysteresisA = 0;
 int hysteresisB = 0;
-#define HYSTERESIS_GAP 5
+#define HYSTERESIS_GAP 20
+bool motorADone = false;
+bool motorBDone = false;
 
 
 
@@ -288,6 +290,11 @@ void loop() {
                         Serial.println(safeMotorEncoderPositionB);
                         Serial.print("Encoder Zero Point: ");
                         Serial.println(encoderZero);
+                        Serial.print("Encoder Set Point: ");
+                        Serial.println(newEncoderPosition);
+                        Serial.print("Hysteresis A and B: ");
+                        Serial.print(hysteresisA);
+                        Serial.println(hysteresisB);
                         Serial.print("Motor Timer: ");
                         Serial.println(abs(millis() - motor_timer));
                         Serial.print("Motor A On:");
@@ -321,7 +328,8 @@ void loop() {
 
                         //copying this code into the case M block for quick compatible drop in
 
-                        hysteresisA = hysteresisB = 0;
+                        hysteresisA = 0;
+                        hysteresisB = 0;
                         newEncoderPosition = (val+encoderZero);
                   }
                   break;
@@ -334,11 +342,15 @@ void loop() {
 
                   // set encoder 0 position
                   if (safeMotorEncoderPositionA > safeMotorEncoderPositionB){
-                    newEncoderPosition = safeMotorEncoderPositionA;
+                    newEncoderPosition = safeMotorEncoderPositionA + val;
                   }else{
-                    newEncoderPosition = safeMotorEncoderPositionB;
+                    newEncoderPosition = safeMotorEncoderPositionB + val;
                   }
                   encoderZero = newEncoderPosition;
+                  hysteresisA = 0;
+                  hysteresisB = 0;
+                  motorADone = false;
+                  motorBDone = false;
 
                   break;
 
@@ -346,12 +358,12 @@ void loop() {
           //return to origin based on limit switch
                   //motor_timer = millis();
 
-                  // return_flag = true;
-                  // curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
+                  return_flag = true;
+                  curMotorPosition = 0; //uncommented this to make ERROR condition work properly in return_to_start_step()
                   // //newMotorPosition = 0;
 
-                  hysteresisA = hysteresisB = 0;
-                  newEncoderPosition = (0+encoderZero);
+                  // hysteresisA = hysteresisB = 0;
+                  // newEncoderPosition = (0+encoderZero);
                   a = 'n';
                   break;
           case 'm' :
@@ -366,7 +378,10 @@ void loop() {
                   //copied this code from the case E block for quick compatible drop in
                   // dirA_up = ((val + encoderZero) > safeMotorEncoderPositionA);
                   // dirB_up = ((val + encoderZero) > safeMotorEncoderPositionB);
-                  hysteresisA = hysteresisB = 0;
+                  hysteresisA = 0;
+                  hysteresisB = 0;
+                  motorADone = false;
+                  motorBDone = false;
                   newEncoderPosition = (val+encoderZero);
                   // newMotorPosition = val;
                   //motor_timer = millis();
@@ -513,31 +528,35 @@ void move_motor_to_position_with_feedback(){
     if ((safeMotorEncoderPositionA < newEncoderPosition - hysteresisA) && read_switch(1)==1 ) {
         // switch stops collision with cell plate
         motorA_on = true;
-        myMotor2->onestep(FORWARD, DOUBLE);
+        myMotor2->onestep(FORWARD, INTERLEAVE);
 
     }
     else if ((safeMotorEncoderPositionA > newEncoderPosition + hysteresisA) && read_switch(2)==1 ) {
         motorA_on = true;
-        myMotor2->onestep(BACKWARD, DOUBLE);
+        myMotor2->onestep(BACKWARD, INTERLEAVE);
 
     }
     else{
         motorA_on = false;
         myMotor2->release();
-        hysteresisA = HYSTERESIS_GAP;
+        motorADone = true;
     }
     if ((safeMotorEncoderPositionB < newEncoderPosition - hysteresisB) && read_switch(1)==1) {
         motorB_on = true;
-        myMotor1->onestep(FORWARD, DOUBLE);
+        myMotor1->onestep(FORWARD, INTERLEAVE);
     }
     else if ((safeMotorEncoderPositionB > newEncoderPosition + hysteresisB) && read_switch(2)==1) {
             motorB_on = true;
-            myMotor1->onestep(BACKWARD, DOUBLE);
+            myMotor1->onestep(BACKWARD, INTERLEAVE);
     }
     else{
         motorB_on = false;
         myMotor1->release();
+        motorBDone = true;
+    }
+    if (motorADone && motorBDone){
         hysteresisB = HYSTERESIS_GAP;
+        hysteresisA = HYSTERESIS_GAP;
     }
   }
 

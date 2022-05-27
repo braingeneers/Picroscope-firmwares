@@ -229,13 +229,15 @@ bool motorBDone = false;
 void move_motor_to_position_with_feedback();
 void shut_down_everything();
 void lights_off();
-
+void update_safe_encoder_counts(){
+  noInterrupts();
+  safeMotorEncoderPositionA = count;
+  safeMotorEncoderPositionB = count2;
+  interrupts();
+}
 void loop() {
 
-        noInterrupts();
-        safeMotorEncoderPositionA = count;
-        safeMotorEncoderPositionB = count2;
-        interrupts();
+        update_safe_encoder_counts();
 
 
         motors_moving = (motorA_on || motorB_on || return_flag || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0);
@@ -294,6 +296,7 @@ void loop() {
                         Serial.println(newEncoderPosition);
                         Serial.print("Hysteresis A and B: ");
                         Serial.print(hysteresisA);
+                        Serial.print(" ");
                         Serial.println(hysteresisB);
                         Serial.print("Motor Timer: ");
                         Serial.println(abs(millis() - motor_timer));
@@ -521,7 +524,7 @@ void loop() {
 
 
 }
-
+//#define DEBUG_MOTORS
 void move_motor_to_position_with_feedback(){
 //must confirm which encoder reads which motor
 //otherwise you end up with one turning forever
@@ -529,35 +532,95 @@ void move_motor_to_position_with_feedback(){
         // switch stops collision with cell plate
         motorA_on = true;
         myMotor2->onestep(FORWARD, INTERLEAVE);
+        #ifdef DEBUG_MOTORS
+        Serial.print("1 Motor A: ");
+        Serial.println(safeMotorEncoderPositionA);
+        Serial.print("Motor B: ");
+        Serial.println(safeMotorEncoderPositionB);
+        #endif
+        update_safe_encoder_counts();
+        if(safeMotorEncoderPositionA >= newEncoderPosition - hysteresisA){
+            motorA_on = false;
+            myMotor2->release();
+            motorADone = true;
+            hysteresisA = HYSTERESIS_GAP;
+        }
 
     }
     else if ((safeMotorEncoderPositionA > newEncoderPosition + hysteresisA) && read_switch(2)==1 ) {
         motorA_on = true;
+        #ifdef DEBUG_MOTORS
+        Serial.print("2 Motor A: ");
+        Serial.println(safeMotorEncoderPositionA);
+        Serial.print("Motor B: ");
+        Serial.println(safeMotorEncoderPositionB);
+        #endif
         myMotor2->onestep(BACKWARD, INTERLEAVE);
+        #ifdef DEBUG_MOTORS
+        #endif
+        update_safe_encoder_counts();
+        if(safeMotorEncoderPositionA <= newEncoderPosition + hysteresisA){
+            motorA_on = false;
+            myMotor2->release();
+            motorADone = true;
+            hysteresisA = HYSTERESIS_GAP;
+        }
 
     }
+    //following line has to be an explicit if statement rather than an else since safeMotorEncoderPositionA
+    //if((safeMotorEncoderPositionA > newEncoderPosition - hysteresisA) && (safeMotorEncoderPositionA < newEncoderPosition + hysteresisA))
     else{
         motorA_on = false;
         myMotor2->release();
         motorADone = true;
+        //hysteresisB = HYSTERESIS_GAP;
+        hysteresisA = HYSTERESIS_GAP;
     }
     if ((safeMotorEncoderPositionB < newEncoderPosition - hysteresisB) && read_switch(1)==1) {
         motorB_on = true;
         myMotor1->onestep(FORWARD, INTERLEAVE);
+        #ifdef DEBUG_MOTORS
+        Serial.print("3 Motor A: ");
+        Serial.println(safeMotorEncoderPositionA);
+        Serial.print("Motor B: ");
+        Serial.println(safeMotorEncoderPositionB);
+        #endif
+        update_safe_encoder_counts();
+        if(safeMotorEncoderPositionB >= newEncoderPosition - hysteresisB){
+            motorB_on = false;
+            myMotor1->release();
+            motorBDone = true;
+            hysteresisB = HYSTERESIS_GAP;
+        }
     }
     else if ((safeMotorEncoderPositionB > newEncoderPosition + hysteresisB) && read_switch(2)==1) {
             motorB_on = true;
             myMotor1->onestep(BACKWARD, INTERLEAVE);
+            #ifdef DEBUG_MOTORS
+            Serial.print("4 Motor A: ");
+            Serial.println(safeMotorEncoderPositionA);
+            Serial.print("Motor B: ");
+            Serial.println(safeMotorEncoderPositionB);
+            #endif
+            update_safe_encoder_counts();
+            if(safeMotorEncoderPositionB <= newEncoderPosition + hysteresisB){
+                motorB_on = false;
+                myMotor1->release();
+                motorBDone = true;
+                hysteresisB = HYSTERESIS_GAP;
+            }
     }
     else{
         motorB_on = false;
         myMotor1->release();
         motorBDone = true;
-    }
-    if (motorADone && motorBDone){
         hysteresisB = HYSTERESIS_GAP;
-        hysteresisA = HYSTERESIS_GAP;
+        //hysteresisA = HYSTERESIS_GAP;
     }
+    // if (motorADone && motorBDone){
+    //     hysteresisB = HYSTERESIS_GAP;
+    //     hysteresisA = HYSTERESIS_GAP;
+    // }
   }
 
 // void move_motor_steps_with_feedback(){

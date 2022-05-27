@@ -524,14 +524,14 @@ void loop() {
 
 
 }
-#define DEBUG_MOTORS
+//#define DEBUG_MOTORS
 void move_motor_to_position_with_feedback(){
 //must confirm which encoder reads which motor
 //otherwise you end up with one turning forever
     if ((safeMotorEncoderPositionA < newEncoderPosition - hysteresisA) && read_switch(1)==1 ) {
         // switch stops collision with cell plate
         motorA_on = true;
-        myMotor2->onestep(FORWARD, DOUBLE);
+        myMotor2->onestep(FORWARD, INTERLEAVE);
         #ifdef DEBUG_MOTORS
         Serial.print("1 Motor A: ");
         Serial.println(safeMotorEncoderPositionA);
@@ -555,7 +555,7 @@ void move_motor_to_position_with_feedback(){
         Serial.print("Motor B: ");
         Serial.println(safeMotorEncoderPositionB);
         #endif
-        myMotor2->onestep(BACKWARD, DOUBLE);
+        myMotor2->onestep(BACKWARD, INTERLEAVE);
         #ifdef DEBUG_MOTORS
         #endif
         update_safe_encoder_counts();
@@ -578,7 +578,7 @@ void move_motor_to_position_with_feedback(){
     }
     if ((safeMotorEncoderPositionB < newEncoderPosition - hysteresisB) && read_switch(1)==1) {
         motorB_on = true;
-        myMotor1->onestep(FORWARD, DOUBLE);
+        myMotor1->onestep(FORWARD, INTERLEAVE);
         #ifdef DEBUG_MOTORS
         Serial.print("3 Motor A: ");
         Serial.println(safeMotorEncoderPositionA);
@@ -595,7 +595,7 @@ void move_motor_to_position_with_feedback(){
     }
     else if ((safeMotorEncoderPositionB > newEncoderPosition + hysteresisB) && read_switch(2)==1) {
             motorB_on = true;
-            myMotor1->onestep(BACKWARD, DOUBLE);
+            myMotor1->onestep(BACKWARD, INTERLEAVE);
             #ifdef DEBUG_MOTORS
             Serial.print("4 Motor A: ");
             Serial.println(safeMotorEncoderPositionA);

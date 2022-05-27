@@ -294,6 +294,7 @@ void loop() {
                         Serial.println(newEncoderPosition);
                         Serial.print("Hysteresis A and B: ");
                         Serial.print(hysteresisA);
+                        Serial.print(" ");
                         Serial.println(hysteresisB);
                         Serial.print("Motor Timer: ");
                         Serial.println(abs(millis() - motor_timer));
@@ -521,43 +522,97 @@ void loop() {
 
 
 }
-
+#define DEBUG_MOTORS
 void move_motor_to_position_with_feedback(){
 //must confirm which encoder reads which motor
 //otherwise you end up with one turning forever
     if ((safeMotorEncoderPositionA < newEncoderPosition - hysteresisA) && read_switch(1)==1 ) {
         // switch stops collision with cell plate
         motorA_on = true;
-        myMotor2->onestep(FORWARD, INTERLEAVE);
+        myMotor2->onestep(FORWARD, DOUBLE);
+        #ifdef DEBUG_MOTORS
+        Serial.print("Motor A: ");
+        Serial.println(safeMotorEncoderPositionA);
+        Serial.print("Motor B: ");
+        Serial.println(safeMotorEncoderPositionB);
+        #endif
+        if(safeMotorEncoderPositionA >= newEncoderPosition - hysteresisA){
+            motorA_on = false;
+            myMotor2->release();
+            motorADone = true;
+            hysteresisA = HYSTERESIS_GAP;
+        }
 
     }
     else if ((safeMotorEncoderPositionA > newEncoderPosition + hysteresisA) && read_switch(2)==1 ) {
         motorA_on = true;
-        myMotor2->onestep(BACKWARD, INTERLEAVE);
+        myMotor2->onestep(BACKWARD, DOUBLE);
+        #ifdef DEBUG_MOTORS
+        Serial.print("Motor A: ");
+        Serial.println(safeMotorEncoderPositionA);
+        Serial.print("Motor B: ");
+        Serial.println(safeMotorEncoderPositionB);
+        #endif
+        if(safeMotorEncoderPositionA <= newEncoderPosition + hysteresisA){
+            motorA_on = false;
+            myMotor2->release();
+            motorADone = true;
+            hysteresisA = HYSTERESIS_GAP;
+        }
 
     }
+    //following line has to be an explicit if statement rather than an else since safeMotorEncoderPositionA
+    //if((safeMotorEncoderPositionA > newEncoderPosition - hysteresisA) && (safeMotorEncoderPositionA < newEncoderPosition + hysteresisA))
     else{
         motorA_on = false;
         myMotor2->release();
         motorADone = true;
+        //hysteresisB = HYSTERESIS_GAP;
+        hysteresisA = HYSTERESIS_GAP;
     }
     if ((safeMotorEncoderPositionB < newEncoderPosition - hysteresisB) && read_switch(1)==1) {
         motorB_on = true;
-        myMotor1->onestep(FORWARD, INTERLEAVE);
+        myMotor1->onestep(FORWARD, DOUBLE);
+        #ifdef DEBUG_MOTORS
+        Serial.print("Motor A: ");
+        Serial.println(safeMotorEncoderPositionA);
+        Serial.print("Motor B: ");
+        Serial.println(safeMotorEncoderPositionB);
+        #endif
+        if(safeMotorEncoderPositionB >= newEncoderPosition - hysteresisB){
+            motorB_on = false;
+            myMotor1->release();
+            motorBDone = true;
+            hysteresisB = HYSTERESIS_GAP;
+        }
     }
     else if ((safeMotorEncoderPositionB > newEncoderPosition + hysteresisB) && read_switch(2)==1) {
             motorB_on = true;
-            myMotor1->onestep(BACKWARD, INTERLEAVE);
+            myMotor1->onestep(BACKWARD, DOUBLE);
+            #ifdef DEBUG_MOTORS
+            Serial.print("Motor A: ");
+            Serial.println(safeMotorEncoderPositionA);
+            Serial.print("Motor B: ");
+            Serial.println(safeMotorEncoderPositionB);
+            #endif
+            if(safeMotorEncoderPositionB <= newEncoderPosition + hysteresisB){
+                motorB_on = false;
+                myMotor1->release();
+                motorBDone = true;
+                hysteresisB = HYSTERESIS_GAP;
+            }
     }
     else{
         motorB_on = false;
         myMotor1->release();
         motorBDone = true;
-    }
-    if (motorADone && motorBDone){
         hysteresisB = HYSTERESIS_GAP;
-        hysteresisA = HYSTERESIS_GAP;
+        //hysteresisA = HYSTERESIS_GAP;
     }
+    // if (motorADone && motorBDone){
+    //     hysteresisB = HYSTERESIS_GAP;
+    //     hysteresisA = HYSTERESIS_GAP;
+    // }
   }
 
 // void move_motor_steps_with_feedback(){

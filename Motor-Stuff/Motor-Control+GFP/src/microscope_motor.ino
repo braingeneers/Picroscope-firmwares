@@ -229,13 +229,15 @@ bool motorBDone = false;
 void move_motor_to_position_with_feedback();
 void shut_down_everything();
 void lights_off();
-
+void update_safe_encoder_counts(){
+  noInterrupts();
+  safeMotorEncoderPositionA = count;
+  safeMotorEncoderPositionB = count2;
+  interrupts();
+}
 void loop() {
 
-        noInterrupts();
-        safeMotorEncoderPositionA = count;
-        safeMotorEncoderPositionB = count2;
-        interrupts();
+        update_safe_encoder_counts();
 
 
         motors_moving = (motorA_on || motorB_on || return_flag || stepsToTake != 0 || xStepsToTake != 0 || yStepsToTake !=0);
@@ -531,11 +533,12 @@ void move_motor_to_position_with_feedback(){
         motorA_on = true;
         myMotor2->onestep(FORWARD, DOUBLE);
         #ifdef DEBUG_MOTORS
-        Serial.print("Motor A: ");
+        Serial.print("1 Motor A: ");
         Serial.println(safeMotorEncoderPositionA);
         Serial.print("Motor B: ");
         Serial.println(safeMotorEncoderPositionB);
         #endif
+        update_safe_encoder_counts();
         if(safeMotorEncoderPositionA >= newEncoderPosition - hysteresisA){
             motorA_on = false;
             myMotor2->release();
@@ -546,13 +549,16 @@ void move_motor_to_position_with_feedback(){
     }
     else if ((safeMotorEncoderPositionA > newEncoderPosition + hysteresisA) && read_switch(2)==1 ) {
         motorA_on = true;
-        myMotor2->onestep(BACKWARD, DOUBLE);
         #ifdef DEBUG_MOTORS
-        Serial.print("Motor A: ");
+        Serial.print("2 Motor A: ");
         Serial.println(safeMotorEncoderPositionA);
         Serial.print("Motor B: ");
         Serial.println(safeMotorEncoderPositionB);
         #endif
+        myMotor2->onestep(BACKWARD, DOUBLE);
+        #ifdef DEBUG_MOTORS
+        #endif
+        update_safe_encoder_counts();
         if(safeMotorEncoderPositionA <= newEncoderPosition + hysteresisA){
             motorA_on = false;
             myMotor2->release();
@@ -574,11 +580,12 @@ void move_motor_to_position_with_feedback(){
         motorB_on = true;
         myMotor1->onestep(FORWARD, DOUBLE);
         #ifdef DEBUG_MOTORS
-        Serial.print("Motor A: ");
+        Serial.print("3 Motor A: ");
         Serial.println(safeMotorEncoderPositionA);
         Serial.print("Motor B: ");
         Serial.println(safeMotorEncoderPositionB);
         #endif
+        update_safe_encoder_counts();
         if(safeMotorEncoderPositionB >= newEncoderPosition - hysteresisB){
             motorB_on = false;
             myMotor1->release();
@@ -590,11 +597,12 @@ void move_motor_to_position_with_feedback(){
             motorB_on = true;
             myMotor1->onestep(BACKWARD, DOUBLE);
             #ifdef DEBUG_MOTORS
-            Serial.print("Motor A: ");
+            Serial.print("4 Motor A: ");
             Serial.println(safeMotorEncoderPositionA);
             Serial.print("Motor B: ");
             Serial.println(safeMotorEncoderPositionB);
             #endif
+            update_safe_encoder_counts();
             if(safeMotorEncoderPositionB <= newEncoderPosition + hysteresisB){
                 motorB_on = false;
                 myMotor1->release();

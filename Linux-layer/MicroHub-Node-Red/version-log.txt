@@ -1,0 +1,13 @@
+1.00,Evee
+1.01,Evee
+1.02,Evee
+1.03,Evee
+1.04,Evee
+1.05,Evee
+1.06,Evee
+1.07,Evee
+1.08,Evee
+1.09,Evee
+1.1,Evee
+1.11,Evee
+1.12,Evee

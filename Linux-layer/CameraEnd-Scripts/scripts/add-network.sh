@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ "$#" -ne 3 ]; then
+    echo "Should be three parameters to this script"
+    exit 9
+fi
+
+
 SSID="ssid=\""$1"\""
 
 #if grep -Fq "$SSID" /Users/pierre/Braingeneers/Picroscope-Firmwares/Linux-layer/CameraEnd-Scripts/scripts/sample_wpa_supplicant.conf

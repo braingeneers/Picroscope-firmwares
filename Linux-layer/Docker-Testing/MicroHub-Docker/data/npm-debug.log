@@ -1,0 +1,1742 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'i',
+1 verbose cli   'node-red-node-serialport' ]
+2 info using npm@1.4.21
+3 info using node@v8.11.1
+4 verbose readDependencies using package.json deps
+5 verbose cache add [ 'node-red-node-serialport', null ]
+6 verbose cache add name=undefined spec="node-red-node-serialport" args=["node-red-node-serialport",null]
+7 verbose parsed url Url {
+7 verbose parsed url   protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: 'node-red-node-serialport',
+7 verbose parsed url   path: 'node-red-node-serialport',
+7 verbose parsed url   href: 'node-red-node-serialport' }
+8 silly lockFile c1b9c895-node-red-node-serialport node-red-node-serialport
+9 verbose lock node-red-node-serialport /home/pi/.npm/c1b9c895-node-red-node-serialport.lock
+10 silly lockFile c1b9c895-node-red-node-serialport node-red-node-serialport
+11 silly lockFile c1b9c895-node-red-node-serialport node-red-node-serialport
+12 verbose addNamed [ 'node-red-node-serialport', '' ]
+13 verbose addNamed [ null, '*' ]
+14 silly lockFile 04f6ca30-node-red-node-serialport node-red-node-serialport@
+15 verbose lock node-red-node-serialport@ /home/pi/.npm/04f6ca30-node-red-node-serialport.lock
+16 silly addNameRange { name: 'node-red-node-serialport', range: '*', hasData: false }
+17 verbose request where is /node-red-node-serialport
+18 verbose request registry https://registry.npmjs.org/
+19 verbose request id 1b9d374364dd48a3
+20 verbose url raw /node-red-node-serialport
+21 verbose url resolving [ 'https://registry.npmjs.org/', './node-red-node-serialport' ]
+22 verbose url resolved https://registry.npmjs.org/node-red-node-serialport
+23 verbose request where is https://registry.npmjs.org/node-red-node-serialport
+24 info trying registry request attempt 1 at 2:43:25 PM
+25 verbose etag W/"c0a0b73ba4a945d688accd86e00078bc"
+26 http GET https://registry.npmjs.org/node-red-node-serialport
+27 http 304 https://registry.npmjs.org/node-red-node-serialport
+28 silly registry.get cb [ 304,
+28 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:25 GMT',
+28 silly registry.get     connection: 'close',
+28 silly registry.get     'set-cookie':
+28 silly registry.get      [ '__cfduid=dd7983fc7b0d0f8051537bce5254506741546987405; expires=Wed, 08-Jan-20 22:43:25 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+28 silly registry.get     'cf-cache-status': 'HIT',
+28 silly registry.get     'cache-control': 'max-age=300',
+28 silly registry.get     'cf-ray': '49622ed52a3b6d6c-SJC',
+28 silly registry.get     etag: '"c0a0b73ba4a945d688accd86e00078bc"',
+28 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+28 silly registry.get     'last-modified': 'Sat, 11 Aug 2018 13:06:15 GMT',
+28 silly registry.get     vary: 'accept-encoding, accept',
+28 silly registry.get     server: 'cloudflare' } ]
+29 verbose etag https://registry.npmjs.org/node-red-node-serialport from cache
+30 silly addNameRange number 2 { name: 'node-red-node-serialport', range: '*', hasData: true }
+31 silly addNameRange versions [ 'node-red-node-serialport',
+31 silly addNameRange   [ '0.0.1',
+31 silly addNameRange     '0.0.2',
+31 silly addNameRange     '0.0.3',
+31 silly addNameRange     '0.1.0',
+31 silly addNameRange     '0.1.1',
+31 silly addNameRange     '0.1.2',
+31 silly addNameRange     '0.2.0',
+31 silly addNameRange     '0.2.1',
+31 silly addNameRange     '0.3.0',
+31 silly addNameRange     '0.4.0',
+31 silly addNameRange     '0.4.1',
+31 silly addNameRange     '0.4.2',
+31 silly addNameRange     '0.4.4',
+31 silly addNameRange     '0.6.0-beta',
+31 silly addNameRange     '0.6.0',
+31 silly addNameRange     '0.6.1',
+31 silly addNameRange     '0.6.2',
+31 silly addNameRange     '0.6.3',
+31 silly addNameRange     '0.6.4',
+31 silly addNameRange     '0.6.5',
+31 silly addNameRange     '0.6.6',
+31 silly addNameRange     '0.6.7',
+31 silly addNameRange     '0.6.8-beta',
+31 silly addNameRange     '0.6.8' ] ]
+32 verbose addNamed [ 'node-red-node-serialport', '0.6.8' ]
+33 verbose addNamed [ '0.6.8', '0.6.8' ]
+34 silly lockFile 005511c9-node-red-node-serialport-0-6-8 node-red-node-serialport@0.6.8
+35 verbose lock node-red-node-serialport@0.6.8 /home/pi/.npm/005511c9-node-red-node-serialport-0-6-8.lock
+36 silly lockFile 005511c9-node-red-node-serialport-0-6-8 node-red-node-serialport@0.6.8
+37 silly lockFile 005511c9-node-red-node-serialport-0-6-8 node-red-node-serialport@0.6.8
+38 silly lockFile 04f6ca30-node-red-node-serialport node-red-node-serialport@
+39 silly lockFile 04f6ca30-node-red-node-serialport node-red-node-serialport@
+40 silly resolved [ { name: 'node-red-node-serialport',
+40 silly resolved     version: '0.6.8',
+40 silly resolved     description: 'Node-RED nodes to talk to serial ports',
+40 silly resolved     dependencies: { serialport: '^6.2.2' },
+40 silly resolved     repository:
+40 silly resolved      { type: 'git',
+40 silly resolved        url: 'https://github.com/node-red/node-red-nodes/tree/master/io/serialport' },
+40 silly resolved     license: 'Apache-2.0',
+40 silly resolved     keywords: [ 'node-red', 'serial' ],
+40 silly resolved     'node-red': { version: '>=0.16.0', nodes: [Object] },
+40 silly resolved     author:
+40 silly resolved      { name: 'Dave Conway-Jones',
+40 silly resolved        email: 'ceejay@vnet.ibm.com',
+40 silly resolved        url: 'http://nodered.org' },
+40 silly resolved     _id: 'node-red-node-serialport@0.6.8',
+40 silly resolved     _npmVersion: '6.3.0',
+40 silly resolved     _nodeVersion: '8.11.3',
+40 silly resolved     _npmUser: { name: 'dceejay', email: 'ceejay@vnet.ibm.com' },
+40 silly resolved     maintainers: [ [Object] ],
+40 silly resolved     dist:
+40 silly resolved      { integrity: 'sha512-wW0TtdHMTs3k1SZd94hW/E8xuYTgJdAVPKu/vh35bTm9doEpfRRQsxzjKs5ZoGmBbNAEQ0OMd6a2ph7hDrF9PA==',
+40 silly resolved        shasum: '51e91f96a54f62df39d5c7a2f5df16af064c17c1',
+40 silly resolved        tarball: 'https://registry.npmjs.org/node-red-node-serialport/-/node-red-node-serialport-0.6.8.tgz',
+40 silly resolved        fileCount: 7,
+40 silly resolved        unpackedSize: 44817,
+40 silly resolved        'npm-signature': '-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbbt9ECRA9TVsSAnZWagAArq0P/3Cr1hu2jCMz/QgKeApm\nvxTXjfQR33C/WeXuJlepUdsgTKJ5YIWm+qsqb/nfvAt4m8d1HGnWaxSpY+fm\n/waHaYv1j7Imj2cTDJC56vRzW9D2WBuhYUkG6XHiUGAlgVZjli6FS/cfD7zF\nf2J8n0/uLZVVzy6QvzBW+OQKQFeB47rwVAa59orWvxLzwlPOatyYV6NgLTs6\ncCv7/DZj8te2yBxMu98+M1OqLoA8E6r9xDCKXlbFxzPDpqUl+KJPuKcs7gFy\nUnpx6sPbMPHKbUe8rNmoozw/3DNZUVWDbS7YLEpWO9UoziSA49L7fkKVt2Vq\nCrdoU83tG2ePrfIJRAK8+jOojAEVBd+YIQEzYCjhBtzfSALXteeUB1g1T4dj\n3gkFWRHsxUOw/5D1vI8zJFOiANhIxRXY2TOHS+Evq01xg+KEU0vGoP98Z1mr\nEFMxOn91UPpGmJklp1jR/07THtbb3KEYxzmtBX4+xb068faK8Hj24FdUirr8\nVuCM74z/+7xZGhuGCXseFZr1kPzRSLKaiOgao9oyuCjIsy7COknMZQDSBq9S\nouEhokT4v75MOZYw4HroaooTRFqKueUvqZ2EHCvMoa16TuiyYL2w15WnadKx\nIjFzJmqlaqeaqO3GrtvTyqqYOafz9PXxZuZT1jQ8nm1ZD/mEHZ4FBv18EHPc\nqWEA\r\n=uEpH\r\n-----END PGP SIGNATURE-----\r\n' },
+40 silly resolved     directories: {},
+40 silly resolved     _npmOperationalInternal:
+40 silly resolved      { host: 's3://npm-registry-packages',
+40 silly resolved        tmp: 'tmp/node-red-node-serialport_0.6.8_1533992771679_0.19783352761965256' },
+40 silly resolved     _shasum: '51e91f96a54f62df39d5c7a2f5df16af064c17c1',
+40 silly resolved     _from: 'node-red-node-serialport@',
+40 silly resolved     _resolved: 'https://registry.npmjs.org/node-red-node-serialport/-/node-red-node-serialport-0.6.8.tgz',
+40 silly resolved     readme: 'ERROR: No README data found!' } ]
+41 info install node-red-node-serialport@0.6.8 into /home/pi/.node-red
+42 info installOne node-red-node-serialport@0.6.8
+43 verbose node_modules/node-red-node-serialport unbuild
+44 verbose tar unpack /home/pi/.npm/node-red-node-serialport/0.6.8/package.tgz
+45 silly lockFile c3736dbb-modules-node-red-node-serialport tar:///home/pi/.node-red/node_modules/node-red-node-serialport
+46 verbose lock tar:///home/pi/.node-red/node_modules/node-red-node-serialport /home/pi/.npm/c3736dbb-modules-node-red-node-serialport.lock
+47 silly lockFile a7b4b7cb-ode-serialport-0-6-8-package-tgz tar:///home/pi/.npm/node-red-node-serialport/0.6.8/package.tgz
+48 verbose lock tar:///home/pi/.npm/node-red-node-serialport/0.6.8/package.tgz /home/pi/.npm/a7b4b7cb-ode-serialport-0-6-8-package-tgz.lock
+49 silly gunzTarPerm modes [ '755', '644' ]
+50 silly gunzTarPerm extractEntry package.json
+51 silly gunzTarPerm extractEntry 25-serial.html
+52 silly gunzTarPerm extractEntry 25-serial.js
+53 silly gunzTarPerm extractEntry LICENSE
+54 silly gunzTarPerm extractEntry README.md
+55 silly gunzTarPerm extractEntry locales/en-US/25-serial.json
+56 silly gunzTarPerm extractEntry locales/ja/25-serial.json
+57 silly lockFile c3736dbb-modules-node-red-node-serialport tar:///home/pi/.node-red/node_modules/node-red-node-serialport
+58 silly lockFile c3736dbb-modules-node-red-node-serialport tar:///home/pi/.node-red/node_modules/node-red-node-serialport
+59 silly lockFile a7b4b7cb-ode-serialport-0-6-8-package-tgz tar:///home/pi/.npm/node-red-node-serialport/0.6.8/package.tgz
+60 silly lockFile a7b4b7cb-ode-serialport-0-6-8-package-tgz tar:///home/pi/.npm/node-red-node-serialport/0.6.8/package.tgz
+61 info preinstall node-red-node-serialport@0.6.8
+62 verbose readDependencies using package.json deps
+63 verbose readDependencies using package.json deps
+64 verbose cache add [ 'serialport@^6.2.2', null ]
+65 verbose cache add name=undefined spec="serialport@^6.2.2" args=["serialport@^6.2.2",null]
+66 verbose parsed url Url {
+66 verbose parsed url   protocol: null,
+66 verbose parsed url   slashes: null,
+66 verbose parsed url   auth: null,
+66 verbose parsed url   host: null,
+66 verbose parsed url   port: null,
+66 verbose parsed url   hostname: null,
+66 verbose parsed url   hash: null,
+66 verbose parsed url   search: null,
+66 verbose parsed url   query: null,
+66 verbose parsed url   pathname: 'serialport@%5E6.2.2',
+66 verbose parsed url   path: 'serialport@%5E6.2.2',
+66 verbose parsed url   href: 'serialport@%5E6.2.2' }
+67 verbose cache add name="serialport" spec="^6.2.2" args=["serialport","^6.2.2"]
+68 verbose parsed url Url {
+68 verbose parsed url   protocol: null,
+68 verbose parsed url   slashes: null,
+68 verbose parsed url   auth: null,
+68 verbose parsed url   host: null,
+68 verbose parsed url   port: null,
+68 verbose parsed url   hostname: null,
+68 verbose parsed url   hash: null,
+68 verbose parsed url   search: null,
+68 verbose parsed url   query: null,
+68 verbose parsed url   pathname: '%5E6.2.2',
+68 verbose parsed url   path: '%5E6.2.2',
+68 verbose parsed url   href: '%5E6.2.2' }
+69 verbose addNamed [ 'serialport', '^6.2.2' ]
+70 verbose addNamed [ null, '>=6.2.2 <7.0.0' ]
+71 silly lockFile 3ed700f5-serialport-6-2-2 serialport@^6.2.2
+72 verbose lock serialport@^6.2.2 /home/pi/.npm/3ed700f5-serialport-6-2-2.lock
+73 silly addNameRange { name: 'serialport', range: '>=6.2.2 <7.0.0', hasData: false }
+74 verbose request where is /serialport
+75 verbose request registry https://registry.npmjs.org/
+76 verbose url raw /serialport
+77 verbose url resolving [ 'https://registry.npmjs.org/', './serialport' ]
+78 verbose url resolved https://registry.npmjs.org/serialport
+79 verbose request where is https://registry.npmjs.org/serialport
+80 info trying registry request attempt 1 at 2:43:25 PM
+81 verbose etag W/"7a1b10b1af0c94b3d94cfca097389353"
+82 http GET https://registry.npmjs.org/serialport
+83 http 304 https://registry.npmjs.org/serialport
+84 silly registry.get cb [ 304,
+84 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:25 GMT',
+84 silly registry.get     connection: 'close',
+84 silly registry.get     'set-cookie':
+84 silly registry.get      [ '__cfduid=dfbca350fdf0746fee34ca3c36be4b7111546987405; expires=Wed, 08-Jan-20 22:43:25 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+84 silly registry.get     'cf-cache-status': 'HIT',
+84 silly registry.get     'cache-control': 'max-age=300',
+84 silly registry.get     'cf-ray': '49622ed70e8e93d2-SJC',
+84 silly registry.get     etag: '"7a1b10b1af0c94b3d94cfca097389353"',
+84 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+84 silly registry.get     'last-modified': 'Tue, 08 Jan 2019 18:07:29 GMT',
+84 silly registry.get     vary: 'accept-encoding, accept',
+84 silly registry.get     'x-amz-meta-rev': '365-ecaf5aa8bb339c34326c7069138ec87e',
+84 silly registry.get     server: 'cloudflare' } ]
+85 verbose etag https://registry.npmjs.org/serialport from cache
+86 silly addNameRange number 2 { name: 'serialport', range: '>=6.2.2 <7.0.0', hasData: true }
+87 silly addNameRange versions [ 'serialport',
+87 silly addNameRange   [ '0.1.0',
+87 silly addNameRange     '0.1.1',
+87 silly addNameRange     '0.1.3',
+87 silly addNameRange     '0.2.0',
+87 silly addNameRange     '0.2.2',
+87 silly addNameRange     '0.2.3',
+87 silly addNameRange     '0.2.4',
+87 silly addNameRange     '0.2.5',
+87 silly addNameRange     '0.2.6',
+87 silly addNameRange     '0.2.7',
+87 silly addNameRange     '0.2.8',
+87 silly addNameRange     '0.2.9',
+87 silly addNameRange     '0.3.0',
+87 silly addNameRange     '0.6.0',
+87 silly addNameRange     '0.6.1',
+87 silly addNameRange     '0.6.2',
+87 silly addNameRange     '0.6.3',
+87 silly addNameRange     '0.6.5',
+87 silly addNameRange     '0.6.6',
+87 silly addNameRange     '0.6.7',
+87 silly addNameRange     '0.7.0',
+87 silly addNameRange     '0.7.1',
+87 silly addNameRange     '0.7.2',
+87 silly addNameRange     '0.7.3',
+87 silly addNameRange     '0.7.4',
+87 silly addNameRange     '0.7.5',
+87 silly addNameRange     '1.0.0',
+87 silly addNameRange     '1.0.1',
+87 silly addNameRange     '1.0.2',
+87 silly addNameRange     '1.0.3',
+87 silly addNameRange     '1.0.4',
+87 silly addNameRange     '1.0.5',
+87 silly addNameRange     '1.0.6',
+87 silly addNameRange     '1.0.7',
+87 silly addNameRange     '1.0.8',
+87 silly addNameRange     '1.1.0',
+87 silly addNameRange     '1.1.1',
+87 silly addNameRange     '1.1.3',
+87 silly addNameRange     '1.2.0',
+87 silly addNameRange     '1.2.1',
+87 silly addNameRange     '1.2.2',
+87 silly addNameRange     '1.2.3',
+87 silly addNameRange     '1.2.4',
+87 silly addNameRange     '1.2.5',
+87 silly addNameRange     '1.3.0',
+87 silly addNameRange     '1.3.1',
+87 silly addNameRange     '1.4.0',
+87 silly addNameRange     '1.4.1',
+87 silly addNameRange     '1.4.2',
+87 silly addNameRange     '1.4.5',
+87 silly addNameRange     '1.4.6',
+87 silly addNameRange     '1.4.8',
+87 silly addNameRange     '1.4.9',
+87 silly addNameRange     '1.4.10',
+87 silly addNameRange     '1.5.0',
+87 silly addNameRange     '1.6.1',
+87 silly addNameRange     '1.6.2',
+87 silly addNameRange     '1.6.3',
+87 silly addNameRange     '1.7.0',
+87 silly addNameRange     '1.7.1',
+87 silly addNameRange     '1.7.3',
+87 silly addNameRange     '1.7.4',
+87 silly addNameRange     '2.0.0',
+87 silly addNameRange     '2.0.1',
+87 silly addNameRange     '2.0.2',
+87 silly addNameRange     '2.0.3',
+87 silly addNameRange     '2.0.4',
+87 silly addNameRange     '2.0.5',
+87 silly addNameRange     '2.0.6',
+87 silly addNameRange     '2.0.7-beta1',
+87 silly addNameRange     '2.0.7-beta2',
+87 silly addNameRange     '2.0.7-beta3',
+87 silly addNameRange     '2.0.7-beta4',
+87 silly addNameRange     '2.0.7-beta5',
+87 silly addNameRange     '2.1.0',
+87 silly addNameRange     '2.1.1',
+87 silly addNameRange     '2.1.2',
+87 silly addNameRange     '3.0.0',
+87 silly addNameRange     '3.0.1',
+87 silly addNameRange     '3.1.0',
+87 silly addNameRange     '3.1.1',
+87 silly addNameRange     '3.1.2-beta1',
+87 silly addNameRange     '3.1.2-beta2',
+87 silly addNameRange     '3.1.2-beta3',
+87 silly addNameRange     '3.1.2-beta5',
+87 silly addNameRange     '3.1.2-beta6',
+87 silly addNameRange     '3.1.2-beta7',
+87 silly addNameRange     '3.1.2',
+87 silly addNameRange     '3.2.0-beta1',
+87 silly addNameRange     '4.0.0-beta1',
+87 silly addNameRange     '4.0.0-beta2',
+87 silly addNameRange     '4.0.0-beta3',
+87 silly addNameRange     '4.0.0-beta4',
+87 silly addNameRange     '4.0.0-rc1',
+87 silly addNameRange     '4.0.0',
+87 silly addNameRange     '4.0.1',
+87 silly addNameRange     '5.0.0-beta1',
+87 silly addNameRange     '4.0.2',
+87 silly addNameRange     '4.0.3',
+87 silly addNameRange     '5.0.0-beta2',
+87 silly addNameRange     ... 34 more items ] ]
+88 verbose addNamed [ 'serialport', '6.2.2' ]
+89 verbose addNamed [ '6.2.2', '6.2.2' ]
+90 silly lockFile 2b994fbb-serialport-6-2-2 serialport@6.2.2
+91 verbose lock serialport@6.2.2 /home/pi/.npm/2b994fbb-serialport-6-2-2.lock
+92 silly lockFile 2b994fbb-serialport-6-2-2 serialport@6.2.2
+93 silly lockFile 2b994fbb-serialport-6-2-2 serialport@6.2.2
+94 silly lockFile 3ed700f5-serialport-6-2-2 serialport@^6.2.2
+95 silly lockFile 3ed700f5-serialport-6-2-2 serialport@^6.2.2
+96 silly resolved [ { name: 'serialport',
+96 silly resolved     version: '6.2.2',
+96 silly resolved     description: 'Node.js package to access serial ports. Linux, OSX and Windows. Welcome your robotic JavaScript overlords. Better yet, program them!',
+96 silly resolved     main: 'lib',
+96 silly resolved     repository:
+96 silly resolved      { type: 'git',
+96 silly resolved        url: 'git://github.com/node-serialport/node-serialport.git' },
+96 silly resolved     keywords:
+96 silly resolved      [ 'ccTalk',
+96 silly resolved        'com port',
+96 silly resolved        'data logging',
+96 silly resolved        'hardware',
+96 silly resolved        'iot',
+96 silly resolved        'johnny-five',
+96 silly resolved        'modem',
+96 silly resolved        'nodebots',
+96 silly resolved        'RFID',
+96 silly resolved        'robotics',
+96 silly resolved        'sensor',
+96 silly resolved        'serial port',
+96 silly resolved        'serial',
+96 silly resolved        'serialport',
+96 silly resolved        'sms gateway',
+96 silly resolved        'sms',
+96 silly resolved        'stream',
+96 silly resolved        'tty',
+96 silly resolved        'UART' ],
+96 silly resolved     maintainers: [ [Object], [Object], [Object] ],
+96 silly resolved     dependencies:
+96 silly resolved      { '@serialport/parser-byte-length': '^1.0.5',
+96 silly resolved        '@serialport/parser-cctalk': '^1.0.5',
+96 silly resolved        '@serialport/parser-delimiter': '^1.0.5',
+96 silly resolved        '@serialport/parser-readline': '^1.0.5',
+96 silly resolved        '@serialport/parser-ready': '^1.0.5',
+96 silly resolved        '@serialport/parser-regex': '^1.0.5',
+96 silly resolved        bindings: '1.3.0',
+96 silly resolved        commander: '^2.13.0',
+96 silly resolved        debug: '^3.1.0',
+96 silly resolved        nan: '^2.9.2',
+96 silly resolved        'prebuild-install': '^4.0.0',
+96 silly resolved        promirepl: '^1.0.1',
+96 silly resolved        'prompt-list': '^3.2.0',
+96 silly resolved        'safe-buffer': '^5.1.2' },
+96 silly resolved     devDependencies:
+96 silly resolved      { '@reconbot/jsdoc-theme': '^1.0.0',
+96 silly resolved        bluebird: '^3.5.0',
+96 silly resolved        cc: '^1.0.1',
+96 silly resolved        chai: '^4.0.2',
+96 silly resolved        'chai-subset': '^1.5.0',
+96 silly resolved        'conventional-changelog-cli': '^2.0.0',
+96 silly resolved        eslint: '^5.0.0',
+96 silly resolved        'eslint-plugin-import': '^2.13.0',
+96 silly resolved        'eslint-plugin-node': '^6.0.1',
+96 silly resolved        'eslint-plugin-promise': '^3.8.0',
+96 silly resolved        istanbul: '^0.4.4',
+96 silly resolved        jsdoc: '^3.5.5',
+96 silly resolved        mocha: '^5.2.0',
+96 silly resolved        prebuild: 'github:reconbot/prebuild#reconbot/build_v8_with_gn',
+96 silly resolved        proxyquire: '^2.0.0',
+96 silly resolved        sinon: '^6.0.1' },
+96 silly resolved     engines: { node: '>=4.0.0' },
+96 silly resolved     bin:
+96 silly resolved      { 'serialport-list': './bin/list.js',
+96 silly resolved        'serialport-repl': './bin/repl.js',
+96 silly resolved        'serialport-term': './bin/terminal.js' },
+96 silly resolved     license: 'MIT',
+96 silly resolved     scripts:
+96 silly resolved      { 'arduino-test': 'TEST_PORT=$(./bin/find-arduino.js) npm test',
+96 silly resolved        changelog: 'conventional-changelog -i CHANGELOG.md -s',
+96 silly resolved        docs: 'jsdoc -c ./.jsdoc.json ',
+96 silly resolved        lint: 'eslint lib test bin examples && cc',
+96 silly resolved        'rebuild-all': 'npm rebuild && node-gyp rebuild',
+96 silly resolved        repl: 'node bin/repl.js',
+96 silly resolved        terminal: 'node bin/terminal.js',
+96 silly resolved        stress: 'mocha --no-timeouts test/arduinoTest/stress.js',
+96 silly resolved        test: 'istanbul cover ./node_modules/mocha/bin/_mocha',
+96 silly resolved        'test:watch': 'mocha -w',
+96 silly resolved        valgrind: 'TEST_PORT=$(./bin/find-arduino.js) valgrind --leak-check=full node test/manual-testing/memory-binding.js',
+96 silly resolved        debugger: 'TEST_PORT=$(./bin/find-arduino.js) node --inspect --debug-brk test/manual-testing/performance.js',
+96 silly resolved        install: 'prebuild-install || node-gyp rebuild',
+96 silly resolved        rebuild: 'prebuild --compile',
+96 silly resolved        prebuild: 'prebuild --all --strip --verbose',
+96 silly resolved        'prebuild-upload': 'prebuild --all --strip --verbose' },
+96 silly resolved     gypfile: true,
+96 silly resolved     cc: { filter: [Array], files: [Array], linelength: '120' },
+96 silly resolved     gitHead: 'eb0b7114d15808273528f05cce21086fcf2d11f7',
+96 silly resolved     bugs:
+96 silly resolved      { url: 'https://github.com/node-serialport/node-serialport/issues' },
+96 silly resolved     homepage: 'https://github.com/node-serialport/node-serialport#readme',
+96 silly resolved     _id: 'serialport@6.2.2',
+96 silly resolved     _npmVersion: '6.2.0',
+96 silly resolved     _nodeVersion: '8.11.3',
+96 silly resolved     _npmUser: { name: 'reconbot', email: 'wizard@roborooter.com' },
+96 silly resolved     dist:
+96 silly resolved      { integrity: 'sha512-BQqTR06ZXKwKB6rUjeANm3aIZo0rqNbQsrQX5zKEDcNY4rxiu5dvdcfIOaAGuZkhW7jAKJsgKC5TjeURtLVuOQ==',
+96 silly resolved        shasum: '75532312571578b060eb29cbdf8f2f3e8ba03063',
+96 silly resolved        tarball: 'https://registry.npmjs.org/serialport/-/serialport-6.2.2.tgz',
+96 silly resolved        fileCount: 38,
+96 silly resolved        unpackedSize: 205564,
+96 silly resolved        'npm-signature': '-----BEGIN PGP SIGNATURE-----\r\nVersion: OpenPGP.js v3.0.4\r\nComment: https://openpgpjs.org\r\n\r\nwsFcBAEBCAAQBQJbUrhHCRA9TVsSAnZWagAAyNUP/i/fhqDMbVzqlJkIcpeZ\nAfdsgImpaRCdQZk95FWrdECZPS5vJ8clYoomnMtmiaEd7CQw3oWoiuvsXtYK\nwl9+UY9Jqf/ImJHN1q+7KNv68hE10k2AkFqWOai6ZxVMnB3oLbbFDCmpGfuv\no0ss2ApK6JYWWp286gj/jOZKkF6M3eCnojjzTFRbFlbeOv5o53res6vVNfZB\nBucarGxl9ebZO0KTJGIA5a3xZHyJnGxpMV1lHzjK2mzC+Ruy/flqrIRKVCxq\nXJg6SmTbfeyQcDAFLYrgI9f/pNYju3Io5T8tY/H5bEUvRUX/P06P1puo3RPD\ny5CS9KU5oyWUeFIwuWLAyhCYepCnskOTbep6Uw2n1KhX8/jHLhWXLMrPhMnP\nkiPqaAvWvb3FABzqpnm6P5cIZMiIRi2dtly1m7Zo863OWRx30R81LE3zWAZ8\nf1LJYxoOvon17dnWwyXjhGvvvzDWhv/riViVyOLlDcAzFKQk5wJM8p74jdgN\nVRdufgVaLi3Sws6XIUr2I9so747Ji7d7y0rJsij5ttvO3RaO/BsRTwJKpL56\njDB0vqB3fTBi3Mb6xUQExKYVIgo0Lj3cgj+pvGpRXLAfyln8uOqb1dT6qi/M\nIT0Mc9EU1gSRqfNuCTznEA10MdZJjbsT3PeGRGBBZk3mu+8mYekjvjGCnOy3\n+6EI\r\n=5L6K\r\n-----END PGP SIGNATURE-----\r\n' },
+96 silly resolved     directories: {},
+96 silly resolved     _npmOperationalInternal:
+96 silly resolved      { host: 's3://npm-registry-packages',
+96 silly resolved        tmp: 'tmp/serialport_6.2.2_1532147783767_0.23375792991661237' },
+96 silly resolved     _hasShrinkwrap: false,
+96 silly resolved     _shasum: '75532312571578b060eb29cbdf8f2f3e8ba03063',
+96 silly resolved     _from: 'serialport@^6.2.2',
+96 silly resolved     _resolved: 'https://registry.npmjs.org/serialport/-/serialport-6.2.2.tgz',
+96 silly resolved     readme: 'ERROR: No README data found!' } ]
+97 info install serialport@6.2.2 into /home/pi/.node-red/node_modules/node-red-node-serialport
+98 info installOne serialport@6.2.2
+99 verbose node_modules/node-red-node-serialport/node_modules/serialport unbuild
+100 verbose tar unpack /home/pi/.npm/serialport/6.2.2/package.tgz
+101 silly lockFile e33c2a88-rialport-node-modules-serialport tar:///home/pi/.node-red/node_modules/node-red-node-serialport/node_modules/serialport
+102 verbose lock tar:///home/pi/.node-red/node_modules/node-red-node-serialport/node_modules/serialport /home/pi/.npm/e33c2a88-rialport-node-modules-serialport.lock
+103 silly lockFile d8d568d9-npm-serialport-6-2-2-package-tgz tar:///home/pi/.npm/serialport/6.2.2/package.tgz
+104 verbose lock tar:///home/pi/.npm/serialport/6.2.2/package.tgz /home/pi/.npm/d8d568d9-npm-serialport-6-2-2-package-tgz.lock
+105 silly gunzTarPerm modes [ '755', '644' ]
+106 silly gunzTarPerm extractEntry package.json
+107 silly gunzTarPerm extractEntry binding.gyp
+108 silly gunzTarPerm extractEntry CHANGELOG.md
+109 silly gunzTarPerm extractEntry LICENSE
+110 silly gunzTarPerm extractEntry README.md
+111 silly gunzTarPerm extractEntry test.js
+112 silly gunzTarPerm extractEntry bin/echo.js
+113 silly gunzTarPerm extractEntry bin/find-arduino.js
+114 silly gunzTarPerm extractEntry bin/list.js
+115 silly gunzTarPerm extractEntry bin/repl.js
+116 silly gunzTarPerm extractEntry bin/terminal.js
+117 silly gunzTarPerm extractEntry lib/bindings/auto-detect.js
+118 silly gunzTarPerm extractEntry lib/bindings/base.js
+119 silly gunzTarPerm extractEntry lib/bindings/darwin.js
+120 silly gunzTarPerm extractEntry lib/bindings/linux-list.js
+121 silly gunzTarPerm extractEntry lib/bindings/linux.js
+122 silly gunzTarPerm extractEntry lib/bindings/mock.js
+123 silly gunzTarPerm extractEntry lib/bindings/poller.js
+124 silly gunzTarPerm extractEntry lib/bindings/unix-read.js
+125 silly gunzTarPerm extractEntry lib/bindings/unix-write.js
+126 silly gunzTarPerm extractEntry lib/bindings/win32-sn-parser.js
+127 silly gunzTarPerm extractEntry lib/bindings/win32.js
+128 silly gunzTarPerm extractEntry lib/index.js
+129 silly gunzTarPerm extractEntry lib/parsers.js
+130 silly gunzTarPerm extractEntry lib/serialport.js
+131 silly gunzTarPerm extractEntry lib/util.js
+132 silly gunzTarPerm extractEntry src/darwin_list.cpp
+133 silly gunzTarPerm extractEntry src/darwin_list.h
+134 silly gunzTarPerm extractEntry src/poller.cpp
+135 silly gunzTarPerm extractEntry src/poller.h
+136 silly gunzTarPerm extractEntry src/serialport_linux.cpp
+137 silly gunzTarPerm extractEntry src/serialport_linux.h
+138 silly gunzTarPerm extractEntry src/serialport_unix.cpp
+139 silly gunzTarPerm extractEntry src/serialport_unix.h
+140 silly gunzTarPerm extractEntry src/serialport_win.cpp
+141 silly gunzTarPerm extractEntry src/serialport_win.h
+142 silly gunzTarPerm extractEntry src/serialport.cpp
+143 silly gunzTarPerm extractEntry src/serialport.h
+144 silly lockFile e33c2a88-rialport-node-modules-serialport tar:///home/pi/.node-red/node_modules/node-red-node-serialport/node_modules/serialport
+145 silly lockFile e33c2a88-rialport-node-modules-serialport tar:///home/pi/.node-red/node_modules/node-red-node-serialport/node_modules/serialport
+146 silly lockFile d8d568d9-npm-serialport-6-2-2-package-tgz tar:///home/pi/.npm/serialport/6.2.2/package.tgz
+147 silly lockFile d8d568d9-npm-serialport-6-2-2-package-tgz tar:///home/pi/.npm/serialport/6.2.2/package.tgz
+148 info preinstall serialport@6.2.2
+149 verbose readDependencies using package.json deps
+150 verbose readDependencies using package.json deps
+151 verbose cache add [ '@serialport/parser-delimiter@^1.0.5', null ]
+152 verbose cache add name=undefined spec="@serialport/parser-delimiter@^1.0.5" args=["@serialport/parser-delimiter@^1.0.5",null]
+153 verbose parsed url Url {
+153 verbose parsed url   protocol: null,
+153 verbose parsed url   slashes: null,
+153 verbose parsed url   auth: null,
+153 verbose parsed url   host: null,
+153 verbose parsed url   port: null,
+153 verbose parsed url   hostname: null,
+153 verbose parsed url   hash: null,
+153 verbose parsed url   search: null,
+153 verbose parsed url   query: null,
+153 verbose parsed url   pathname: '@serialport/parser-delimiter@%5E1.0.5',
+153 verbose parsed url   path: '@serialport/parser-delimiter@%5E1.0.5',
+153 verbose parsed url   href: '@serialport/parser-delimiter@%5E1.0.5' }
+154 verbose cache add name="" spec="serialport/parser-delimiter@^1.0.5" args=["","serialport/parser-delimiter@^1.0.5"]
+155 verbose parsed url Url {
+155 verbose parsed url   protocol: null,
+155 verbose parsed url   slashes: null,
+155 verbose parsed url   auth: null,
+155 verbose parsed url   host: null,
+155 verbose parsed url   port: null,
+155 verbose parsed url   hostname: null,
+155 verbose parsed url   hash: null,
+155 verbose parsed url   search: null,
+155 verbose parsed url   query: null,
+155 verbose parsed url   pathname: 'serialport/parser-delimiter@%5E1.0.5',
+155 verbose parsed url   path: 'serialport/parser-delimiter@%5E1.0.5',
+155 verbose parsed url   href: 'serialport/parser-delimiter@%5E1.0.5' }
+156 verbose cache add [ '@serialport/parser-readline@^1.0.5', null ]
+157 verbose cache add name=undefined spec="@serialport/parser-readline@^1.0.5" args=["@serialport/parser-readline@^1.0.5",null]
+158 verbose parsed url Url {
+158 verbose parsed url   protocol: null,
+158 verbose parsed url   slashes: null,
+158 verbose parsed url   auth: null,
+158 verbose parsed url   host: null,
+158 verbose parsed url   port: null,
+158 verbose parsed url   hostname: null,
+158 verbose parsed url   hash: null,
+158 verbose parsed url   search: null,
+158 verbose parsed url   query: null,
+158 verbose parsed url   pathname: '@serialport/parser-readline@%5E1.0.5',
+158 verbose parsed url   path: '@serialport/parser-readline@%5E1.0.5',
+158 verbose parsed url   href: '@serialport/parser-readline@%5E1.0.5' }
+159 verbose cache add [ '@serialport/parser-ready@^1.0.5', null ]
+160 verbose cache add name=undefined spec="@serialport/parser-ready@^1.0.5" args=["@serialport/parser-ready@^1.0.5",null]
+161 verbose parsed url Url {
+161 verbose parsed url   protocol: null,
+161 verbose parsed url   slashes: null,
+161 verbose parsed url   auth: null,
+161 verbose parsed url   host: null,
+161 verbose parsed url   port: null,
+161 verbose parsed url   hostname: null,
+161 verbose parsed url   hash: null,
+161 verbose parsed url   search: null,
+161 verbose parsed url   query: null,
+161 verbose parsed url   pathname: '@serialport/parser-ready@%5E1.0.5',
+161 verbose parsed url   path: '@serialport/parser-ready@%5E1.0.5',
+161 verbose parsed url   href: '@serialport/parser-ready@%5E1.0.5' }
+162 verbose cache add [ '@serialport/parser-regex@^1.0.5', null ]
+163 verbose cache add name=undefined spec="@serialport/parser-regex@^1.0.5" args=["@serialport/parser-regex@^1.0.5",null]
+164 verbose parsed url Url {
+164 verbose parsed url   protocol: null,
+164 verbose parsed url   slashes: null,
+164 verbose parsed url   auth: null,
+164 verbose parsed url   host: null,
+164 verbose parsed url   port: null,
+164 verbose parsed url   hostname: null,
+164 verbose parsed url   hash: null,
+164 verbose parsed url   search: null,
+164 verbose parsed url   query: null,
+164 verbose parsed url   pathname: '@serialport/parser-regex@%5E1.0.5',
+164 verbose parsed url   path: '@serialport/parser-regex@%5E1.0.5',
+164 verbose parsed url   href: '@serialport/parser-regex@%5E1.0.5' }
+165 verbose cache add name="serialport/parser-delimiter" spec="^1.0.5" args=["serialport/parser-delimiter","^1.0.5"]
+166 verbose parsed url Url {
+166 verbose parsed url   protocol: null,
+166 verbose parsed url   slashes: null,
+166 verbose parsed url   auth: null,
+166 verbose parsed url   host: null,
+166 verbose parsed url   port: null,
+166 verbose parsed url   hostname: null,
+166 verbose parsed url   hash: null,
+166 verbose parsed url   search: null,
+166 verbose parsed url   query: null,
+166 verbose parsed url   pathname: '%5E1.0.5',
+166 verbose parsed url   path: '%5E1.0.5',
+166 verbose parsed url   href: '%5E1.0.5' }
+167 verbose addNamed [ 'serialport/parser-delimiter', '^1.0.5' ]
+168 verbose addNamed [ null, '>=1.0.5 <2.0.0' ]
+169 silly lockFile 9e00658e-erialport-parser-delimiter-1-0-5 serialport/parser-delimiter@^1.0.5
+170 verbose lock serialport/parser-delimiter@^1.0.5 /home/pi/.npm/9e00658e-erialport-parser-delimiter-1-0-5.lock
+171 verbose cache add name="" spec="serialport/parser-readline@^1.0.5" args=["","serialport/parser-readline@^1.0.5"]
+172 verbose parsed url Url {
+172 verbose parsed url   protocol: null,
+172 verbose parsed url   slashes: null,
+172 verbose parsed url   auth: null,
+172 verbose parsed url   host: null,
+172 verbose parsed url   port: null,
+172 verbose parsed url   hostname: null,
+172 verbose parsed url   hash: null,
+172 verbose parsed url   search: null,
+172 verbose parsed url   query: null,
+172 verbose parsed url   pathname: 'serialport/parser-readline@%5E1.0.5',
+172 verbose parsed url   path: 'serialport/parser-readline@%5E1.0.5',
+172 verbose parsed url   href: 'serialport/parser-readline@%5E1.0.5' }
+173 verbose cache add name="" spec="serialport/parser-ready@^1.0.5" args=["","serialport/parser-ready@^1.0.5"]
+174 verbose parsed url Url {
+174 verbose parsed url   protocol: null,
+174 verbose parsed url   slashes: null,
+174 verbose parsed url   auth: null,
+174 verbose parsed url   host: null,
+174 verbose parsed url   port: null,
+174 verbose parsed url   hostname: null,
+174 verbose parsed url   hash: null,
+174 verbose parsed url   search: null,
+174 verbose parsed url   query: null,
+174 verbose parsed url   pathname: 'serialport/parser-ready@%5E1.0.5',
+174 verbose parsed url   path: 'serialport/parser-ready@%5E1.0.5',
+174 verbose parsed url   href: 'serialport/parser-ready@%5E1.0.5' }
+175 verbose cache add name="" spec="serialport/parser-regex@^1.0.5" args=["","serialport/parser-regex@^1.0.5"]
+176 verbose parsed url Url {
+176 verbose parsed url   protocol: null,
+176 verbose parsed url   slashes: null,
+176 verbose parsed url   auth: null,
+176 verbose parsed url   host: null,
+176 verbose parsed url   port: null,
+176 verbose parsed url   hostname: null,
+176 verbose parsed url   hash: null,
+176 verbose parsed url   search: null,
+176 verbose parsed url   query: null,
+176 verbose parsed url   pathname: 'serialport/parser-regex@%5E1.0.5',
+176 verbose parsed url   path: 'serialport/parser-regex@%5E1.0.5',
+176 verbose parsed url   href: 'serialport/parser-regex@%5E1.0.5' }
+177 verbose cache add [ 'bindings@1.3.0', null ]
+178 verbose cache add name=undefined spec="bindings@1.3.0" args=["bindings@1.3.0",null]
+179 verbose parsed url Url {
+179 verbose parsed url   protocol: null,
+179 verbose parsed url   slashes: null,
+179 verbose parsed url   auth: null,
+179 verbose parsed url   host: null,
+179 verbose parsed url   port: null,
+179 verbose parsed url   hostname: null,
+179 verbose parsed url   hash: null,
+179 verbose parsed url   search: null,
+179 verbose parsed url   query: null,
+179 verbose parsed url   pathname: 'bindings@1.3.0',
+179 verbose parsed url   path: 'bindings@1.3.0',
+179 verbose parsed url   href: 'bindings@1.3.0' }
+180 verbose cache add [ 'commander@^2.13.0', null ]
+181 verbose cache add name=undefined spec="commander@^2.13.0" args=["commander@^2.13.0",null]
+182 verbose parsed url Url {
+182 verbose parsed url   protocol: null,
+182 verbose parsed url   slashes: null,
+182 verbose parsed url   auth: null,
+182 verbose parsed url   host: null,
+182 verbose parsed url   port: null,
+182 verbose parsed url   hostname: null,
+182 verbose parsed url   hash: null,
+182 verbose parsed url   search: null,
+182 verbose parsed url   query: null,
+182 verbose parsed url   pathname: 'commander@%5E2.13.0',
+182 verbose parsed url   path: 'commander@%5E2.13.0',
+182 verbose parsed url   href: 'commander@%5E2.13.0' }
+183 verbose cache add [ 'debug@^3.1.0', null ]
+184 verbose cache add name=undefined spec="debug@^3.1.0" args=["debug@^3.1.0",null]
+185 verbose parsed url Url {
+185 verbose parsed url   protocol: null,
+185 verbose parsed url   slashes: null,
+185 verbose parsed url   auth: null,
+185 verbose parsed url   host: null,
+185 verbose parsed url   port: null,
+185 verbose parsed url   hostname: null,
+185 verbose parsed url   hash: null,
+185 verbose parsed url   search: null,
+185 verbose parsed url   query: null,
+185 verbose parsed url   pathname: 'debug@%5E3.1.0',
+185 verbose parsed url   path: 'debug@%5E3.1.0',
+185 verbose parsed url   href: 'debug@%5E3.1.0' }
+186 verbose cache add [ 'nan@^2.9.2', null ]
+187 verbose cache add name=undefined spec="nan@^2.9.2" args=["nan@^2.9.2",null]
+188 verbose parsed url Url {
+188 verbose parsed url   protocol: null,
+188 verbose parsed url   slashes: null,
+188 verbose parsed url   auth: null,
+188 verbose parsed url   host: null,
+188 verbose parsed url   port: null,
+188 verbose parsed url   hostname: null,
+188 verbose parsed url   hash: null,
+188 verbose parsed url   search: null,
+188 verbose parsed url   query: null,
+188 verbose parsed url   pathname: 'nan@%5E2.9.2',
+188 verbose parsed url   path: 'nan@%5E2.9.2',
+188 verbose parsed url   href: 'nan@%5E2.9.2' }
+189 verbose cache add [ 'prebuild-install@^4.0.0', null ]
+190 verbose cache add name=undefined spec="prebuild-install@^4.0.0" args=["prebuild-install@^4.0.0",null]
+191 verbose parsed url Url {
+191 verbose parsed url   protocol: null,
+191 verbose parsed url   slashes: null,
+191 verbose parsed url   auth: null,
+191 verbose parsed url   host: null,
+191 verbose parsed url   port: null,
+191 verbose parsed url   hostname: null,
+191 verbose parsed url   hash: null,
+191 verbose parsed url   search: null,
+191 verbose parsed url   query: null,
+191 verbose parsed url   pathname: 'prebuild-install@%5E4.0.0',
+191 verbose parsed url   path: 'prebuild-install@%5E4.0.0',
+191 verbose parsed url   href: 'prebuild-install@%5E4.0.0' }
+192 verbose cache add [ 'promirepl@^1.0.1', null ]
+193 verbose cache add name=undefined spec="promirepl@^1.0.1" args=["promirepl@^1.0.1",null]
+194 verbose parsed url Url {
+194 verbose parsed url   protocol: null,
+194 verbose parsed url   slashes: null,
+194 verbose parsed url   auth: null,
+194 verbose parsed url   host: null,
+194 verbose parsed url   port: null,
+194 verbose parsed url   hostname: null,
+194 verbose parsed url   hash: null,
+194 verbose parsed url   search: null,
+194 verbose parsed url   query: null,
+194 verbose parsed url   pathname: 'promirepl@%5E1.0.1',
+194 verbose parsed url   path: 'promirepl@%5E1.0.1',
+194 verbose parsed url   href: 'promirepl@%5E1.0.1' }
+195 verbose cache add [ 'prompt-list@^3.2.0', null ]
+196 verbose cache add name=undefined spec="prompt-list@^3.2.0" args=["prompt-list@^3.2.0",null]
+197 verbose parsed url Url {
+197 verbose parsed url   protocol: null,
+197 verbose parsed url   slashes: null,
+197 verbose parsed url   auth: null,
+197 verbose parsed url   host: null,
+197 verbose parsed url   port: null,
+197 verbose parsed url   hostname: null,
+197 verbose parsed url   hash: null,
+197 verbose parsed url   search: null,
+197 verbose parsed url   query: null,
+197 verbose parsed url   pathname: 'prompt-list@%5E3.2.0',
+197 verbose parsed url   path: 'prompt-list@%5E3.2.0',
+197 verbose parsed url   href: 'prompt-list@%5E3.2.0' }
+198 verbose cache add [ 'safe-buffer@^5.1.2', null ]
+199 verbose cache add name=undefined spec="safe-buffer@^5.1.2" args=["safe-buffer@^5.1.2",null]
+200 verbose parsed url Url {
+200 verbose parsed url   protocol: null,
+200 verbose parsed url   slashes: null,
+200 verbose parsed url   auth: null,
+200 verbose parsed url   host: null,
+200 verbose parsed url   port: null,
+200 verbose parsed url   hostname: null,
+200 verbose parsed url   hash: null,
+200 verbose parsed url   search: null,
+200 verbose parsed url   query: null,
+200 verbose parsed url   pathname: 'safe-buffer@%5E5.1.2',
+200 verbose parsed url   path: 'safe-buffer@%5E5.1.2',
+200 verbose parsed url   href: 'safe-buffer@%5E5.1.2' }
+201 verbose cache add [ '@serialport/parser-byte-length@^1.0.5', null ]
+202 verbose cache add name=undefined spec="@serialport/parser-byte-length@^1.0.5" args=["@serialport/parser-byte-length@^1.0.5",null]
+203 verbose parsed url Url {
+203 verbose parsed url   protocol: null,
+203 verbose parsed url   slashes: null,
+203 verbose parsed url   auth: null,
+203 verbose parsed url   host: null,
+203 verbose parsed url   port: null,
+203 verbose parsed url   hostname: null,
+203 verbose parsed url   hash: null,
+203 verbose parsed url   search: null,
+203 verbose parsed url   query: null,
+203 verbose parsed url   pathname: '@serialport/parser-byte-length@%5E1.0.5',
+203 verbose parsed url   path: '@serialport/parser-byte-length@%5E1.0.5',
+203 verbose parsed url   href: '@serialport/parser-byte-length@%5E1.0.5' }
+204 verbose cache add [ '@serialport/parser-cctalk@^1.0.5', null ]
+205 verbose cache add name=undefined spec="@serialport/parser-cctalk@^1.0.5" args=["@serialport/parser-cctalk@^1.0.5",null]
+206 verbose parsed url Url {
+206 verbose parsed url   protocol: null,
+206 verbose parsed url   slashes: null,
+206 verbose parsed url   auth: null,
+206 verbose parsed url   host: null,
+206 verbose parsed url   port: null,
+206 verbose parsed url   hostname: null,
+206 verbose parsed url   hash: null,
+206 verbose parsed url   search: null,
+206 verbose parsed url   query: null,
+206 verbose parsed url   pathname: '@serialport/parser-cctalk@%5E1.0.5',
+206 verbose parsed url   path: '@serialport/parser-cctalk@%5E1.0.5',
+206 verbose parsed url   href: '@serialport/parser-cctalk@%5E1.0.5' }
+207 verbose cache add name="serialport/parser-readline" spec="^1.0.5" args=["serialport/parser-readline","^1.0.5"]
+208 verbose parsed url Url {
+208 verbose parsed url   protocol: null,
+208 verbose parsed url   slashes: null,
+208 verbose parsed url   auth: null,
+208 verbose parsed url   host: null,
+208 verbose parsed url   port: null,
+208 verbose parsed url   hostname: null,
+208 verbose parsed url   hash: null,
+208 verbose parsed url   search: null,
+208 verbose parsed url   query: null,
+208 verbose parsed url   pathname: '%5E1.0.5',
+208 verbose parsed url   path: '%5E1.0.5',
+208 verbose parsed url   href: '%5E1.0.5' }
+209 verbose addNamed [ 'serialport/parser-readline', '^1.0.5' ]
+210 verbose addNamed [ null, '>=1.0.5 <2.0.0' ]
+211 silly lockFile 77d83616-serialport-parser-readline-1-0-5 serialport/parser-readline@^1.0.5
+212 verbose lock serialport/parser-readline@^1.0.5 /home/pi/.npm/77d83616-serialport-parser-readline-1-0-5.lock
+213 verbose cache add name="serialport/parser-ready" spec="^1.0.5" args=["serialport/parser-ready","^1.0.5"]
+214 verbose parsed url Url {
+214 verbose parsed url   protocol: null,
+214 verbose parsed url   slashes: null,
+214 verbose parsed url   auth: null,
+214 verbose parsed url   host: null,
+214 verbose parsed url   port: null,
+214 verbose parsed url   hostname: null,
+214 verbose parsed url   hash: null,
+214 verbose parsed url   search: null,
+214 verbose parsed url   query: null,
+214 verbose parsed url   pathname: '%5E1.0.5',
+214 verbose parsed url   path: '%5E1.0.5',
+214 verbose parsed url   href: '%5E1.0.5' }
+215 verbose addNamed [ 'serialport/parser-ready', '^1.0.5' ]
+216 verbose addNamed [ null, '>=1.0.5 <2.0.0' ]
+217 silly lockFile f757c8a6-serialport-parser-ready-1-0-5 serialport/parser-ready@^1.0.5
+218 verbose lock serialport/parser-ready@^1.0.5 /home/pi/.npm/f757c8a6-serialport-parser-ready-1-0-5.lock
+219 verbose cache add name="serialport/parser-regex" spec="^1.0.5" args=["serialport/parser-regex","^1.0.5"]
+220 verbose parsed url Url {
+220 verbose parsed url   protocol: null,
+220 verbose parsed url   slashes: null,
+220 verbose parsed url   auth: null,
+220 verbose parsed url   host: null,
+220 verbose parsed url   port: null,
+220 verbose parsed url   hostname: null,
+220 verbose parsed url   hash: null,
+220 verbose parsed url   search: null,
+220 verbose parsed url   query: null,
+220 verbose parsed url   pathname: '%5E1.0.5',
+220 verbose parsed url   path: '%5E1.0.5',
+220 verbose parsed url   href: '%5E1.0.5' }
+221 verbose addNamed [ 'serialport/parser-regex', '^1.0.5' ]
+222 verbose addNamed [ null, '>=1.0.5 <2.0.0' ]
+223 silly lockFile 470fe212-serialport-parser-regex-1-0-5 serialport/parser-regex@^1.0.5
+224 verbose lock serialport/parser-regex@^1.0.5 /home/pi/.npm/470fe212-serialport-parser-regex-1-0-5.lock
+225 verbose cache add name="bindings" spec="1.3.0" args=["bindings","1.3.0"]
+226 verbose parsed url Url {
+226 verbose parsed url   protocol: null,
+226 verbose parsed url   slashes: null,
+226 verbose parsed url   auth: null,
+226 verbose parsed url   host: null,
+226 verbose parsed url   port: null,
+226 verbose parsed url   hostname: null,
+226 verbose parsed url   hash: null,
+226 verbose parsed url   search: null,
+226 verbose parsed url   query: null,
+226 verbose parsed url   pathname: '1.3.0',
+226 verbose parsed url   path: '1.3.0',
+226 verbose parsed url   href: '1.3.0' }
+227 verbose addNamed [ 'bindings', '1.3.0' ]
+228 verbose addNamed [ '1.3.0', '1.3.0' ]
+229 silly lockFile e7c26552-bindings-1-3-0 bindings@1.3.0
+230 verbose lock bindings@1.3.0 /home/pi/.npm/e7c26552-bindings-1-3-0.lock
+231 verbose cache add name="commander" spec="^2.13.0" args=["commander","^2.13.0"]
+232 verbose parsed url Url {
+232 verbose parsed url   protocol: null,
+232 verbose parsed url   slashes: null,
+232 verbose parsed url   auth: null,
+232 verbose parsed url   host: null,
+232 verbose parsed url   port: null,
+232 verbose parsed url   hostname: null,
+232 verbose parsed url   hash: null,
+232 verbose parsed url   search: null,
+232 verbose parsed url   query: null,
+232 verbose parsed url   pathname: '%5E2.13.0',
+232 verbose parsed url   path: '%5E2.13.0',
+232 verbose parsed url   href: '%5E2.13.0' }
+233 verbose addNamed [ 'commander', '^2.13.0' ]
+234 verbose addNamed [ null, '>=2.13.0 <3.0.0' ]
+235 silly lockFile 46a91646-commander-2-13-0 commander@^2.13.0
+236 verbose lock commander@^2.13.0 /home/pi/.npm/46a91646-commander-2-13-0.lock
+237 verbose cache add name="debug" spec="^3.1.0" args=["debug","^3.1.0"]
+238 verbose parsed url Url {
+238 verbose parsed url   protocol: null,
+238 verbose parsed url   slashes: null,
+238 verbose parsed url   auth: null,
+238 verbose parsed url   host: null,
+238 verbose parsed url   port: null,
+238 verbose parsed url   hostname: null,
+238 verbose parsed url   hash: null,
+238 verbose parsed url   search: null,
+238 verbose parsed url   query: null,
+238 verbose parsed url   pathname: '%5E3.1.0',
+238 verbose parsed url   path: '%5E3.1.0',
+238 verbose parsed url   href: '%5E3.1.0' }
+239 verbose addNamed [ 'debug', '^3.1.0' ]
+240 verbose addNamed [ null, '>=3.1.0 <4.0.0' ]
+241 silly lockFile 3b0d9689-debug-3-1-0 debug@^3.1.0
+242 verbose lock debug@^3.1.0 /home/pi/.npm/3b0d9689-debug-3-1-0.lock
+243 verbose cache add name="nan" spec="^2.9.2" args=["nan","^2.9.2"]
+244 verbose parsed url Url {
+244 verbose parsed url   protocol: null,
+244 verbose parsed url   slashes: null,
+244 verbose parsed url   auth: null,
+244 verbose parsed url   host: null,
+244 verbose parsed url   port: null,
+244 verbose parsed url   hostname: null,
+244 verbose parsed url   hash: null,
+244 verbose parsed url   search: null,
+244 verbose parsed url   query: null,
+244 verbose parsed url   pathname: '%5E2.9.2',
+244 verbose parsed url   path: '%5E2.9.2',
+244 verbose parsed url   href: '%5E2.9.2' }
+245 verbose addNamed [ 'nan', '^2.9.2' ]
+246 verbose addNamed [ null, '>=2.9.2 <3.0.0' ]
+247 silly lockFile ccc179b8-nan-2-9-2 nan@^2.9.2
+248 verbose lock nan@^2.9.2 /home/pi/.npm/ccc179b8-nan-2-9-2.lock
+249 verbose cache add name="prebuild-install" spec="^4.0.0" args=["prebuild-install","^4.0.0"]
+250 verbose parsed url Url {
+250 verbose parsed url   protocol: null,
+250 verbose parsed url   slashes: null,
+250 verbose parsed url   auth: null,
+250 verbose parsed url   host: null,
+250 verbose parsed url   port: null,
+250 verbose parsed url   hostname: null,
+250 verbose parsed url   hash: null,
+250 verbose parsed url   search: null,
+250 verbose parsed url   query: null,
+250 verbose parsed url   pathname: '%5E4.0.0',
+250 verbose parsed url   path: '%5E4.0.0',
+250 verbose parsed url   href: '%5E4.0.0' }
+251 verbose addNamed [ 'prebuild-install', '^4.0.0' ]
+252 verbose addNamed [ null, '>=4.0.0 <5.0.0' ]
+253 silly lockFile bf48774a-prebuild-install-4-0-0 prebuild-install@^4.0.0
+254 verbose lock prebuild-install@^4.0.0 /home/pi/.npm/bf48774a-prebuild-install-4-0-0.lock
+255 verbose cache add name="promirepl" spec="^1.0.1" args=["promirepl","^1.0.1"]
+256 verbose parsed url Url {
+256 verbose parsed url   protocol: null,
+256 verbose parsed url   slashes: null,
+256 verbose parsed url   auth: null,
+256 verbose parsed url   host: null,
+256 verbose parsed url   port: null,
+256 verbose parsed url   hostname: null,
+256 verbose parsed url   hash: null,
+256 verbose parsed url   search: null,
+256 verbose parsed url   query: null,
+256 verbose parsed url   pathname: '%5E1.0.1',
+256 verbose parsed url   path: '%5E1.0.1',
+256 verbose parsed url   href: '%5E1.0.1' }
+257 verbose addNamed [ 'promirepl', '^1.0.1' ]
+258 verbose addNamed [ null, '>=1.0.1 <2.0.0' ]
+259 silly lockFile db03ce13-promirepl-1-0-1 promirepl@^1.0.1
+260 verbose lock promirepl@^1.0.1 /home/pi/.npm/db03ce13-promirepl-1-0-1.lock
+261 verbose cache add name="prompt-list" spec="^3.2.0" args=["prompt-list","^3.2.0"]
+262 verbose parsed url Url {
+262 verbose parsed url   protocol: null,
+262 verbose parsed url   slashes: null,
+262 verbose parsed url   auth: null,
+262 verbose parsed url   host: null,
+262 verbose parsed url   port: null,
+262 verbose parsed url   hostname: null,
+262 verbose parsed url   hash: null,
+262 verbose parsed url   search: null,
+262 verbose parsed url   query: null,
+262 verbose parsed url   pathname: '%5E3.2.0',
+262 verbose parsed url   path: '%5E3.2.0',
+262 verbose parsed url   href: '%5E3.2.0' }
+263 verbose addNamed [ 'prompt-list', '^3.2.0' ]
+264 verbose addNamed [ null, '>=3.2.0 <4.0.0' ]
+265 silly lockFile dd2478c1-prompt-list-3-2-0 prompt-list@^3.2.0
+266 verbose lock prompt-list@^3.2.0 /home/pi/.npm/dd2478c1-prompt-list-3-2-0.lock
+267 verbose cache add name="safe-buffer" spec="^5.1.2" args=["safe-buffer","^5.1.2"]
+268 verbose parsed url Url {
+268 verbose parsed url   protocol: null,
+268 verbose parsed url   slashes: null,
+268 verbose parsed url   auth: null,
+268 verbose parsed url   host: null,
+268 verbose parsed url   port: null,
+268 verbose parsed url   hostname: null,
+268 verbose parsed url   hash: null,
+268 verbose parsed url   search: null,
+268 verbose parsed url   query: null,
+268 verbose parsed url   pathname: '%5E5.1.2',
+268 verbose parsed url   path: '%5E5.1.2',
+268 verbose parsed url   href: '%5E5.1.2' }
+269 verbose addNamed [ 'safe-buffer', '^5.1.2' ]
+270 verbose addNamed [ null, '>=5.1.2 <6.0.0' ]
+271 silly lockFile f5bda6da-safe-buffer-5-1-2 safe-buffer@^5.1.2
+272 verbose lock safe-buffer@^5.1.2 /home/pi/.npm/f5bda6da-safe-buffer-5-1-2.lock
+273 verbose cache add name="" spec="serialport/parser-byte-length@^1.0.5" args=["","serialport/parser-byte-length@^1.0.5"]
+274 verbose parsed url Url {
+274 verbose parsed url   protocol: null,
+274 verbose parsed url   slashes: null,
+274 verbose parsed url   auth: null,
+274 verbose parsed url   host: null,
+274 verbose parsed url   port: null,
+274 verbose parsed url   hostname: null,
+274 verbose parsed url   hash: null,
+274 verbose parsed url   search: null,
+274 verbose parsed url   query: null,
+274 verbose parsed url   pathname: 'serialport/parser-byte-length@%5E1.0.5',
+274 verbose parsed url   path: 'serialport/parser-byte-length@%5E1.0.5',
+274 verbose parsed url   href: 'serialport/parser-byte-length@%5E1.0.5' }
+275 verbose cache add name="" spec="serialport/parser-cctalk@^1.0.5" args=["","serialport/parser-cctalk@^1.0.5"]
+276 verbose parsed url Url {
+276 verbose parsed url   protocol: null,
+276 verbose parsed url   slashes: null,
+276 verbose parsed url   auth: null,
+276 verbose parsed url   host: null,
+276 verbose parsed url   port: null,
+276 verbose parsed url   hostname: null,
+276 verbose parsed url   hash: null,
+276 verbose parsed url   search: null,
+276 verbose parsed url   query: null,
+276 verbose parsed url   pathname: 'serialport/parser-cctalk@%5E1.0.5',
+276 verbose parsed url   path: 'serialport/parser-cctalk@%5E1.0.5',
+276 verbose parsed url   href: 'serialport/parser-cctalk@%5E1.0.5' }
+277 silly addNameRange { name: 'serialport/parser-delimiter',
+277 silly addNameRange   range: '>=1.0.5 <2.0.0',
+277 silly addNameRange   hasData: false }
+278 verbose cache add name="serialport/parser-byte-length" spec="^1.0.5" args=["serialport/parser-byte-length","^1.0.5"]
+279 verbose parsed url Url {
+279 verbose parsed url   protocol: null,
+279 verbose parsed url   slashes: null,
+279 verbose parsed url   auth: null,
+279 verbose parsed url   host: null,
+279 verbose parsed url   port: null,
+279 verbose parsed url   hostname: null,
+279 verbose parsed url   hash: null,
+279 verbose parsed url   search: null,
+279 verbose parsed url   query: null,
+279 verbose parsed url   pathname: '%5E1.0.5',
+279 verbose parsed url   path: '%5E1.0.5',
+279 verbose parsed url   href: '%5E1.0.5' }
+280 verbose addNamed [ 'serialport/parser-byte-length', '^1.0.5' ]
+281 verbose addNamed [ null, '>=1.0.5 <2.0.0' ]
+282 silly lockFile c82d8a75-ialport-parser-byte-length-1-0-5 serialport/parser-byte-length@^1.0.5
+283 verbose lock serialport/parser-byte-length@^1.0.5 /home/pi/.npm/c82d8a75-ialport-parser-byte-length-1-0-5.lock
+284 verbose cache add name="serialport/parser-cctalk" spec="^1.0.5" args=["serialport/parser-cctalk","^1.0.5"]
+285 verbose parsed url Url {
+285 verbose parsed url   protocol: null,
+285 verbose parsed url   slashes: null,
+285 verbose parsed url   auth: null,
+285 verbose parsed url   host: null,
+285 verbose parsed url   port: null,
+285 verbose parsed url   hostname: null,
+285 verbose parsed url   hash: null,
+285 verbose parsed url   search: null,
+285 verbose parsed url   query: null,
+285 verbose parsed url   pathname: '%5E1.0.5',
+285 verbose parsed url   path: '%5E1.0.5',
+285 verbose parsed url   href: '%5E1.0.5' }
+286 verbose addNamed [ 'serialport/parser-cctalk', '^1.0.5' ]
+287 verbose addNamed [ null, '>=1.0.5 <2.0.0' ]
+288 silly lockFile 61a13812-serialport-parser-cctalk-1-0-5 serialport/parser-cctalk@^1.0.5
+289 verbose lock serialport/parser-cctalk@^1.0.5 /home/pi/.npm/61a13812-serialport-parser-cctalk-1-0-5.lock
+290 silly addNameRange { name: 'serialport/parser-readline',
+290 silly addNameRange   range: '>=1.0.5 <2.0.0',
+290 silly addNameRange   hasData: false }
+291 silly addNameRange { name: 'serialport/parser-ready',
+291 silly addNameRange   range: '>=1.0.5 <2.0.0',
+291 silly addNameRange   hasData: false }
+292 silly addNameRange { name: 'serialport/parser-regex',
+292 silly addNameRange   range: '>=1.0.5 <2.0.0',
+292 silly addNameRange   hasData: false }
+293 silly addNameRange { name: 'commander', range: '>=2.13.0 <3.0.0', hasData: false }
+294 silly addNameRange { name: 'debug', range: '>=3.1.0 <4.0.0', hasData: false }
+295 silly addNameRange { name: 'nan', range: '>=2.9.2 <3.0.0', hasData: false }
+296 silly addNameRange { name: 'prebuild-install',
+296 silly addNameRange   range: '>=4.0.0 <5.0.0',
+296 silly addNameRange   hasData: false }
+297 silly addNameRange { name: 'promirepl', range: '>=1.0.1 <2.0.0', hasData: false }
+298 silly addNameRange { name: 'prompt-list', range: '>=3.2.0 <4.0.0', hasData: false }
+299 silly addNameRange { name: 'safe-buffer', range: '>=5.1.2 <6.0.0', hasData: false }
+300 silly addNameRange { name: 'serialport/parser-byte-length',
+300 silly addNameRange   range: '>=1.0.5 <2.0.0',
+300 silly addNameRange   hasData: false }
+301 silly addNameRange { name: 'serialport/parser-cctalk',
+301 silly addNameRange   range: '>=1.0.5 <2.0.0',
+301 silly addNameRange   hasData: false }
+302 verbose request where is /serialport/parser-delimiter
+303 verbose request registry https://registry.npmjs.org/
+304 verbose url raw /serialport/parser-delimiter
+305 verbose url resolving [ 'https://registry.npmjs.org/',
+305 verbose url resolving   './serialport/parser-delimiter' ]
+306 verbose url resolved https://registry.npmjs.org/serialport/parser-delimiter
+307 verbose request where is https://registry.npmjs.org/serialport/parser-delimiter
+308 info trying registry request attempt 1 at 2:43:26 PM
+309 http GET https://registry.npmjs.org/serialport/parser-delimiter
+310 verbose request where is /serialport/parser-readline
+311 verbose request registry https://registry.npmjs.org/
+312 verbose url raw /serialport/parser-readline
+313 verbose url resolving [ 'https://registry.npmjs.org/',
+313 verbose url resolving   './serialport/parser-readline' ]
+314 verbose url resolved https://registry.npmjs.org/serialport/parser-readline
+315 verbose request where is https://registry.npmjs.org/serialport/parser-readline
+316 info trying registry request attempt 1 at 2:43:26 PM
+317 http GET https://registry.npmjs.org/serialport/parser-readline
+318 verbose request where is /serialport/parser-ready
+319 verbose request registry https://registry.npmjs.org/
+320 verbose url raw /serialport/parser-ready
+321 verbose url resolving [ 'https://registry.npmjs.org/', './serialport/parser-ready' ]
+322 verbose url resolved https://registry.npmjs.org/serialport/parser-ready
+323 verbose request where is https://registry.npmjs.org/serialport/parser-ready
+324 info trying registry request attempt 1 at 2:43:26 PM
+325 http GET https://registry.npmjs.org/serialport/parser-ready
+326 verbose request where is /serialport/parser-regex
+327 verbose request registry https://registry.npmjs.org/
+328 verbose url raw /serialport/parser-regex
+329 verbose url resolving [ 'https://registry.npmjs.org/', './serialport/parser-regex' ]
+330 verbose url resolved https://registry.npmjs.org/serialport/parser-regex
+331 verbose request where is https://registry.npmjs.org/serialport/parser-regex
+332 info trying registry request attempt 1 at 2:43:26 PM
+333 http GET https://registry.npmjs.org/serialport/parser-regex
+334 verbose request where is /bindings
+335 verbose request registry https://registry.npmjs.org/
+336 verbose url raw /bindings
+337 verbose url resolving [ 'https://registry.npmjs.org/', './bindings' ]
+338 verbose url resolved https://registry.npmjs.org/bindings
+339 verbose request where is https://registry.npmjs.org/bindings
+340 info trying registry request attempt 1 at 2:43:26 PM
+341 verbose etag W/"de1857ca73ccaa798aa31b425673bf64"
+342 http GET https://registry.npmjs.org/bindings
+343 verbose request where is /commander
+344 verbose request registry https://registry.npmjs.org/
+345 verbose url raw /commander
+346 verbose url resolving [ 'https://registry.npmjs.org/', './commander' ]
+347 verbose url resolved https://registry.npmjs.org/commander
+348 verbose request where is https://registry.npmjs.org/commander
+349 info trying registry request attempt 1 at 2:43:26 PM
+350 verbose etag W/"eaa140feadc822f6ecfd55aef91fe881"
+351 http GET https://registry.npmjs.org/commander
+352 verbose request where is /nan
+353 verbose request registry https://registry.npmjs.org/
+354 verbose url raw /nan
+355 verbose url resolving [ 'https://registry.npmjs.org/', './nan' ]
+356 verbose url resolved https://registry.npmjs.org/nan
+357 verbose request where is https://registry.npmjs.org/nan
+358 info trying registry request attempt 1 at 2:43:26 PM
+359 verbose etag W/"4650c7a6353fcd42b9a9f0038b4974b4"
+360 http GET https://registry.npmjs.org/nan
+361 verbose request where is /promirepl
+362 verbose request registry https://registry.npmjs.org/
+363 verbose url raw /promirepl
+364 verbose url resolving [ 'https://registry.npmjs.org/', './promirepl' ]
+365 verbose url resolved https://registry.npmjs.org/promirepl
+366 verbose request where is https://registry.npmjs.org/promirepl
+367 info trying registry request attempt 1 at 2:43:26 PM
+368 verbose etag W/"068fac83c636cafc9de013a5380b74ff"
+369 http GET https://registry.npmjs.org/promirepl
+370 verbose request where is /prebuild-install
+371 verbose request registry https://registry.npmjs.org/
+372 verbose url raw /prebuild-install
+373 verbose url resolving [ 'https://registry.npmjs.org/', './prebuild-install' ]
+374 verbose url resolved https://registry.npmjs.org/prebuild-install
+375 verbose request where is https://registry.npmjs.org/prebuild-install
+376 info trying registry request attempt 1 at 2:43:26 PM
+377 verbose etag W/"128044c8cd1d74503692d45ec8458661"
+378 http GET https://registry.npmjs.org/prebuild-install
+379 verbose request where is /prompt-list
+380 verbose request registry https://registry.npmjs.org/
+381 verbose url raw /prompt-list
+382 verbose url resolving [ 'https://registry.npmjs.org/', './prompt-list' ]
+383 verbose url resolved https://registry.npmjs.org/prompt-list
+384 verbose request where is https://registry.npmjs.org/prompt-list
+385 info trying registry request attempt 1 at 2:43:26 PM
+386 verbose etag W/"b509802804880672e83385323486493e"
+387 http GET https://registry.npmjs.org/prompt-list
+388 verbose request where is /debug
+389 verbose request registry https://registry.npmjs.org/
+390 verbose url raw /debug
+391 verbose url resolving [ 'https://registry.npmjs.org/', './debug' ]
+392 verbose url resolved https://registry.npmjs.org/debug
+393 verbose request where is https://registry.npmjs.org/debug
+394 info trying registry request attempt 1 at 2:43:26 PM
+395 verbose etag W/"0a47fdeda4821c3cabdc036d59d85ba1"
+396 http GET https://registry.npmjs.org/debug
+397 verbose request where is /safe-buffer
+398 verbose request registry https://registry.npmjs.org/
+399 verbose url raw /safe-buffer
+400 verbose url resolving [ 'https://registry.npmjs.org/', './safe-buffer' ]
+401 verbose url resolved https://registry.npmjs.org/safe-buffer
+402 verbose request where is https://registry.npmjs.org/safe-buffer
+403 info trying registry request attempt 1 at 2:43:26 PM
+404 verbose etag W/"e1e9d2abb52b3a1e2908af37fb83169e"
+405 http GET https://registry.npmjs.org/safe-buffer
+406 verbose request where is /serialport/parser-cctalk
+407 verbose request registry https://registry.npmjs.org/
+408 verbose url raw /serialport/parser-cctalk
+409 verbose url resolving [ 'https://registry.npmjs.org/', './serialport/parser-cctalk' ]
+410 verbose url resolved https://registry.npmjs.org/serialport/parser-cctalk
+411 verbose request where is https://registry.npmjs.org/serialport/parser-cctalk
+412 info trying registry request attempt 1 at 2:43:26 PM
+413 http GET https://registry.npmjs.org/serialport/parser-cctalk
+414 verbose request where is /serialport/parser-byte-length
+415 verbose request registry https://registry.npmjs.org/
+416 verbose url raw /serialport/parser-byte-length
+417 verbose url resolving [ 'https://registry.npmjs.org/',
+417 verbose url resolving   './serialport/parser-byte-length' ]
+418 verbose url resolved https://registry.npmjs.org/serialport/parser-byte-length
+419 verbose request where is https://registry.npmjs.org/serialport/parser-byte-length
+420 info trying registry request attempt 1 at 2:43:26 PM
+421 http GET https://registry.npmjs.org/serialport/parser-byte-length
+422 http 304 https://registry.npmjs.org/bindings
+423 silly registry.get cb [ 304,
+423 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+423 silly registry.get     connection: 'close',
+423 silly registry.get     'set-cookie':
+423 silly registry.get      [ '__cfduid=d3e11c3f83014cb4b2d5659669b1cfea61546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+423 silly registry.get     'cf-cache-status': 'HIT',
+423 silly registry.get     'cache-control': 'max-age=300',
+423 silly registry.get     'cf-ray': '49622edafbdb930c-SJC',
+423 silly registry.get     etag: '"de1857ca73ccaa798aa31b425673bf64"',
+423 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+423 silly registry.get     'last-modified': 'Tue, 01 Jan 2019 09:11:37 GMT',
+423 silly registry.get     vary: 'accept-encoding, accept',
+423 silly registry.get     'x-amz-meta-rev': '64-8622a803e7c29327aa91b385eba959e0',
+423 silly registry.get     server: 'cloudflare' } ]
+424 verbose etag https://registry.npmjs.org/bindings from cache
+425 http 304 https://registry.npmjs.org/commander
+426 silly registry.get cb [ 304,
+426 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+426 silly registry.get     connection: 'close',
+426 silly registry.get     'set-cookie':
+426 silly registry.get      [ '__cfduid=d24292cb8fdc74585dc489ff6bb07be901546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+426 silly registry.get     'cf-cache-status': 'HIT',
+426 silly registry.get     'cache-control': 'max-age=300',
+426 silly registry.get     'cf-ray': '49622edaf9ef6ce2-SJC',
+426 silly registry.get     etag: '"eaa140feadc822f6ecfd55aef91fe881"',
+426 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+426 silly registry.get     'last-modified': 'Tue, 01 Jan 2019 14:54:38 GMT',
+426 silly registry.get     vary: 'accept-encoding, accept',
+426 silly registry.get     'x-amz-meta-rev': '1317-6e47cf681789e53062625120e2d448eb',
+426 silly registry.get     server: 'cloudflare' } ]
+427 verbose etag https://registry.npmjs.org/commander from cache
+428 http 304 https://registry.npmjs.org/nan
+429 silly registry.get cb [ 304,
+429 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+429 silly registry.get     connection: 'close',
+429 silly registry.get     'set-cookie':
+429 silly registry.get      [ '__cfduid=d7f32ce23cbea4080af4efa142ef903351546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+429 silly registry.get     'cf-cache-status': 'HIT',
+429 silly registry.get     'cache-control': 'max-age=300',
+429 silly registry.get     'cf-ray': '49622edaffd5284c-SJC',
+429 silly registry.get     etag: '"4650c7a6353fcd42b9a9f0038b4974b4"',
+429 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+429 silly registry.get     'last-modified': 'Fri, 04 Jan 2019 21:15:26 GMT',
+429 silly registry.get     vary: 'accept-encoding, accept',
+429 silly registry.get     'x-amz-meta-rev': '183-cd5bd2412d05a8163a77e8ec04228cfd',
+429 silly registry.get     server: 'cloudflare' } ]
+430 verbose etag https://registry.npmjs.org/nan from cache
+431 http 304 https://registry.npmjs.org/debug
+432 silly registry.get cb [ 304,
+432 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+432 silly registry.get     connection: 'close',
+432 silly registry.get     'set-cookie':
+432 silly registry.get      [ '__cfduid=d4775dd607e28a544820ff40d7f4a97c71546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+432 silly registry.get     'cf-cache-status': 'HIT',
+432 silly registry.get     'cache-control': 'max-age=300',
+432 silly registry.get     'cf-ray': '49622edb0b20288e-SJC',
+432 silly registry.get     etag: '"0a47fdeda4821c3cabdc036d59d85ba1"',
+432 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+432 silly registry.get     'last-modified': 'Wed, 02 Jan 2019 20:03:23 GMT',
+432 silly registry.get     vary: 'accept-encoding, accept',
+432 silly registry.get     'x-amz-meta-rev': '901-d5a7726a6c12fb5b68b86f9674681f93',
+432 silly registry.get     server: 'cloudflare' } ]
+433 verbose etag https://registry.npmjs.org/debug from cache
+434 http 304 https://registry.npmjs.org/promirepl
+435 silly registry.get cb [ 304,
+435 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+435 silly registry.get     connection: 'close',
+435 silly registry.get     'set-cookie':
+435 silly registry.get      [ '__cfduid=db7da08479384e9af65e6f9c40029f70c1546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+435 silly registry.get     'cf-cache-status': 'HIT',
+435 silly registry.get     'cache-control': 'max-age=300',
+435 silly registry.get     'cf-ray': '49622edb0edb5176-SJC',
+435 silly registry.get     etag: '"068fac83c636cafc9de013a5380b74ff"',
+435 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+435 silly registry.get     'last-modified': 'Sun, 27 May 2018 12:58:32 GMT',
+435 silly registry.get     vary: 'accept-encoding, accept',
+435 silly registry.get     server: 'cloudflare' } ]
+436 verbose etag https://registry.npmjs.org/promirepl from cache
+437 http 304 https://registry.npmjs.org/safe-buffer
+438 silly registry.get cb [ 304,
+438 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+438 silly registry.get     connection: 'close',
+438 silly registry.get     'set-cookie':
+438 silly registry.get      [ '__cfduid=dd99e1518781d95d8443459494307cd361546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+438 silly registry.get     'cf-cache-status': 'HIT',
+438 silly registry.get     'cache-control': 'max-age=300',
+438 silly registry.get     'cf-ray': '49622edb0bac9680-SJC',
+438 silly registry.get     etag: '"e1e9d2abb52b3a1e2908af37fb83169e"',
+438 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+438 silly registry.get     'last-modified': 'Tue, 08 Jan 2019 10:10:29 GMT',
+438 silly registry.get     vary: 'accept-encoding, accept',
+438 silly registry.get     'x-amz-meta-rev': '18-fbb351e1bed50849939f908291ddcc32',
+438 silly registry.get     server: 'cloudflare' } ]
+439 verbose etag https://registry.npmjs.org/safe-buffer from cache
+440 http 304 https://registry.npmjs.org/prebuild-install
+441 silly registry.get cb [ 304,
+441 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+441 silly registry.get     connection: 'close',
+441 silly registry.get     'set-cookie':
+441 silly registry.get      [ '__cfduid=dffdae5a2a63927abeb5f22a817905f2b1546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+441 silly registry.get     'cf-cache-status': 'HIT',
+441 silly registry.get     'cache-control': 'max-age=300',
+441 silly registry.get     'cf-ray': '49622edb0d19932a-SJC',
+441 silly registry.get     etag: '"128044c8cd1d74503692d45ec8458661"',
+441 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+441 silly registry.get     'last-modified': 'Sat, 05 Jan 2019 04:53:16 GMT',
+441 silly registry.get     vary: 'accept-encoding, accept',
+441 silly registry.get     'x-amz-meta-rev': '32-f44d0c73f07f21dce3e092784c973d72',
+441 silly registry.get     server: 'cloudflare' } ]
+442 verbose etag https://registry.npmjs.org/prebuild-install from cache
+443 http 304 https://registry.npmjs.org/prompt-list
+444 silly registry.get cb [ 304,
+444 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+444 silly registry.get     connection: 'close',
+444 silly registry.get     'set-cookie':
+444 silly registry.get      [ '__cfduid=df4e2157efdd58bd9aaf88062a12e65401546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+444 silly registry.get     'cf-cache-status': 'HIT',
+444 silly registry.get     'cache-control': 'max-age=300',
+444 silly registry.get     'cf-ray': '49622edb1b4c9306-SJC',
+444 silly registry.get     etag: '"b509802804880672e83385323486493e"',
+444 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+444 silly registry.get     'last-modified': 'Mon, 28 May 2018 20:11:07 GMT',
+444 silly registry.get     vary: 'accept-encoding, accept',
+444 silly registry.get     server: 'cloudflare' } ]
+445 verbose etag https://registry.npmjs.org/prompt-list from cache
+446 http 405 https://registry.npmjs.org/serialport/parser-ready
+447 silly registry.get cb [ 405,
+447 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+447 silly registry.get     'content-type': 'application/json',
+447 silly registry.get     'content-length': '63',
+447 silly registry.get     connection: 'close',
+447 silly registry.get     'set-cookie':
+447 silly registry.get      [ '__cfduid=dffdae5a2a63927abeb5f22a817905f2b1546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+447 silly registry.get     allow: 'PUT',
+447 silly registry.get     'cf-ray': '49622edafd15932a-SJC',
+447 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+447 silly registry.get     vary: 'Accept-Encoding',
+447 silly registry.get     server: 'cloudflare' } ]
+448 http 405 https://registry.npmjs.org/serialport/parser-readline
+449 silly registry.get cb [ 405,
+449 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+449 silly registry.get     'content-type': 'application/json',
+449 silly registry.get     'content-length': '63',
+449 silly registry.get     connection: 'close',
+449 silly registry.get     'set-cookie':
+449 silly registry.get      [ '__cfduid=d0cc83c707f9f5485e8507699d4417dc51546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+449 silly registry.get     allow: 'PUT',
+449 silly registry.get     'cf-ray': '49622edaeca75194-SJC',
+449 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+449 silly registry.get     vary: 'Accept-Encoding',
+449 silly registry.get     server: 'cloudflare' } ]
+450 http 405 https://registry.npmjs.org/serialport/parser-delimiter
+451 silly registry.get cb [ 405,
+451 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+451 silly registry.get     'content-type': 'application/json',
+451 silly registry.get     'content-length': '63',
+451 silly registry.get     connection: 'close',
+451 silly registry.get     'set-cookie':
+451 silly registry.get      [ '__cfduid=dade0d3044e2b4853721d8aceceb9bf611546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+451 silly registry.get     allow: 'PUT',
+451 silly registry.get     'cf-ray': '49622edae81793ba-SJC',
+451 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+451 silly registry.get     vary: 'Accept-Encoding',
+451 silly registry.get     server: 'cloudflare' } ]
+452 http 405 https://registry.npmjs.org/serialport/parser-cctalk
+453 silly registry.get cb [ 405,
+453 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+453 silly registry.get     'content-type': 'application/json',
+453 silly registry.get     'content-length': '63',
+453 silly registry.get     connection: 'close',
+453 silly registry.get     'set-cookie':
+453 silly registry.get      [ '__cfduid=d7b6d3f31dcfd762632477119a2e897331546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+453 silly registry.get     allow: 'PUT',
+453 silly registry.get     'cf-ray': '49622edb1ed06e50-SJC',
+453 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+453 silly registry.get     vary: 'Accept-Encoding',
+453 silly registry.get     server: 'cloudflare' } ]
+454 silly addNameRange number 2 { name: 'commander', range: '>=2.13.0 <3.0.0', hasData: true }
+455 silly addNameRange versions [ 'commander',
+455 silly addNameRange   [ '0.0.1',
+455 silly addNameRange     '0.0.3',
+455 silly addNameRange     '0.0.4',
+455 silly addNameRange     '0.0.5',
+455 silly addNameRange     '0.1.0',
+455 silly addNameRange     '0.2.0',
+455 silly addNameRange     '0.2.1',
+455 silly addNameRange     '0.3.0',
+455 silly addNameRange     '0.3.1',
+455 silly addNameRange     '0.3.2',
+455 silly addNameRange     '0.3.3',
+455 silly addNameRange     '0.4.0',
+455 silly addNameRange     '0.4.1',
+455 silly addNameRange     '0.4.2',
+455 silly addNameRange     '0.4.3',
+455 silly addNameRange     '0.5.0',
+455 silly addNameRange     '0.5.1',
+455 silly addNameRange     '0.6.0',
+455 silly addNameRange     '0.6.1',
+455 silly addNameRange     '0.5.2',
+455 silly addNameRange     '1.0.0',
+455 silly addNameRange     '1.0.1',
+455 silly addNameRange     '1.0.2',
+455 silly addNameRange     '1.0.3',
+455 silly addNameRange     '1.0.4',
+455 silly addNameRange     '1.0.5',
+455 silly addNameRange     '1.1.0',
+455 silly addNameRange     '1.1.1',
+455 silly addNameRange     '1.2.0',
+455 silly addNameRange     '1.3.0',
+455 silly addNameRange     '1.3.1',
+455 silly addNameRange     '1.3.2',
+455 silly addNameRange     '2.0.0',
+455 silly addNameRange     '2.1.0',
+455 silly addNameRange     '2.2.0',
+455 silly addNameRange     '2.3.0',
+455 silly addNameRange     '2.4.0',
+455 silly addNameRange     '2.5.0',
+455 silly addNameRange     '2.5.1',
+455 silly addNameRange     '2.6.0',
+455 silly addNameRange     '2.7.0',
+455 silly addNameRange     '2.7.1',
+455 silly addNameRange     '2.8.0',
+455 silly addNameRange     '2.8.1',
+455 silly addNameRange     '2.9.0',
+455 silly addNameRange     '2.10.0',
+455 silly addNameRange     '2.11.0',
+455 silly addNameRange     '2.12.0',
+455 silly addNameRange     '2.12.1',
+455 silly addNameRange     '2.12.2',
+455 silly addNameRange     '2.13.0',
+455 silly addNameRange     '2.14.0',
+455 silly addNameRange     '2.14.1',
+455 silly addNameRange     '2.15.0',
+455 silly addNameRange     '2.15.1',
+455 silly addNameRange     '2.16.0',
+455 silly addNameRange     '2.17.0',
+455 silly addNameRange     '2.17.1',
+455 silly addNameRange     '2.18.0',
+455 silly addNameRange     '2.19.0' ] ]
+456 verbose addNamed [ 'commander', '2.19.0' ]
+457 verbose addNamed [ '2.19.0', '2.19.0' ]
+458 silly lockFile 8e59f48f-commander-2-19-0 commander@2.19.0
+459 verbose lock commander@2.19.0 /home/pi/.npm/8e59f48f-commander-2-19-0.lock
+460 http 405 https://registry.npmjs.org/serialport/parser-byte-length
+461 silly registry.get cb [ 405,
+461 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+461 silly registry.get     'content-type': 'application/json',
+461 silly registry.get     'content-length': '63',
+461 silly registry.get     connection: 'close',
+461 silly registry.get     'set-cookie':
+461 silly registry.get      [ '__cfduid=db40b5a477914b06bb85a1244627307541546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+461 silly registry.get     allow: 'PUT',
+461 silly registry.get     'cf-ray': '49622edb4abb6bec-SJC',
+461 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+461 silly registry.get     vary: 'Accept-Encoding',
+461 silly registry.get     server: 'cloudflare' } ]
+462 http 405 https://registry.npmjs.org/serialport/parser-regex
+463 silly registry.get cb [ 405,
+463 silly registry.get   { date: 'Tue, 08 Jan 2019 22:43:26 GMT',
+463 silly registry.get     'content-type': 'application/json',
+463 silly registry.get     'content-length': '63',
+463 silly registry.get     connection: 'close',
+463 silly registry.get     'set-cookie':
+463 silly registry.get      [ '__cfduid=d11766dfee67c0a8df7b780fe3d50d05e1546987406; expires=Wed, 08-Jan-20 22:43:26 GMT; path=/; domain=.registry.npmjs.org; HttpOnly' ],
+463 silly registry.get     allow: 'PUT',
+463 silly registry.get     'cf-ray': '49622edaecc89656-SJC',
+463 silly registry.get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+463 silly registry.get     vary: 'Accept-Encoding',
+463 silly registry.get     server: 'cloudflare' } ]
+464 silly addNameRange number 2 { name: 'nan', range: '>=2.9.2 <3.0.0', hasData: true }
+465 silly addNameRange versions [ 'nan',
+465 silly addNameRange   [ '0.3.0-wip',
+465 silly addNameRange     '0.3.0-wip2',
+465 silly addNameRange     '0.3.0',
+465 silly addNameRange     '0.3.1',
+465 silly addNameRange     '0.3.2',
+465 silly addNameRange     '0.4.0',
+465 silly addNameRange     '0.4.1',
+465 silly addNameRange     '0.4.2',
+465 silly addNameRange     '0.4.3',
+465 silly addNameRange     '0.4.4',
+465 silly addNameRange     '0.5.0',
+465 silly addNameRange     '0.5.1',
+465 silly addNameRange     '0.5.2',
+465 silly addNameRange     '0.6.0',
+465 silly addNameRange     '0.7.0',
+465 silly addNameRange     '0.7.1',
+465 silly addNameRange     '0.8.0',
+465 silly addNameRange     '1.0.0',
+465 silly addNameRange     '1.1.0',
+465 silly addNameRange     '1.1.1',
+465 silly addNameRange     '1.1.2',
+465 silly addNameRange     '1.2.0',
+465 silly addNameRange     '1.3.0',
+465 silly addNameRange     '1.4.0',
+465 silly addNameRange     '1.4.1',
+465 silly addNameRange     '1.5.0',
+465 silly addNameRange     '1.4.2',
+465 silly addNameRange     '1.4.3',
+465 silly addNameRange     '1.5.1',
+465 silly addNameRange     '1.5.2',
+465 silly addNameRange     '1.6.0',
+465 silly addNameRange     '1.5.3',
+465 silly addNameRange     '1.6.1',
+465 silly addNameRange     '1.6.2',
+465 silly addNameRange     '1.7.0',
+465 silly addNameRange     '1.8.0',
+465 silly addNameRange     '1.8.1',
+465 silly addNameRange     '1.8.2',
+465 silly addNameRange     '1.8.3',
+465 silly addNameRange     '1.8.4',
+465 silly addNameRange     '1.9.0',
+465 silly addNameRange     '2.0.0',
+465 silly addNameRange     '2.0.1',
+465 silly addNameRange     '2.0.2',
+465 silly addNameRange     '2.0.3',
+465 silly addNameRange     '2.0.4',
+465 silly addNameRange     '2.0.5',
+465 silly addNameRange     '2.0.6',
+465 silly addNameRange     '2.0.7',
+465 silly addNameRange     '2.0.8',
+465 silly addNameRange     '2.0.9',
+465 silly addNameRange     '2.1.0',
+465 silly addNameRange     '2.2.0',
+465 silly addNameRange     '2.2.1',
+465 silly addNameRange     '2.3.0',
+465 silly addNameRange     '2.3.1',
+465 silly addNameRange     '2.3.2',
+465 silly addNameRange     '2.3.3',
+465 silly addNameRange     '2.3.4',
+465 silly addNameRange     '2.3.5',
+465 silly addNameRange     '2.4.0',
+465 silly addNameRange     '2.5.0',
+465 silly addNameRange     '2.5.1',
+465 silly addNameRange     '2.6.0',
+465 silly addNameRange     '2.6.1',
+465 silly addNameRange     '2.6.2',
+465 silly addNameRange     '2.7.0',
+465 silly addNameRange     '2.8.0',
+465 silly addNameRange     '2.9.1',
+465 silly addNameRange     '2.9.2',
+465 silly addNameRange     '2.10.0',
+465 silly addNameRange     '2.11.0',
+465 silly addNameRange     '2.11.1',
+465 silly addNameRange     '2.12.0',
+465 silly addNameRange     '2.12.1' ] ]
+466 verbose addNamed [ 'nan', '2.12.1' ]
+467 verbose addNamed [ '2.12.1', '2.12.1' ]
+468 silly lockFile cede6e45-nan-2-12-1 nan@2.12.1
+469 verbose lock nan@2.12.1 /home/pi/.npm/cede6e45-nan-2-12-1.lock
+470 silly addNameRange number 2 { name: 'debug', range: '>=3.1.0 <4.0.0', hasData: true }
+471 silly addNameRange versions [ 'debug',
+471 silly addNameRange   [ '0.0.1',
+471 silly addNameRange     '0.1.0',
+471 silly addNameRange     '0.2.0',
+471 silly addNameRange     '0.3.0',
+471 silly addNameRange     '0.4.0',
+471 silly addNameRange     '0.4.1',
+471 silly addNameRange     '0.5.0',
+471 silly addNameRange     '0.6.0',
+471 silly addNameRange     '0.7.0',
+471 silly addNameRange     '0.7.1',
+471 silly addNameRange     '0.7.2',
+471 silly addNameRange     '0.7.3',
+471 silly addNameRange     '0.7.4',
+471 silly addNameRange     '0.8.0',
+471 silly addNameRange     '0.8.1',
+471 silly addNameRange     '1.0.0',
+471 silly addNameRange     '1.0.1',
+471 silly addNameRange     '1.0.2',
+471 silly addNameRange     '1.0.3',
+471 silly addNameRange     '1.0.4',
+471 silly addNameRange     '2.0.0',
+471 silly addNameRange     '2.1.0',
+471 silly addNameRange     '2.1.1',
+471 silly addNameRange     '2.1.2',
+471 silly addNameRange     '2.1.3',
+471 silly addNameRange     '2.2.0',
+471 silly addNameRange     '2.3.0',
+471 silly addNameRange     '2.3.1',
+471 silly addNameRange     '2.3.2',
+471 silly addNameRange     '2.3.3',
+471 silly addNameRange     '2.4.0',
+471 silly addNameRange     '2.4.1',
+471 silly addNameRange     '2.4.2',
+471 silly addNameRange     '2.4.3',
+471 silly addNameRange     '2.4.4',
+471 silly addNameRange     '2.4.5',
+471 silly addNameRange     '2.5.0',
+471 silly addNameRange     '2.5.1',
+471 silly addNameRange     '2.5.2',
+471 silly addNameRange     '2.6.0',
+471 silly addNameRange     '2.6.1',
+471 silly addNameRange     '2.6.2',
+471 silly addNameRange     '2.6.3',
+471 silly addNameRange     '2.6.4',
+471 silly addNameRange     '2.6.5',
+471 silly addNameRange     '2.6.6',
+471 silly addNameRange     '2.6.7',
+471 silly addNameRange     '2.6.8',
+471 silly addNameRange     '1.0.5',
+471 silly addNameRange     '3.0.0',
+471 silly addNameRange     '3.0.1',
+471 silly addNameRange     '2.6.9',
+471 silly addNameRange     '3.1.0',
+471 silly addNameRange     '3.2.0',
+471 silly addNameRange     '3.2.1',
+471 silly addNameRange     '3.2.2',
+471 silly addNameRange     '3.2.3',
+471 silly addNameRange     '4.0.0',
+471 silly addNameRange     '3.2.4',
+471 silly addNameRange     '3.2.5',
+471 silly addNameRange     '4.0.1',
+471 silly addNameRange     '4.1.0',
+471 silly addNameRange     '3.2.6',
+471 silly addNameRange     '4.1.1' ] ]
+472 verbose addNamed [ 'debug', '3.2.6' ]
+473 verbose addNamed [ '3.2.6', '3.2.6' ]
+474 silly lockFile 93e505f4-debug-3-2-6 debug@3.2.6
+475 verbose lock debug@3.2.6 /home/pi/.npm/93e505f4-debug-3-2-6.lock
+476 silly addNameRange number 2 { name: 'promirepl', range: '>=1.0.1 <2.0.0', hasData: true }
+477 silly addNameRange versions [ 'promirepl', [ '1.0.1' ] ]
+478 verbose addNamed [ 'promirepl', '1.0.1' ]
+479 verbose addNamed [ '1.0.1', '1.0.1' ]
+480 silly lockFile 8bcfb9e6-promirepl-1-0-1 promirepl@1.0.1
+481 verbose lock promirepl@1.0.1 /home/pi/.npm/8bcfb9e6-promirepl-1-0-1.lock
+482 silly addNameRange number 2 { name: 'safe-buffer', range: '>=5.1.2 <6.0.0', hasData: true }
+483 silly addNameRange versions [ 'safe-buffer',
+483 silly addNameRange   [ '1.0.0',
+483 silly addNameRange     '2.0.0',
+483 silly addNameRange     '3.0.0',
+483 silly addNameRange     '4.0.0',
+483 silly addNameRange     '5.0.0',
+483 silly addNameRange     '5.0.1',
+483 silly addNameRange     '5.1.0',
+483 silly addNameRange     '5.1.1',
+483 silly addNameRange     '5.1.2' ] ]
+484 verbose addNamed [ 'safe-buffer', '5.1.2' ]
+485 verbose addNamed [ '5.1.2', '5.1.2' ]
+486 silly lockFile 11083a0e-safe-buffer-5-1-2 safe-buffer@5.1.2
+487 verbose lock safe-buffer@5.1.2 /home/pi/.npm/11083a0e-safe-buffer-5-1-2.lock
+488 silly addNameRange number 2 { name: 'prebuild-install',
+488 silly addNameRange   range: '>=4.0.0 <5.0.0',
+488 silly addNameRange   hasData: true }
+489 silly addNameRange versions [ 'prebuild-install',
+489 silly addNameRange   [ '1.0.0',
+489 silly addNameRange     '1.0.1',
+489 silly addNameRange     '1.0.2',
+489 silly addNameRange     '1.1.0',
+489 silly addNameRange     '2.0.0',
+489 silly addNameRange     '2.1.0',
+489 silly addNameRange     '2.1.1',
+489 silly addNameRange     '2.1.2',
+489 silly addNameRange     '2.2.0',
+489 silly addNameRange     '2.2.1',
+489 silly addNameRange     '2.2.2',
+489 silly addNameRange     '2.3.0',
+489 silly addNameRange     '2.4.0',
+489 silly addNameRange     '2.4.1',
+489 silly addNameRange     '2.5.0',
+489 silly addNameRange     '2.5.1',
+489 silly addNameRange     '2.5.2',
+489 silly addNameRange     '2.5.3',
+489 silly addNameRange     '3.0.0',
+489 silly addNameRange     '4.0.0',
+489 silly addNameRange     '5.0.0',
+489 silly addNameRange     '5.1.0',
+489 silly addNameRange     '5.2.0',
+489 silly addNameRange     '5.2.1',
+489 silly addNameRange     '5.2.2' ] ]
+490 verbose addNamed [ 'prebuild-install', '4.0.0' ]
+491 verbose addNamed [ '4.0.0', '4.0.0' ]
+492 silly lockFile 85b12fa4-prebuild-install-4-0-0 prebuild-install@4.0.0
+493 verbose lock prebuild-install@4.0.0 /home/pi/.npm/85b12fa4-prebuild-install-4-0-0.lock
+494 silly lockFile f757c8a6-serialport-parser-ready-1-0-5 serialport/parser-ready@^1.0.5
+495 silly lockFile f757c8a6-serialport-parser-ready-1-0-5 serialport/parser-ready@^1.0.5
+496 silly addNameRange number 2 { name: 'prompt-list', range: '>=3.2.0 <4.0.0', hasData: true }
+497 silly addNameRange versions [ 'prompt-list',
+497 silly addNameRange   [ '0.1.0',
+497 silly addNameRange     '0.1.1',
+497 silly addNameRange     '0.1.2',
+497 silly addNameRange     '0.2.0',
+497 silly addNameRange     '1.0.0',
+497 silly addNameRange     '2.0.0',
+497 silly addNameRange     '2.0.1',
+497 silly addNameRange     '2.1.0',
+497 silly addNameRange     '2.2.0',
+497 silly addNameRange     '3.0.0',
+497 silly addNameRange     '3.1.0',
+497 silly addNameRange     '3.1.1',
+497 silly addNameRange     '3.1.2',
+497 silly addNameRange     '3.2.0' ] ]
+498 verbose addNamed [ 'prompt-list', '3.2.0' ]
+499 verbose addNamed [ '3.2.0', '3.2.0' ]
+500 silly lockFile 930dee83-prompt-list-3-2-0 prompt-list@3.2.0
+501 verbose lock prompt-list@3.2.0 /home/pi/.npm/930dee83-prompt-list-3-2-0.lock
+502 verbose about to build /home/pi/.node-red/node_modules/node-red-node-serialport/node_modules/serialport
+503 verbose node_modules/node-red-node-serialport/node_modules/serialport unbuild
+504 info preuninstall serialport@6.2.2
+505 silly lockFile 77d83616-serialport-parser-readline-1-0-5 serialport/parser-readline@^1.0.5
+506 silly lockFile 77d83616-serialport-parser-readline-1-0-5 serialport/parser-readline@^1.0.5
+507 silly lockFile 9e00658e-erialport-parser-delimiter-1-0-5 serialport/parser-delimiter@^1.0.5
+508 silly lockFile 9e00658e-erialport-parser-delimiter-1-0-5 serialport/parser-delimiter@^1.0.5
+509 silly lockFile 61a13812-serialport-parser-cctalk-1-0-5 serialport/parser-cctalk@^1.0.5
+510 silly lockFile 61a13812-serialport-parser-cctalk-1-0-5 serialport/parser-cctalk@^1.0.5
+511 silly lockFile e7c26552-bindings-1-3-0 bindings@1.3.0
+512 silly lockFile e7c26552-bindings-1-3-0 bindings@1.3.0
+513 info uninstall serialport@6.2.2
+514 silly lockFile 470fe212-serialport-parser-regex-1-0-5 serialport/parser-regex@^1.0.5
+515 silly lockFile 470fe212-serialport-parser-regex-1-0-5 serialport/parser-regex@^1.0.5
+516 silly lockFile c82d8a75-ialport-parser-byte-length-1-0-5 serialport/parser-byte-length@^1.0.5
+517 silly lockFile c82d8a75-ialport-parser-byte-length-1-0-5 serialport/parser-byte-length@^1.0.5
+518 silly lockFile 8e59f48f-commander-2-19-0 commander@2.19.0
+519 silly lockFile 8e59f48f-commander-2-19-0 commander@2.19.0
+520 silly lockFile 46a91646-commander-2-13-0 commander@^2.13.0
+521 silly lockFile 46a91646-commander-2-13-0 commander@^2.13.0
+522 verbose false,/home/pi/.node-red/node_modules,/home/pi/.node-red/node_modules/node-red-node-serialport/node_modules unbuild serialport@6.2.2
+523 verbose /home/pi/.node-red/node_modules/node-red-node-serialport/node_modules/.bin,[object Object] binRoot
+524 silly lockFile cede6e45-nan-2-12-1 nan@2.12.1
+525 silly lockFile cede6e45-nan-2-12-1 nan@2.12.1
+526 silly lockFile 93e505f4-debug-3-2-6 debug@3.2.6
+527 silly lockFile 93e505f4-debug-3-2-6 debug@3.2.6
+528 silly lockFile ccc179b8-nan-2-9-2 nan@^2.9.2
+529 silly lockFile ccc179b8-nan-2-9-2 nan@^2.9.2
+530 silly lockFile 8bcfb9e6-promirepl-1-0-1 promirepl@1.0.1
+531 silly lockFile 8bcfb9e6-promirepl-1-0-1 promirepl@1.0.1
+532 silly lockFile 11083a0e-safe-buffer-5-1-2 safe-buffer@5.1.2
+533 silly lockFile 11083a0e-safe-buffer-5-1-2 safe-buffer@5.1.2
+534 silly lockFile 85b12fa4-prebuild-install-4-0-0 prebuild-install@4.0.0
+535 silly lockFile 85b12fa4-prebuild-install-4-0-0 prebuild-install@4.0.0
+536 info postuninstall serialport@6.2.2
+537 silly lockFile 3b0d9689-debug-3-1-0 debug@^3.1.0
+538 silly lockFile 3b0d9689-debug-3-1-0 debug@^3.1.0
+539 silly lockFile db03ce13-promirepl-1-0-1 promirepl@^1.0.1
+540 silly lockFile db03ce13-promirepl-1-0-1 promirepl@^1.0.1
+541 silly lockFile f5bda6da-safe-buffer-5-1-2 safe-buffer@^5.1.2
+542 silly lockFile f5bda6da-safe-buffer-5-1-2 safe-buffer@^5.1.2
+543 silly lockFile bf48774a-prebuild-install-4-0-0 prebuild-install@^4.0.0
+544 silly lockFile bf48774a-prebuild-install-4-0-0 prebuild-install@^4.0.0
+545 silly lockFile 930dee83-prompt-list-3-2-0 prompt-list@3.2.0
+546 silly lockFile 930dee83-prompt-list-3-2-0 prompt-list@3.2.0
+547 silly lockFile dd2478c1-prompt-list-3-2-0 prompt-list@^3.2.0
+548 silly lockFile dd2478c1-prompt-list-3-2-0 prompt-list@^3.2.0
+549 verbose about to build /home/pi/.node-red/node_modules/node-red-node-serialport
+550 verbose node_modules/node-red-node-serialport unbuild
+551 info preuninstall node-red-node-serialport@0.6.8
+552 info uninstall node-red-node-serialport@0.6.8
+553 verbose true,/home/pi/.node-red/node_modules,/home/pi/.node-red/node_modules unbuild node-red-node-serialport@0.6.8
+554 info postuninstall node-red-node-serialport@0.6.8
+555 error Error: Method Not Allowed
+555 error     at errorResponse (/usr/share/npm/lib/cache/add-named.js:260:10)
+555 error     at /usr/share/npm/lib/cache/add-named.js:203:12
+555 error     at saved (/usr/share/npm/node_modules/npm-registry-client/lib/get.js:167:7)
+555 error     at FSReqWrap.oncomplete (fs.js:135:15)
+556 error If you need help, you may report this *entire* log,
+556 error including the npm and node versions, at:
+556 error     <http://github.com/npm/npm/issues>
+557 error System Linux 4.14.79-v7+
+558 error command "/usr/bin/node" "/usr/bin/npm" "i" "node-red-node-serialport"
+559 error cwd /home/pi/.node-red
+560 error node -v v8.11.1
+561 error npm -v 1.4.21
+562 error code E405
+563 verbose exit [ 1, true ]

@@ -14,10 +14,18 @@ services:
 #      - TZ=Europe/Amsterdam
     ports:
       - "1880:1880"
-#    networks:
-#      - node-red-net
+    networks:
+      - node-red-net
     volumes:
       - ./data:/data
+  
+  MQTTbroker:
+    image: eclipse-mosquitto:1.6.13
+#    restart: unless-stopped
+    networks:
+      - node-red-net
 
-#networks:
-#  node-red-net:
+#volumes:
+#  node-red-data:
+networks:
+  node-red-net:

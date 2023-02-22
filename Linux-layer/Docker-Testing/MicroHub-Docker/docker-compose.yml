@@ -20,7 +20,8 @@ services:
       - ./data:/data
       - ./config:/boot  
       - ./params:/home/pi/parameters
-      - ~/.aws/credentials:/home/pi/.aws/credentials
+      - ${SCRIPTS_PATH}:/home/pi/scripts
+      - ${CREDENTIALS_PATH}:/home/pi/.aws/credentials
   MQTTbroker:
     image: eclipse-mosquitto:1.6.13
 #    restart: unless-stopped

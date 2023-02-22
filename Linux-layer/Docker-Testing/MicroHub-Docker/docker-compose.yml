@@ -18,7 +18,8 @@ services:
       - node-red-net
     volumes:
       - ./data:/data
-  
+      - ./config:/boot  
+      - ./params:/home/pi/parameters
   MQTTbroker:
     image: eclipse-mosquitto:1.6.13
 #    restart: unless-stopped

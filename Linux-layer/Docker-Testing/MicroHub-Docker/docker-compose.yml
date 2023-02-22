@@ -22,6 +22,8 @@ services:
   MQTTbroker:
     image: eclipse-mosquitto:1.6.13
 #    restart: unless-stopped
+    ports:
+      - "1883:1883"
     networks:
       - node-red-net
 

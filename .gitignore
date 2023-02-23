@@ -1,3 +1,5 @@
 **/.env
 **/.DS_Store
+**/context/*
+**/.npm/*
 Motor-Control+GFP/.pio/

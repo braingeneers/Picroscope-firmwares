@@ -10,12 +10,13 @@ services:
   node-red:
     build: .
     image: picroscope-hub-node-red:latest
-#    environment:
-#      - TZ=Europe/Amsterdam
+    restart: always
     ports:
       - "1880:1880"
     networks:
       - node-red-net
+    devices:
+      - /dev/ttyACM0
     volumes:
       - ./data:/data
       - ./config:/boot  
@@ -24,7 +25,7 @@ services:
       - ${CREDENTIALS_PATH}:/home/pi/.aws/credentials
   MQTTbroker:
     image: eclipse-mosquitto:1.6.13
-#    restart: unless-stopped
+    restart: always
     ports:
       - "1883:1883"
     networks:

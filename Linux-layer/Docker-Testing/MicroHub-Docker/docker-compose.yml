@@ -22,7 +22,7 @@ services:
     privileged: true
     volumes:
       - ./data:/data
-      - ./config:/boot  
+      - ${CONFIG_PATH}:/boot  
       - ./params:/home/pi/parameters
       - ${SCRIPTS_PATH}:/home/pi/scripts
       - ${CREDENTIALS_PATH}:/home/pi/.aws/credentials

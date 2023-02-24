@@ -15,8 +15,11 @@ services:
       - "1880:1880"
     networks:
       - node-red-net
-    devices:
-      - /dev/ttyACM0
+#    devices:
+#      - /dev/ttyACM0
+#   Devices mount works but causes container to fail startup if device is not plugged in, we want to be able to plug in devices after launch
+#   To accomplish this we will use a more unsafe method and give our container privileged access to the host system. 
+    privileged: true
     volumes:
       - ./data:/data
       - ./config:/boot  

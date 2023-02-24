@@ -26,6 +26,7 @@ services:
       - ./params:/home/pi/parameters
       - ${SCRIPTS_PATH}:/home/pi/scripts
       - ${CREDENTIALS_PATH}:/home/pi/.aws/credentials
+      - ${PICTURES_PATH}:/home/pi/Pictures
   MQTTbroker:
     image: eclipse-mosquitto:1.6.13
     restart: always
@@ -35,6 +36,7 @@ services:
       - node-red-net
 
 #volumes:
-#  node-red-data:
+#  pictures-dir:
+
 networks:
   node-red-net:

@@ -2,14 +2,21 @@
     "transferring": false,
     "position": 0,
     "start-position": 0,
-    "hub-id": "dockertesthub",
+    "hub-id": "Hamm",
     "params": {
         "interval": 1,
-        "stack_size": 5,
+        "stack_size": 3,
         "stack_offset": 500,
         "step_size": 100,
         "camera_params": "-t 4000 -awb off -awbg 1,1 -o",
         "light_mode": "Above"
     },
-    "group-id": "H"
+    "group-id": "H",
+    "uuid": "2023-02-22-i-hamm-test-2",
+    "experiment_path": "/home/pi/Pictures/2023-02-22-i-hamm-test-2",
+    "state": "engaged",
+    "z-stack-flag": false,
+    "z-stack-start": false,
+    "last-timestamp": "2023-02-24T03:02:27",
+    "path": "/home/pi/Pictures/2023-02-22-i-hamm-test-2/2023-02-24T03:02:27"
 }

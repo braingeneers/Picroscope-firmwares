@@ -10,6 +10,8 @@ services:
   node-red:
     build: .
     image: picroscope-hub-node-red:latest
+    environment:
+      - AWS_SHARED_CREDENTIALS_FILE=/home/pi/.aws/credentials
     restart: always
     ports:
       - "1880:1880"
@@ -27,6 +29,7 @@ services:
       - ${SCRIPTS_PATH}:/home/pi/scripts
       - ${CREDENTIALS_PATH}:/home/pi/.aws/credentials
       - ${PICTURES_PATH}:/home/pi/Pictures
+      - ${ARCHIVE_PATH}:/home/pi/Pictures-archive 
   MQTTbroker:
     image: eclipse-mosquitto:1.6.13
     restart: always
